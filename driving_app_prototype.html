@@ -1,0 +1,2632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Drive Learn – Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple-1: #6B2ABC;
+    --purple-2: #9B5DE5;
+    --purple-light: #F2F0F5;
+    --purple-glow: rgba(107,47,217,0.18);
+    --orange: #FF6B35;
+    --text-primary: #150826;
+    --text-secondary: #786E84;
+    --text-tertiary: #A0A0B2;
+    --bg: #FCFCFC;
+    --card-bg: #FFFFFF;
+    --border: rgba(0,0,0,0.07);
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    font-family: 'Inter', 'DM Sans', sans-serif;
+  }
+
+  body {
+    background: #E8E5F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 24px 16px;
+  }
+
+  /* Phone shell */
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: var(--bg);
+    border-radius: 50px;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 10px #1A1A2E,
+      0 0 0 12px #2A2A40,
+      0 40px 100px rgba(0,0,0,0.4),
+      0 8px 24px rgba(0,0,0,0.25);
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 48px;
+    padding: 14px 28px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 10;
+  }
+  .status-bar .time { font-size: 15px; font-weight: 600; color: inherit; }
+  .status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-icons svg { width: 16px; height: 16px; }
+
+  /* Screens */
+  .screen {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease;
+    will-change: transform, opacity;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.hidden {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .screen.hidden-left {
+    transform: translateX(-8%) scale(0.97);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* ─── SCREEN 1: HOME ─── */
+  #screen-home { background: var(--bg); }
+
+  .home-status { color: var(--text-primary); background: var(--bg); }
+
+  .hero-card {
+    margin: 8px 20px 0;
+    background: #401971;
+    border-radius: var(--radius-lg);
+    padding: 22px 22px 22px;
+    position: relative;
+    overflow: hidden;
+    min-height: 192px;
+  }
+  .hero-card::before {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero-badge {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: #6B2ABC;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 600;
+    z-index: 2;
+    height: 24px;
+    display: flex; align-items: center;
+  }
+  .hero-category {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #CFBBE2;
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.1px;
+  }
+  .hero-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 0;
+    position: relative; z-index: 1;
+  }
+  .hero-cta {
+    margin-top: auto;
+    align-self: flex-start;
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    position: relative; z-index: 1;
+    border: none;
+    margin-top: 32px;
+  }
+  .hero-cta:active { transform: scale(0.93); background: rgba(255,255,255,0.28); }
+  .hero-cta svg { color: #fff; }
+
+  /* Decorative car illustration */
+  .hero-deco {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 110px; height: 80px;
+    z-index: 1;
+    opacity: 0.55;
+  }
+  .hero-deco svg { width: 100%; height: 100%; }
+
+  /* Quick actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 20px 0;
+  }
+  .qa-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: transform 0.18s, box-shadow 0.18s;
+    border: 1px solid var(--border);
+  }
+  .qa-card:active { transform: scale(0.96); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .qa-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 12px; }
+  .qa-icon {
+    width: 40px; height: 40px;
+    background: var(--purple-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .qa-icon svg { color: var(--purple-1); }
+
+  /* Learn in 90s */
+  .learn90-btn {
+    margin: 10px 20px 0;
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    border: 1px solid var(--border);
+    transition: transform 0.18s;
+    width: calc(100% - 40px);
+    text-align: left;
+  }
+  .learn90-btn:active { transform: scale(0.97); }
+  .learn90-icon {
+    width: 40px; height: 40px;
+    background: var(--purple-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .learn90-icon svg { color: var(--purple-1); }
+  .learn90-text-wrap { display: flex; flex-direction: column; gap: 2px; }
+  .learn90-text { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  .learn90-sub { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 400; color: var(--text-secondary); }
+
+  /* More to explore */
+  .section-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding: 18px 20px 8px;
+  }
+  .explore-list { padding: 0 20px; }
+  .explore-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    gap: 14px;
+    transition: opacity 0.15s;
+  }
+  .explore-item:active { opacity: 0.6; }
+  .explore-item:last-child { border-bottom: none; }
+  .explore-icon {
+    width: 40px; height: 40px;
+    background: var(--purple-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .explore-icon svg { color: var(--text-secondary); }
+  .explore-text-wrap { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+  .explore-text { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 500; color: var(--text-primary); }
+  .explore-sub { font-family: 'Inter', sans-serif; font-size: 12px; color: var(--text-secondary); }
+  .explore-chevron { color: var(--text-tertiary); }
+
+  /* Tab bar */
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    width: 390px;
+    background: rgba(252,252,252,0.95);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+    display: flex;
+    padding: 10px 0 20px;
+    z-index: 100;
+  }
+  .tab-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    color: var(--text-tertiary);
+    font-size: 11px;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+  .tab-item.active { color: var(--purple-1); }
+  .tab-item svg { width: 22px; height: 22px; }
+
+  /* Content bottom padding for tab bar */
+  .screen-content { padding-bottom: 80px; }
+
+  /* ─── SCREEN 2: VIDEO LIST ─── */
+  #screen-list { background: var(--bg); }
+
+  .nav-header {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px 0;
+    gap: 16px;
+  }
+  .back-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    transition: transform 0.15s;
+  }
+  .back-btn:active { transform: scale(0.9); }
+  .nav-title { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 20px 80px;
+  }
+
+  .video-card {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    position: relative;
+    background: #2A2A3E;
+    aspect-ratio: 0.75;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    transition: transform 0.2s;
+  }
+  .video-card:active:not(.locked) { transform: scale(0.96); }
+  .video-card.locked { cursor: default; }
+
+  .video-thumb {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Gradient placeholder for thumbs */
+  .thumb-placeholder {
+    width: 100%; height: 100%;
+    position: absolute;
+    inset: 0;
+  }
+  .thumb-p1 { background: linear-gradient(160deg, #2C1654, #8B3FE8); }
+  .thumb-p2 { background: linear-gradient(160deg, #14213D, #457B9D); }
+  .thumb-p3 { background: linear-gradient(160deg, #1B2838, #4ECDC4); }
+  .thumb-p4 { background: linear-gradient(160deg, #3D1C02, #E76F51); }
+  .thumb-p5 { background: linear-gradient(160deg, #0D1B2A, #415A77); }
+  .thumb-p6 { background: linear-gradient(160deg, #1A0533, #7B2D8B); }
+
+  .thumb-figure {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.35;
+  }
+  .thumb-figure svg { width: 60px; height: 60px; color: #fff; }
+
+  .video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 50%);
+  }
+
+  .video-tag {
+    position: absolute;
+    top: 10px; left: 10px;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(8px);
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .play-btn {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.9);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .play-btn svg { color: var(--purple-1); margin-left: 2px; }
+
+  .lock-btn {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px; height: 40px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lock-btn svg { color: rgba(255,255,255,0.8); }
+
+  .locked-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(3px);
+  }
+
+  .video-card-title {
+    position: absolute;
+    bottom: 10px; left: 10px; right: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  /* ─── SCREEN 3: VIDEO PLAYER ─── */
+  #screen-player { background: #000; overflow: hidden; }
+
+  .player-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .player-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.30) 0%,
+      rgba(0,0,0,0.0) 28%,
+      rgba(0,0,0,0.0) 46%,
+      rgba(0,0,0,0.60) 65%,
+      rgba(0,0,0,0.92) 100%
+    );
+  }
+
+  .player-top {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 56px 24px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  .close-btn {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    border: none;
+  }
+  .close-btn:active { background: rgba(255,255,255,0.2); }
+  .close-btn svg { color: #fff; }
+
+  .progress-badge {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .player-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+  }
+  .big-play-btn {
+    width: 72px; height: 72px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.2);
+    transition: background 0.15s, transform 0.15s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+  .big-play-btn:active { background: rgba(255,255,255,0.2); transform: scale(0.95); }
+  .big-play-btn svg { color: #fff; margin-left: 4px; }
+
+  /* player info block above bottom sheet */
+  .player-info-block {
+    position: absolute;
+    left: 0; right: 0;
+    bottom: 76px;
+    padding: 0 24px 16px;
+    z-index: 10;
+  }
+
+  .player-title-inter {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 14px;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+  }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.2);
+    height: 4px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: #fff;
+    border-radius: 4px;
+    width: 24%;
+    transition: width 0.3s;
+  }
+
+  .time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  /* Bottom sheet */
+  /* ─── BOTTOM SHEET – standard expandable ─── */
+
+  .bottom-sheet {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 20;
+  }
+
+  /* The always-visible collapsed bar */
+  .bs-handle-area {
+    background: rgba(18, 14, 30, 0.96);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    border-radius: 20px 20px 0 0;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    padding: 10px 22px 16px;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.5);
+    transition: background 0.18s;
+  }
+  .bs-handle-area:active { background: rgba(28, 22, 42, 0.98); }
+
+  /* Native-looking drag pill */
+  .bs-handle {
+    width: 36px; height: 4px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 100px;
+    margin: 0 auto 14px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.25);
+  }
+
+  .bs-collapsed-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .bs-collapsed-text {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.90);
+    letter-spacing: -0.1px;
+  }
+
+  .bs-chevron {
+    color: rgba(255,255,255,0.40);
+    flex-shrink: 0;
+    transition: transform 0.34s cubic-bezier(0.4,0,0.2,1), color 0.2s;
+  }
+  .bs-chevron.up {
+    transform: rotate(180deg);
+    color: rgba(255,255,255,0.70);
+  }
+
+  /* Expanded panel */
+  .bs-expanded-content {
+    background: rgba(14, 10, 24, 0.98);
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.40s cubic-bezier(0.4,0,0.2,1);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .bs-expanded-content.open {
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .bs-expanded-content.open::-webkit-scrollbar { display: none; }
+
+  /* Video list rows */
+  .bs-list { padding: 6px 0 28px; }
+
+  .bs-item {
+    display: flex;
+    align-items: center;
+    padding: 13px 22px;
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .bs-item:active { background: rgba(255,255,255,0.04); }
+  .bs-item.current { background: rgba(107,47,217,0.10); }
+  .bs-item.current::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 8px; bottom: 8px;
+    width: 3px;
+    background: var(--purple-2);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .bs-num {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.25);
+    width: 20px; flex-shrink: 0; text-align: center;
+  }
+  .bs-item.current .bs-num { color: var(--purple-2); }
+
+  .bs-item-info { flex: 1; min-width: 0; }
+  .bs-item-title {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 3px; letter-spacing: -0.1px;
+  }
+  .bs-item.current .bs-item-title { color: rgba(255,255,255,0.95); font-weight: 600; }
+  .bs-item-meta {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 11px; color: rgba(255,255,255,0.28);
+  }
+
+  .bs-item-badge {
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .now-badge {
+    background: linear-gradient(135deg, #7B3FEF, #5A22C4);
+    padding: 3px 9px; border-radius: 20px;
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 11px; font-weight: 700; color: #fff;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(107,47,217,0.45);
+  }
+
+  /* –– Animations –– */
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .anim-in { animation: fadeSlideIn 0.4s ease both; }
+  .anim-in-1 { animation-delay: 0.05s; }
+  .anim-in-2 { animation-delay: 0.1s; }
+  .anim-in-3 { animation-delay: 0.15s; }
+  .anim-in-4 { animation-delay: 0.2s; }
+  .anim-in-5 { animation-delay: 0.25s; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .progress-bar-fill {
+    animation: progressAnim 8s linear infinite;
+  }
+  @keyframes progressAnim {
+    from { width: 24%; }
+    to { width: 75%; }
+  }
+  /* ───────────────── QUIZ PROMPT OVERLAY ───────────────── */
+
+  .quiz-prompt {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .quiz-prompt.show {
+    pointer-events: all;
+    opacity: 1;
+  }
+
+  /* dim the video behind */
+  .qp-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .qp-card {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    background: #1A1428;
+    border-radius: 28px 28px 0 0;
+    padding: 10px 24px 36px;
+    border-top: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 -16px 60px rgba(0,0,0,0.6);
+    transform: translateY(100%);
+    transition: transform 0.42s cubic-bezier(0.4,0,0.2,1);
+  }
+  .quiz-prompt.show .qp-card {
+    transform: translateY(0);
+  }
+
+  /* drag handle */
+  .qp-card::before {
+    content: '';
+    display: block;
+    width: 36px; height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 100px;
+    margin: 8px auto 20px;
+  }
+
+  .qp-icon-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .qp-icon {
+    width: 52px; height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--purple-1), var(--purple-2));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(107,47,217,0.45);
+  }
+  .qp-icon svg { color: #fff; }
+
+  .qp-tag {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--purple-2);
+    margin-bottom: 8px;
+  }
+
+  .qp-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px; font-weight: 400;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .qp-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .qp-meta {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .qp-meta-pill {
+    display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 5px 12px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,0.65);
+  }
+  .qp-meta-pill svg { color: var(--purple-2); flex-shrink: 0; }
+
+  .qp-primary {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #7B3FEF, #5A22C4);
+    border: none; border-radius: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 10px;
+    box-shadow: 0 6px 24px rgba(107,47,217,0.5);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .qp-primary:active { transform: scale(0.97); box-shadow: 0 3px 12px rgba(107,47,217,0.4); }
+
+  .qp-secondary {
+    width: 100%;
+    padding: 14px;
+    background: transparent;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 500;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .qp-secondary:active { color: rgba(255,255,255,0.7); }
+
+  /* ───────────────── QUIZ SCREEN ───────────────── */
+
+  #screen-quiz {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .quiz-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, #F0EAFF 0%, #F7F6FC 60%);
+  }
+
+  .quiz-header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 56px 20px 16px;
+  }
+
+  .quiz-close-btn {
+    width: 34px; height: 34px;
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.07);
+    border: none; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .quiz-close-btn:active { background: rgba(0,0,0,0.13); }
+  .quiz-close-btn svg { color: var(--text-secondary); }
+
+  .quiz-progress-track {
+    flex: 1;
+    height: 6px;
+    background: rgba(107,47,217,0.12);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .quiz-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple-1), var(--purple-2));
+    border-radius: 100px;
+    width: 33%;
+    transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .quiz-qnum {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* Question body */
+  .quiz-body {
+    position: relative;
+    z-index: 2;
+    flex: 1;
+    padding: 8px 20px 24px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .quiz-body::-webkit-scrollbar { display: none; }
+
+  .quiz-topic-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--purple-1);
+    margin-bottom: 10px;
+  }
+
+  .quiz-question {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin-bottom: 28px;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .quiz-option {
+    padding: 16px 18px;
+    background: #fff;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex; align-items: center; gap: 14px;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .quiz-option:active { transform: scale(0.98); }
+  .quiz-option.selected-correct {
+    border-color: #22C55E;
+    background: #F0FDF4;
+    color: #15803D;
+  }
+  .quiz-option.selected-wrong {
+    border-color: #EF4444;
+    background: #FEF2F2;
+    color: #B91C1C;
+  }
+  .quiz-option.reveal-correct {
+    border-color: #22C55E;
+    background: #F0FDF4;
+    color: #15803D;
+  }
+
+  .quiz-option-letter {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: rgba(107,47,217,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+    color: var(--purple-1);
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+  }
+  .selected-correct .quiz-option-letter { background: #22C55E; color: #fff; }
+  .selected-wrong .quiz-option-letter { background: #EF4444; color: #fff; }
+  .reveal-correct .quiz-option-letter { background: #22C55E; color: #fff; }
+
+  .quiz-next-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #7B3FEF, #5A22C4);
+    border: none; border-radius: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s, transform 0.15s;
+    box-shadow: 0 6px 20px rgba(107,47,217,0.4);
+  }
+  .quiz-next-btn.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .quiz-next-btn:active { transform: scale(0.97); }
+
+  /* Result screen */
+  .quiz-result {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: linear-gradient(160deg, #F0EAFF 0%, #F7F6FC 60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+    text-align: center;
+    transition: opacity 0.3s;
+  }
+  .quiz-result.hidden { display: none; }
+
+  .qr-emoji {
+    font-size: 64px;
+    margin-bottom: 20px;
+    line-height: 1;
+  }
+  .qr-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .qr-score {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--purple-1);
+    margin-bottom: 10px;
+  }
+  .qr-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 400;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 40px;
+  }
+  .qr-cta {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #7B3FEF, #5A22C4);
+    border: none; border-radius: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(107,47,217,0.4);
+    transition: transform 0.15s;
+  }
+  .qr-cta:active { transform: scale(0.97); }
+
+  /* ───────────────── MICRO-VICTORY OVERLAY ───────────────── */
+
+  .micro-victory {
+    position: absolute;
+    inset: 0;
+    z-index: 90;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .micro-victory.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .mv-card {
+    background: rgba(22, 16, 38, 0.96);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 28px;
+    padding: 32px 36px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 260px;
+    box-shadow:
+      0 24px 60px rgba(0,0,0,0.55),
+      0 4px 16px rgba(0,0,0,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.08);
+    transform: scale(0.82) translateY(16px);
+    transition: transform 0.38s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .micro-victory.show .mv-card {
+    transform: scale(1) translateY(0);
+  }
+
+  /* Score ring */
+  .mv-score-ring {
+    position: relative;
+    width: 80px; height: 80px;
+    margin-bottom: 4px;
+  }
+  .mv-ring-svg {
+    width: 80px; height: 80px;
+    transform: rotate(-90deg);
+  }
+  .mv-ring-bg {
+    fill: none;
+    stroke: rgba(255,255,255,0.08);
+    stroke-width: 5;
+  }
+  .mv-ring-fill {
+    fill: none;
+    stroke: var(--purple-2);
+    stroke-width: 5;
+    stroke-linecap: round;
+    stroke-dasharray: 169.6; /* 2π×27 */
+    stroke-dashoffset: 169.6;
+    transition: stroke-dashoffset 0.7s cubic-bezier(0.4,0,0.2,1) 0.2s,
+                stroke 0.3s ease;
+    filter: drop-shadow(0 0 6px rgba(155,93,229,0.7));
+  }
+  .mv-score-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .mv-emoji {
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  .mv-line {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.3px;
+    text-align: center;
+  }
+
+  /* Auto-dismiss progress bar */
+  .mv-bar-wrap {
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.10);
+    border-radius: 100px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .mv-bar {
+    height: 100%;
+    width: 100%;
+    background: var(--purple-2);
+    border-radius: 100px;
+    transform-origin: left;
+    transform: scaleX(1);
+    transition: transform 2s linear;
+  }
+  .mv-bar.drain {
+    transform: scaleX(0);
+  }
+
+  /* ───────────────── SWIPE-TO-QUIZ ZONE ───────────────── */
+
+  /* Invisible tap zone – right 45% of player, vertically centred */
+  .swipe-zone-right {
+    position: absolute;
+    right: 0; top: 0; bottom: 140px; /* don't overlap bottom sheet */
+    width: 50%;
+    z-index: 8; /* above scrim, below UI controls */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 22px;
+    cursor: pointer;
+  }
+
+  /* Two staggered chevrons – pulse to hint at swipe */
+  .swipe-hint {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    opacity: 0;
+    animation: swipeHintPulse 2.8s ease-in-out 1.2s infinite;
+  }
+  .swipe-hint svg {
+    color: rgba(255,255,255,0.65);
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
+  }
+  .swipe-hint svg:first-child {
+    opacity: 0.45;
+    animation: chevronTrail 2.8s ease-in-out 1.2s infinite;
+  }
+
+  @keyframes swipeHintPulse {
+    0%   { opacity: 0;    transform: translateX(-8px); }
+    20%  { opacity: 1;    transform: translateX(0px);  }
+    60%  { opacity: 0.9;  transform: translateX(4px);  }
+    80%  { opacity: 0.5;  transform: translateX(8px);  }
+    100% { opacity: 0;    transform: translateX(12px); }
+  }
+  @keyframes chevronTrail {
+    0%   { opacity: 0;    }
+    15%  { opacity: 0.35; }
+    65%  { opacity: 0.25; }
+    100% { opacity: 0;    }
+  }
+
+  /* Flash ripple on tap */
+  .swipe-zone-right.tapped::after {
+    content: '';
+    position: absolute;
+    right: 20px; top: 50%;
+    width: 60px; height: 60px;
+    margin-top: -30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    animation: swipeTapRipple 0.4s ease-out forwards;
+  }
+  @keyframes swipeTapRipple {
+    from { transform: scale(0.3); opacity: 1; }
+    to   { transform: scale(2);   opacity: 0; }
+  }
+
+  /* ───────────────── VERTICAL SWIPE – TikTok style ───────────────── */
+
+  #screen-player {
+    /* needed so transform works during drag */
+    will-change: transform;
+  }
+
+  /* Ghost card – next or prev video peeking behind during drag */
+  .player-ghost {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .player-ghost img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .player-ghost.visible img { opacity: 1; }
+
+  /* Swipe direction hint arrows */
+  .swipe-v-hint {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    z-index: 9;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .swipe-v-hint.top { top: 68px; }
+  .swipe-v-hint.bottom { bottom: 160px; }
+  .swipe-v-hint svg { color: rgba(255,255,255,0.55); filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)); }
+
+  /* show hints only when player is active and not swiping */
+  #screen-player:not(.swiping) .swipe-v-hint { animation: vhintPulse 3s ease-in-out 1.5s infinite; }
+  @keyframes vhintPulse {
+    0%,100% { opacity: 0; }
+    40%,60%  { opacity: 0.75; }
+  }
+
+  /* ───────────────── REELS FEED ───────────────── */
+
+  #screen-player { background: #000; overflow: hidden; }
+
+  .rf-topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 52px 20px 12px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  .rf-topbar .close-btn { pointer-events: all; }
+  .rf-topbar-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.2px;
+  }
+
+  /* The scrollable feed */
+  .reels-feed {
+    position: absolute;
+    inset: 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .reels-feed::-webkit-scrollbar { display: none; }
+
+  /* –– Video slide –– */
+  .rs-slide {
+    position: relative;
+    width: 390px;
+    height: 844px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow: hidden;
+    background: #111;
+  }
+
+  .rs-photo {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .rs-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.28) 0%,
+      transparent 30%,
+      transparent 50%,
+      rgba(0,0,0,0.55) 68%,
+      rgba(0,0,0,0.88) 100%
+    );
+  }
+
+  .rs-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 0 22px 72px;
+    z-index: 5;
+  }
+
+  .rs-cat-badge {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(107,47,217,0.75);
+    backdrop-filter: blur(8px);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px; font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .rs-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: #fff;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    margin-bottom: 12px;
+  }
+
+  .rs-progress-wrap {
+    height: 3px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .rs-progress-fill {
+    height: 100%;
+    background: #fff;
+    border-radius: 3px;
+    width: 0%;
+    animation: rsProgress 8s linear forwards;
+  }
+  @keyframes rsProgress {
+    from { width: 0%; }
+    to   { width: 100%; }
+  }
+
+  .rs-time {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+  }
+
+  /* Error overlay */
+  .rs-error-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(6px);
+    gap: 10px;
+    padding: 32px;
+  }
+  .rs-error-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .rs-error-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.2px;
+  }
+  .rs-error-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    line-height: 1.5;
+  }
+  .rs-error-retry {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 6px;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.12s;
+  }
+  .rs-error-retry:active { background: rgba(255,255,255,0.22); transform: scale(0.95); }
+
+  /* –– Quiz slide: light theme –– */
+  .rs-quiz-slide {
+    position: relative;
+    width: 390px;
+    height: 844px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow: hidden;
+    background: #EDEAF4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rs-quiz-slide::before { display: none; }
+
+  .rs-quiz-card {
+    position: relative;
+    z-index: 2;
+    width: calc(100% - 40px);
+    background: #FFFFFF;
+    border: none;
+    border-radius: 24px;
+    padding: 28px 24px 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+    touch-action: none;
+    user-select: none;
+  }
+
+  .rs-quiz-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 16px;
+  }
+  .rs-quiz-dot {
+    width: 18px; height: 18px;
+    flex-shrink: 0;
+    background: none;
+    box-shadow: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* sparkle icon via SVG inline in JS */
+  .rs-quiz-label-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 500;
+    color: rgba(0,0,0,0.45);
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .rs-quiz-q {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 600;
+    color: #0F0F14;
+    line-height: 1.45;
+    margin-bottom: 24px;
+    letter-spacing: -0.2px;
+  }
+
+  .rs-quiz-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .rs-yes, .rs-no {
+    padding: 15px 10px;
+    border-radius: 100px;
+    border: 2px solid transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.15s, border-color 0.15s;
+  }
+  .rs-no {
+    background: #FFE4E8;
+    color: #DC2626;
+  }
+  .rs-yes {
+    background: #DCFCE7;
+    color: #16A34A;
+  }
+  .rs-no.lit  { background: #FECDD3; border-color: #f87171; }
+  .rs-yes.lit { background: #BBF7D0; border-color: #4ade80; }
+  .rs-yes:active, .rs-no:active { transform: scale(0.95); }
+
+  .rs-swipe-hint-text {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: rgba(0,0,0,0.30);
+    letter-spacing: 0.1px;
+  }
+
+  /* tint overlays during swipe */
+  .rs-quiz-card.tint-yes { background: #DCFCE7; }
+  .rs-quiz-card.tint-no  { background: #FFE4E8; }
+
+  /* –– Video loading skeleton –– */
+  .rs-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    background: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+  }
+  .rs-loading.done { opacity: 0; }
+  .rs-spinner {
+    width: 32px; height: 32px;
+    border: 2.5px solid rgba(255,255,255,0.18);
+    border-top-color: rgba(255,255,255,0.85);
+    border-radius: 50%;
+    animation: rsSpin 0.75s linear infinite;
+  }
+  @keyframes rsSpin { to { transform: rotate(360deg); } }
+
+
+  /* ── Wrong answer: light pink redesign ── */
+  .rs-wrong-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: #FCEDF0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 20px 110px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+    overflow: hidden;
+  }
+  .rs-wrong-screen.show { opacity: 1; pointer-events: all; }
+
+  /* Mascot sits in top area, bleeds into card */
+  .rs-wrong-mascot-area {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex: 0 0 200px;
+    position: relative;
+    z-index: 2;
+  }
+  .rs-wrong-mascot {
+    font-size: 108px;
+    line-height: 1;
+    margin-bottom: -24px; /* overlaps card top */
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.15));
+    animation: wrongMascotPop 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.08s both;
+  }
+  @keyframes wrongMascotPop {
+    from { transform: scale(0.55) translateY(16px); opacity: 0; }
+    to   { transform: scale(1) translateY(0);       opacity: 1; }
+  }
+
+  .rs-wrong-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 36px 22px 24px; /* extra top padding for mascot overlap */
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: wrongCardUp 0.38s cubic-bezier(0.4,0,0.2,1) 0.04s both;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  @keyframes wrongCardUp {
+    from { transform: translateY(28px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  .rs-wrong-x-wrap {
+    width: 52px; height: 52px;
+    background: #FFE4E8;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 14px;
+  }
+  .rs-wrong-x-wrap svg { color: #DC2626; }
+
+  .rs-wrong-heading {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: #DC2626;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+  }
+
+  .rs-wrong-explain {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 400;
+    color: #4A4860;
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+
+  .rs-wrong-answer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #F0FDF4;
+    border: 1.5px solid #BBF7D0;
+    border-radius: 100px;
+    padding: 7px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: #16A34A;
+    margin-bottom: 20px;
+    align-self: center;
+  }
+
+  .rs-wrong-next {
+    margin-top: auto;
+    width: 100%;
+    padding: 15px;
+    background: #0F0F14;
+    border: none;
+    border-radius: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.12s, background 0.15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  }
+  .rs-wrong-next:active { transform: scale(0.97); background: #1a1a2e; }
+  /* ───────────────── BOTTOM SHEET – light iOS style (reference) ───────────────── */
+
+  .bottom-sheet {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    border-radius: 20px 20px 0 0;
+    overflow: hidden;
+    box-shadow: 0 -2px 20px rgba(0,0,0,0.18), 0 -1px 0 rgba(0,0,0,0.06);
+  }
+
+  /* –– Collapsed handle area –– */
+  .bs-handle-area {
+    background: #F5F5F7;
+    padding: 10px 20px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.14s;
+  }
+  .bs-handle-area:active { background: #EBEBEF; }
+
+  .bs-handle {
+    width: 36px; height: 4px;
+    background: rgba(0,0,0,0.14);
+    border-radius: 100px;
+    margin: 0 auto 12px;
+  }
+
+  /* Collapsed two-line header */
+  .bs-collapsed-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .bs-collapsed-info { flex: 1; min-width: 0; }
+  .bs-collapsed-counter {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 12px; font-weight: 500;
+    color: rgba(0,0,0,0.38);
+    letter-spacing: 0.1px;
+    margin-bottom: 3px;
+  }
+  .bs-collapsed-title {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: #0F0F14;
+    letter-spacing: -0.35px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 40px;
+    opacity: 1;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+  }
+  .bs-chevron {
+    color: rgba(0,0,0,0.32);
+    flex-shrink: 0;
+    margin-bottom: 5px;
+    transition: transform 0.34s cubic-bezier(0.4,0,0.2,1), color 0.18s;
+  }
+  .bs-chevron.up { transform: rotate(180deg); color: rgba(0,0,0,0.55); }
+
+  /* When expanded: hide title, promote counter to header */
+  .bottom-sheet.open .bs-collapsed-title {
+    max-height: 0;
+    overflow: hidden;
+    margin: 0;
+    opacity: 0;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+  }
+  .bottom-sheet.open .bs-collapsed-counter {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0F0F14;
+    margin-bottom: 0;
+    letter-spacing: -0.25px;
+  }
+  .bottom-sheet.open .bs-collapsed-row {
+    align-items: center;
+  }
+  .bottom-sheet.open .bs-chevron {
+    margin-bottom: 0;
+  }
+
+  /* –– Expanded list –– */
+  .bs-expanded-content {
+    background: #FFFFFF;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.40s cubic-bezier(0.4,0,0.2,1);
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+  .bs-expanded-content.open {
+    max-height: 500px;
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .bs-expanded-content.open::-webkit-scrollbar { display: none; }
+
+  .bs-list { padding: 8px 0 28px; }
+
+  .bs-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-bottom: 1px solid rgba(0,0,0,0.055);
+  }
+  .bs-item:last-child { border-bottom: none; }
+  .bs-item:active { background: rgba(0,0,0,0.04); }
+
+  /* Number circle: grey default, filled purple on current */
+  .bs-num {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.07);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: rgba(0,0,0,0.40);
+    transition: background 0.2s, color 0.2s;
+  }
+  .bs-item.current .bs-num {
+    background: var(--purple-1);
+    color: #fff;
+  }
+
+  .bs-item-info { flex: 1; min-width: 0; }
+  .bs-item-title {
+    font-family: 'Inter', 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 400;
+    color: rgba(0,0,0,0.45);
+    white-space: normal;
+    line-height: 1.35;
+    letter-spacing: -0.1px;
+  }
+  .bs-item.current .bs-item-title {
+    color: #0F0F14;
+    font-weight: 600;
+  }
+
+  .bs-item-badge { display: none; } /* no badge – current shown via purple circle */
+
+  /* –– Correct answer: minimal check overlay –– */
+  .rs-check-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 60, 28, 0.72);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
+  }
+  .rs-check-overlay.show { opacity: 1; pointer-events: all; }
+  .rs-check-overlay.fade { opacity: 0; transition: opacity 0.4s ease; }
+
+  .rs-check-circle {
+    width: 90px; height: 90px;
+    background: #22C55E;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 0 rgba(34,197,94,0.5);
+    animation: checkPop 0.38s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes checkPop {
+    from { transform: scale(0.3); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
+  .rs-check-circle svg {
+    color: #fff;
+    animation: checkDraw 0.4s ease 0.15s both;
+    opacity: 0;
+  }
+  @keyframes checkDraw {
+    from { opacity: 0; transform: scale(0.5); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  /* ring pulse */
+  .rs-check-circle::after {
+    content: '';
+    position: absolute;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    border: 3px solid rgba(34,197,94,0.5);
+    animation: ringPulse 0.7s ease 0.3s both;
+  }
+  @keyframes ringPulse {
+    from { transform: scale(1);   opacity: 0.8; }
+    to   { transform: scale(1.7); opacity: 0; }
+  }
+
+  /* ───────────────── RIGHT SCROLL INDICATOR ───────────────── */
+
+  .scroll-indicator {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 35;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: -40px;
+  }
+
+  /* Track */
+  .si-track {
+    position: relative;
+    width: 3px;
+    height: 100px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+  }
+
+  /* Thumb */
+  .si-thumb {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 24px;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(255,255,255,0.5);
+    top: 0;
+    transition: top 0.32s cubic-bezier(0.4,0,0.2,1);
+  }
+
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ─────────────────────────────── SCREEN 1: HOME ─────────────────────────────── -->
+  <div class="screen" id="screen-home">
+    <!-- Status bar -->
+    <div class="status-bar home-status">
+      <span class="time">9:41</span>
+      <div class="status-icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1 7l2 2c5-5 13-5 18 0l2-2C17.5 1 6.5 1 1 7zm4 4l2 2c3-3 8-3 11 0l2-2c-4-4-13-4-15 0zm6 4l2 2 2-2c-1-1-3-1-4 0z"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+      </div>
+    </div>
+
+    <div class="screen-content">
+      <!-- Hero -->
+      <div class="hero-card anim-in">
+        <div class="hero-badge">🔥 13</div>
+        <div class="hero-category">Category В</div>
+        <div class="hero-title">Start<br>learning</div>
+        <button class="hero-cta" onclick="goTo('screen-list')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <!-- Deco car -->
+        <div class="hero-deco">
+          <svg viewBox="0 0 110 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="32" width="90" height="32" rx="8" fill="rgba(255,255,255,0.18)"/>
+            <path d="M20 32 L32 14 L78 14 L90 32Z" fill="rgba(255,255,255,0.22)"/>
+            <circle cx="30" cy="66" r="10" fill="rgba(255,255,255,0.20)"/>
+            <circle cx="80" cy="66" r="10" fill="rgba(255,255,255,0.20)"/>
+            <rect x="38" y="18" width="14" height="12" rx="2" fill="rgba(255,255,255,0.35)"/>
+            <rect x="58" y="18" width="14" height="12" rx="2" fill="rgba(255,255,255,0.35)"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions anim-in anim-in-1">
+        <div class="qa-card">
+          <div class="qa-label">Skill Boosters</div>
+          <div class="qa-icon">
+            <!-- target / bullseye icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+        </div>
+        <div class="qa-card">
+          <div class="qa-label">Mock Test</div>
+          <div class="qa-icon">
+            <!-- car icon -->
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3v-4l2-5h14l2 5v4h-2"/><path d="M7 17h10"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Learn button -->
+      <button class="learn90-btn anim-in anim-in-2" onclick="goToPlayer('Reading traffic lights','Junctions','1:24')">
+        <div class="learn90-icon">
+          <!-- lightbulb icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.6-1.4 4.9-3.5 6.2L15 18H9l-.5-2.8A7 7 0 0 1 12 2z"/></svg>
+        </div>
+        <div class="learn90-text-wrap">
+          <span class="learn90-text">Learn in 90 seconds</span>
+          <span class="learn90-sub">for driving practice</span>
+        </div>
+        <svg style="margin-left:auto;color:var(--text-tertiary)" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <!-- More to explore -->
+      <div class="section-title anim-in anim-in-3">More to explore</div>
+      <div class="explore-list anim-in anim-in-4">
+        <div class="explore-item">
+          <div class="explore-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="explore-text-wrap">
+            <span class="explore-text">Road signs quiz</span>
+            <span class="explore-sub">Subtext</span>
+          </div>
+          <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="explore-item">
+          <div class="explore-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="explore-text-wrap">
+            <span class="explore-text">Becoming a driver</span>
+            <span class="explore-sub">Subtext</span>
+          </div>
+          <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="explore-item">
+          <div class="explore-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <div class="explore-text-wrap">
+            <span class="explore-text">Handbook</span>
+            <span class="explore-sub">Subtext</span>
+          </div>
+          <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="explore-item">
+          <div class="explore-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="explore-text-wrap">
+            <span class="explore-text">Mistakes</span>
+            <span class="explore-sub">Subtext</span>
+          </div>
+          <svg class="explore-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="tab-bar">
+      <div class="tab-item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        Home
+      </div>
+      <div class="tab-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Statistics
+      </div>
+      <div class="tab-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        Share
+      </div>
+      <div class="tab-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+        Settings
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────── SCREEN 2: REELS FEED ─────────────────────────────── -->
+  <div class="screen hidden" id="screen-player">
+
+    <!-- Fixed top bar sits above the feed -->
+    <div class="rf-topbar">
+      <button class="close-btn" onclick="goTo('screen-home')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <span class="rf-topbar-title">Theory shorts</span>
+      <div style="width:36px"></div>
+    </div>
+
+    <!-- Vertical scroll feed -->
+    <div class="reels-feed" id="reels-feed">
+      <!-- slides injected by JS -->
+    </div>
+
+    <!-- –– Right-side scroll indicator –– -->
+    <div class="scroll-indicator" id="scroll-indicator">
+      <div class="si-track" id="si-track">
+        <div class="si-thumb" id="si-thumb"></div>
+      </div>
+    </div>
+
+    <!-- Fade overlay for jump transition -->
+    <div id="rs-fade" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:50;transition:opacity 0.22s ease;"></div>
+
+    <!-- –– Bottom Sheet (fixed above feed) –– -->
+    <div class="bottom-sheet" id="bottom-sheet">
+      <div class="bs-handle-area" id="bs-handle-area" onclick="handleAreaClick()">
+        <div class="bs-handle"></div>
+        <div class="bs-collapsed-row">
+          <div class="bs-collapsed-info">
+            <div class="bs-collapsed-counter" id="bs-collapsed-counter">Videos · 1/6</div>
+            <div class="bs-collapsed-title" id="bs-collapsed-title">Spotting hazards early</div>
+          </div>
+          <svg class="bs-chevron" id="bs-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        </div>
+      </div>
+      <div class="bs-expanded-content" id="bs-content">
+        <div class="bs-list" id="bs-list"></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // ───────────────── DATA ─────────────────
+  const videos = [
+    { title: 'Spotting hazards early',        cat: 'Hazards',   dur: '1:10', photo: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Warning vs regulatory signs',   cat: 'Signs',     dur: '1:50', photo: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Reading traffic lights',        cat: 'Junctions', dur: '1:24', photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Stopping distances',            cat: 'Safety',    dur: '1:20', photo: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Pedestrian crossings',          cat: 'Hazards',   dur: '1:15', photo: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Roundabout rules explained',    cat: 'Junctions', dur: '1:30', photo: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Motorway driving basics',       cat: 'Rules',     dur: '1:45', photo: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Night driving tips',            cat: 'Safety',    dur: '1:18', photo: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Overtaking safely',             cat: 'Hazards',   dur: '1:35', photo: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Fog and low visibility',        cat: 'Safety',    dur: '1:22', photo: 'https://images.unsplash.com/photo-1576435728678-68d0fbf94e91?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Box junctions & yellow lines',  cat: 'Junctions', dur: '1:28', photo: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Speed limits explained',        cat: 'Rules',     dur: '1:40', photo: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Merging on dual carriageways',  cat: 'Rules',     dur: '1:16', photo: 'https://images.unsplash.com/photo-1590674899484-d5640e854abe?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Parking rules & restrictions',  cat: 'Signs',     dur: '1:33', photo: 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&q=80&auto=format&fit=crop' },
+    { title: 'Emergency vehicles priority',   cat: 'Hazards',   dur: '1:12', photo: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&q=80&auto=format&fit=crop' },
+  ];
+
+  const quizBank = {
+    'Hazards':   [
+      { q: 'True or False: You should always brake immediately when you spot a hazard.', correct: false, explain: 'Assess first — braking immediately can cause skidding. Reduce speed smoothly.' },
+      { q: 'True or False: Interior mirror should be checked before moving off.', correct: true, explain: 'Always check all mirrors before moving off, starting with the interior mirror.' },
+    ],
+    'Signs':     [
+      { q: 'True or False: Warning signs in the UK are triangular.', correct: true, explain: 'Triangular signs warn of hazards ahead. Circular signs give orders.' },
+      { q: 'True or False: A red circular sign means you must do something.', correct: false, explain: 'Red circles are prohibitions — they mean you must NOT do something.' },
+    ],
+    'Junctions': [
+      { q: 'True or False: Traffic on a roundabout has priority over entering traffic.', correct: true, explain: 'You must give way to traffic already circulating on the roundabout.' },
+      { q: 'True or False: A flashing amber light means stop and wait.', correct: false, explain: 'Flashing amber means proceed with caution — give way to pedestrians.' },
+    ],
+    'Safety':    [
+      { q: 'True or False: Stopping distance at 30 mph is about 23 metres.', correct: true, explain: 'At 30 mph the overall stopping distance is 23 metres (75 feet).' },
+      { q: 'True or False: Worn tyres below 1 mm are illegal in the UK.', correct: false, explain: 'The minimum legal tread depth is 1.6 mm, not 1 mm.' },
+    ],
+    'Rules':     [
+      { q: 'True or False: The national speed limit on a dual carriageway is 70 mph for cars.', correct: true, explain: 'Cars and motorcycles can travel up to 70 mph on dual carriageways.' },
+      { q: 'True or False: You must use headlights whenever it rains.', correct: false, explain: 'Use headlights when visibility is seriously reduced — not every rain shower.' },
+      { q: 'True or False: On a motorway you may drive in the right lane at any speed.', correct: false, explain: 'Keep left unless overtaking — the right lane is for overtaking only, not cruising.' },
+    ],
+  };
+
+  // Build slide sequence: video, quiz, video, quiz …
+  // Each pair: [videoIndex, quizIndex_within_cat]
+  const RS_QUIZ_IDX = new Set(); // indices in slideData that are quiz slides
+  const slideData = []; // { type:'video'|'quiz', videoIdx, question, correct, explain }
+
+  videos.forEach((v, vi) => {
+    slideData.push({ type: 'video', videoIdx: vi });
+    const bank = quizBank[v.cat] || quizBank['Hazards'];
+    const q = bank[vi % bank.length];
+    const si = slideData.length;
+    RS_QUIZ_IDX.add(si);
+    slideData.push({ type: 'quiz', videoIdx: vi, ...q });
+  });
+
+  // ───────────────── PROGRESS STATE ─────────────────
+  // quizStates: slideIdx → 'correct' | 'wrong'
+  const quizStates = {};
+
+  function findStartSlide() {
+    // find first video whose quiz is unanswered or was wrong (needs retry)
+    for (let vi = 0; vi < videos.length; vi++) {
+      const quizSlideIdx = vi * 2 + 1;
+      if (quizStates[quizSlideIdx] !== 'correct') return vi * 2;
+    }
+    return (videos.length - 1) * 2; // all correct → last video
+  }
+
+  // ───────────────── NAVIGATION ─────────────────
+  function goTo(screenId) {
+    const screens = document.querySelectorAll('.screen');
+    const order = ['screen-home', 'screen-player'];
+    const currentActive = document.querySelector('.screen:not(.hidden):not(.hidden-left)');
+    const fromIdx = order.indexOf(currentActive ? currentActive.id : 'screen-home');
+    const toIdx   = order.indexOf(screenId);
+    const forward = toIdx > fromIdx;
+
+    screens.forEach(s => {
+      if (s.id !== screenId) {
+        s.classList.remove('hidden');
+        s.classList.add(forward ? 'hidden-left' : 'hidden');
+      }
+    });
+    const target = document.getElementById(screenId);
+    target.classList.remove('hidden', 'hidden-left');
+    target.scrollTop = 0;
+
+    setTimeout(() => {
+      screens.forEach(s => {
+        if (s.id !== screenId) { s.classList.add('hidden'); s.classList.remove('hidden-left'); }
+      });
+    }, 420);
+  }
+
+  function goToPlayer(title, tag, duration) {
+    buildFeed();
+    goTo('screen-player');
+    const feed = document.getElementById('reels-feed');
+    const startSlide = findStartSlide();
+    if (feed) feed.scrollTop = startSlide * 844;
+    triggerLoading(startSlide);
+    setTimeout(initScrollIndicator, 60);
+  }
+
+  // ───────────────── BUILD FEED ─────────────────
+  function buildFeed() {
+    const feed = document.getElementById('reels-feed');
+    feed.innerHTML = '';
+    slideData.forEach((s, i) => {
+      feed.appendChild(s.type === 'video' ? buildVideoSlide(s, i) : buildQuizSlide(s, i));
+    });
+  }
+
+  function buildVideoSlide(s, i) {
+    const v = videos[s.videoIdx];
+    const el = document.createElement('div');
+    el.className = 'rs-slide';
+    el.dataset.idx = i;
+    const isError = s.videoIdx === 1;
+    el.innerHTML = `
+      <div class="rs-loading" id="rs-loading-${i}"><div class="rs-spinner"></div></div>
+      <img class="rs-photo" src="${v.photo}" alt="${v.title}" loading="lazy" />
+      <div class="rs-scrim"></div>
+      ${isError ? `
+      <div class="rs-error-overlay">
+        <div class="rs-error-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="rs-error-title">Video unavailable</div>
+        <div class="rs-error-sub">Unable to load this video. Please try again later.</div>
+        <button class="rs-error-retry" onclick="retryVideo(this)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
+          Try again
+        </button>
+      </div>` : ''}
+      <div class="rs-info">
+        <div class="rs-cat-badge">${v.cat}</div>
+        ${isError ? '' : `<div class="rs-progress-wrap"><div class="rs-progress-fill"></div></div>
+        <div class="rs-time"><span>0:00</span><span>${v.dur}</span></div>`}
+      </div>
+    `;
+    return el;
+  }
+
+  function buildQuizSlide(s, i) {
+    const el = document.createElement('div');
+    el.className = 'rs-quiz-slide';
+    el.dataset.idx = i;
+
+    // already correctly answered on a previous session — make invisible & non-snapping
+    if (quizStates[i] === 'correct') {
+      el.style.scrollSnapAlign = 'none';
+      el.style.scrollSnapStop = 'normal';
+      el.style.opacity = '0';
+      el.style.pointerEvents = 'none';
+    }
+
+    const card = document.createElement('div');
+    card.className = 'rs-quiz-card';
+    card.innerHTML = `
+      <div class="rs-quiz-label">
+        <div class="rs-quiz-dot">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke="#6B2FD9" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <span class="rs-quiz-label-text">Quick check</span>
+      </div>
+      <div class="rs-quiz-q">${s.q}</div>
+      <div class="rs-quiz-btns">
+        <button class="rs-no"  onclick="rsAnswer(this, false, ${i})">No</button>
+        <button class="rs-yes" onclick="rsAnswer(this, true, ${i})">Yes</button>
+      </div>
+      <div class="rs-swipe-hint-text">Swipe left or right to answer</div>
+    `;
+
+    // correct answer overlay (green check)
+    const checkOverlay = document.createElement('div');
+    checkOverlay.className = 'rs-check-overlay';
+    checkOverlay.id = `rs-check-${i}`;
+    checkOverlay.innerHTML = `
+      <div class="rs-check-circle" style="position:relative">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+    `;
+
+    // wrong answer screen (light pink)
+    const wrongScreen = document.createElement('div');
+    wrongScreen.className = 'rs-wrong-screen';
+    wrongScreen.id = `rs-wrong-${i}`;
+
+    el.appendChild(card);
+    el.appendChild(checkOverlay);
+    el.appendChild(wrongScreen);
+
+    initRsQuiz(card, wrongScreen, s, i);
+    return el;
+  }
+
+  // ───────────────── QUIZ SWIPE ON CARD ─────────────────
+  function initRsQuiz(card, wrongScreen, s, slideIdx) {
+    let startX = 0, startY = 0, dx = 0, axisLocked = null;
+    const feed = document.getElementById('reels-feed');
+    const THRESHOLD = 55;
+
+    function start(x, y) { startX = x; startY = y; dx = 0; axisLocked = null; }
+
+    function move(x, y) {
+      const curDx = x - startX;
+      const curDy = y - startY;
+
+      if (!axisLocked) {
+        if (Math.abs(curDy) > Math.abs(curDx) + 4) { axisLocked = 'v'; return; }
+        if (Math.abs(curDx) > 8) { axisLocked = 'h'; feed.style.overflowY = 'hidden'; }
+        else return;
+      }
+      if (axisLocked !== 'h') return;
+
+      dx = curDx;
+      const rot = dx * 0.06;
+      card.style.transform = `translateX(${dx}px) rotate(${rot}deg)`;
+      card.style.transition = 'none';
+
+      card.classList.remove('tint-yes', 'tint-no');
+      card.querySelector('.rs-yes').classList.toggle('lit', dx > 20);
+      card.querySelector('.rs-no').classList.toggle('lit',  dx < -20);
+      if (dx > 20)  card.classList.add('tint-yes');
+      if (dx < -20) card.classList.add('tint-no');
+    }
+
+    function end() {
+      feed.style.overflowY = '';
+      if (axisLocked !== 'h') return;
+
+      if (Math.abs(dx) >= THRESHOLD) {
+        const choseYes = dx > 0;
+        flyCard(card, choseYes);
+        setTimeout(() => showRsResult(wrongScreen, s, slideIdx, choseYes), 340);
+      } else {
+        card.style.transition = 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)';
+        card.style.transform = 'translateX(0) rotate(0deg)';
+        card.classList.remove('tint-yes', 'tint-no');
+        card.querySelector('.rs-yes').classList.remove('lit');
+        card.querySelector('.rs-no').classList.remove('lit');
+      }
+    }
+
+    card.addEventListener('touchstart', e => start(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    card.addEventListener('touchmove',  e => { move(e.touches[0].clientX, e.touches[0].clientY); if (axisLocked === 'h') e.preventDefault(); }, { passive: false });
+    card.addEventListener('touchend',   end, { passive: true });
+
+    card.addEventListener('mousedown',  e => { start(e.clientX, e.clientY); card._md = true; });
+    document.addEventListener('mousemove', e => { if (card._md) move(e.clientX, e.clientY); });
+    document.addEventListener('mouseup',   e => { if (card._md) { card._md = false; end(); } });
+  }
+
+  function flyCard(card, right) {
+    card.style.transition = 'transform 0.34s cubic-bezier(0.4,0,0.2,1)';
+    card.style.transform = `translateX(${right ? 130 : -130}%) rotate(${right ? 18 : -18}deg)`;
+  }
+
+  function rsAnswer(btn, choseYes, slideIdx) {
+    const s = slideData[slideIdx];
+    const slide = document.querySelector(`[data-idx="${slideIdx}"]`);
+    const card  = slide.querySelector('.rs-quiz-card');
+    const wrongScreen = slide.querySelector('.rs-wrong-screen');
+    flyCard(card, choseYes);
+    setTimeout(() => showRsResult(wrongScreen, s, slideIdx, choseYes), 340);
+  }
+
+  function showRsResult(wrongScreen, s, slideIdx, choseYes) {
+    const correct = (choseYes === s.correct);
+
+    if (correct) {
+      quizStates[slideIdx] = 'correct';
+      const checkEl = document.getElementById(`rs-check-${slideIdx}`);
+      checkEl.classList.add('show');
+      setTimeout(() => {
+        checkEl.classList.add('fade');
+        setTimeout(() => {
+          rsNext(slideIdx);
+          // make this slide invisible and non-snapping so scrolling back won't flash it
+          const slide = document.querySelector(`[data-idx="${slideIdx}"]`);
+          if (slide) {
+            slide.style.scrollSnapAlign = 'none';
+            slide.style.scrollSnapStop = 'normal';
+            slide.style.opacity = '0';
+            slide.style.pointerEvents = 'none';
+          }
+        }, 420);
+      }, 2300);
+
+    } else {
+      quizStates[slideIdx] = 'wrong';
+      const correctLabel = s.correct ? 'Yes' : 'No';
+      wrongScreen.innerHTML = `
+        <div class="rs-wrong-mascot-area">
+          <div class="rs-wrong-mascot">🤔</div>
+        </div>
+        <div class="rs-wrong-card">
+          <div class="rs-wrong-x-wrap">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </div>
+          <div class="rs-wrong-heading">Not quite</div>
+          <div class="rs-wrong-explain">${s.explain}</div>
+          <div class="rs-wrong-answer-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Correct answer: ${correctLabel}
+          </div>
+          <button class="rs-wrong-next" onclick="rsNext(${slideIdx})">Got it, next →</button>
+        </div>
+      `;
+      void wrongScreen.offsetWidth;
+      wrongScreen.classList.add('show');
+    }
+  }
+
+  function rsNext(slideIdx) {
+    const nextSlide = document.querySelector(`[data-idx="${slideIdx + 1}"]`);
+    if (nextSlide) nextSlide.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // ───────────────── SCROLL INDICATOR ─────────────────
+
+  function initScrollIndicator() {
+    const feed      = document.getElementById('reels-feed');
+    const thumb     = document.getElementById('si-thumb');
+    const SLIDE_H   = 844;
+    const TRACK_H   = 100;
+    const THUMB_H   = 24;
+
+    function updateIndicator() {
+      if (!feed) return;
+      const progress = Math.min(1, feed.scrollTop / Math.max(1, SLIDE_H * (slideData.length - 1)));
+      thumb.style.top = (progress * (TRACK_H - THUMB_H)) + 'px';
+    }
+
+    feed.addEventListener('scroll', updateIndicator, { passive: true });
+    updateIndicator();
+  }
+
+  // ───────────────── BOTTOM SHEET ─────────────────
+  let sheetOpen = false;
+
+  function handleAreaClick() {
+    sheetOpen ? closeSheet() : openSheet();
+  }
+
+  function openSheet() {
+    sheetOpen = true;
+    document.getElementById('bs-content').classList.add('open');
+    document.getElementById('bs-chevron').classList.add('up');
+    document.getElementById('bottom-sheet').classList.add('open');
+    document.getElementById('reels-feed').style.overflowY = 'hidden';
+  }
+
+  function closeSheet() {
+    sheetOpen = false;
+    document.getElementById('bs-content').classList.remove('open');
+    document.getElementById('bs-chevron').classList.remove('up');
+    document.getElementById('bottom-sheet').classList.remove('open');
+    document.getElementById('reels-feed').style.overflowY = '';
+  }
+
+  // –– Single source of truth ––
+  let currentVideoIdx = 0;
+
+  function setCurrentVideo(idx) {
+    if (idx === currentVideoIdx && document.getElementById('bs-list').children.length > 0) {
+      // just re-highlight without full rebuild if only index changed
+      document.querySelectorAll('.bs-item').forEach((el, i) => {
+        el.classList.toggle('current', i === idx);
+      });
+    }
+    currentVideoIdx = idx;
+    updateBsCollapsed();
+    buildBsExpanded();
+  }
+
+  function updateBsCollapsed() {
+    const v = videos[currentVideoIdx];
+    const titleEl   = document.getElementById('bs-collapsed-title');
+    const counterEl = document.getElementById('bs-collapsed-counter');
+    if (!titleEl || !counterEl || !v) return;
+
+    titleEl.style.transition = 'opacity 0.18s ease';
+    titleEl.style.opacity = '0';
+    setTimeout(() => {
+      titleEl.textContent = v.title;
+      titleEl.style.opacity = '1';
+    }, 100);
+
+    counterEl.textContent = `Videos · ${currentVideoIdx + 1}/${videos.length}`;
+  }
+
+  function buildBsExpanded() {
+    const list = document.getElementById('bs-list');
+    if (!list) return;
+    list.innerHTML = videos.map((v, i) => `
+      <div class="bs-item ${i === currentVideoIdx ? 'current' : ''}" onclick="jumpToVideo(${i})">
+        <div class="bs-num">${i + 1}</div>
+        <div class="bs-item-info">
+          <div class="bs-item-title">${v.title}</div>
+        </div>
+      </div>
+    `).join('');
+
+    if (sheetOpen) {
+      setTimeout(() => {
+        const active = list.querySelector('.bs-item.current');
+        if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }, 60);
+    }
+  }
+
+  // Legacy alias so scroll tracker still works
+  function buildBsList(idx) { setCurrentVideo(idx); }
+
+  function jumpToVideo(videoIdx) {
+    closeSheet();
+    const fade = document.getElementById('rs-fade');
+    const feed = document.getElementById('reels-feed');
+
+    // fade to black
+    fade.style.pointerEvents = 'all';
+    fade.style.opacity = '1';
+
+    setTimeout(() => {
+      // snap scroll while screen is black
+      feed.scrollTop = videoIdx * 2 * 844;
+      buildBsList(videoIdx);
+      triggerLoading(videoIdx * 2);
+
+      // fade back in
+      setTimeout(() => {
+        fade.style.opacity = '0';
+        setTimeout(() => { fade.style.pointerEvents = 'none'; }, 220);
+      }, 80);
+    }, 220);
+  }
+
+  // Show loading overlay when a video slide snaps into view
+  const loadedSlides = new Set();
+
+  function triggerLoading(slideIdx) {
+    if (loadedSlides.has(slideIdx)) return;
+    loadedSlides.add(slideIdx);
+    const loader = document.getElementById(`rs-loading-${slideIdx}`);
+    if (!loader) return;
+    // show spinner for ~700ms, then fade out
+    setTimeout(() => loader.classList.add('done'), 700);
+  }
+
+  // Track which video is visible as user scrolls
+  function initScrollTracker() {
+    const feed = document.getElementById('reels-feed');
+    let lastVideoIdx = 0;
+    let lastSlideIdx = -1;
+    let skipPending = false;
+
+    feed.addEventListener('scroll', () => {
+      const scrollTop = feed.scrollTop;
+      const slideH = 844;
+      const currentSlide = Math.round(scrollTop / slideH);
+
+      if (currentSlide !== lastSlideIdx) {
+        const prevSlide = lastSlideIdx;
+        lastSlideIdx = currentSlide;
+
+        // trigger loading on new video slide
+        if (slideData[currentSlide]?.type === 'video') {
+          triggerLoading(currentSlide);
+        }
+
+        // auto-skip correct quiz slides
+        if (
+          !skipPending &&
+          slideData[currentSlide]?.type === 'quiz' &&
+          quizStates[currentSlide] === 'correct'
+        ) {
+          skipPending = true;
+          const dir = currentSlide > prevSlide ? 1 : -1;
+          const target = Math.max(0, Math.min(slideData.length - 1, currentSlide + dir));
+          setTimeout(() => {
+            feed.scrollTo({ top: target * slideH, behavior: 'smooth' });
+            skipPending = false;
+          }, 60);
+        }
+      }
+
+      // find the closest video slide at or before currentSlide
+      let videoIdx = 0;
+      for (let i = 0; i <= currentSlide && i < slideData.length; i++) {
+        if (slideData[i].type === 'video') videoIdx = slideData[i].videoIdx;
+      }
+      if (videoIdx !== lastVideoIdx) {
+        lastVideoIdx = videoIdx;
+        buildBsList(videoIdx);
+      }
+    }, { passive: true });
+  }
+
+  function retryVideo(btn) {
+    const overlay = btn.closest('.rs-error-overlay');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="rs-spinner" style="width:14px;height:14px;border-width:2px"></div> Retrying…';
+    // simulate retry — still fails after 1.5s
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> Try again`;
+    }, 1500);
+  }
+
+  // ───────────────── INIT ─────────────────
+  buildFeed();
+  buildBsList(0);
+  document.addEventListener('DOMContentLoaded', () => { initScrollTracker(); initScrollIndicator(); });
+  initScrollTracker();
+  initScrollIndicator();
+</script>
+</body>
+</html>
