@@ -1396,56 +1396,81 @@
     font-weight: 500;
   }
 
-  /* Error overlay */
+  /* ── Error overlay: Figma 1328-6477 ── */
   .rs-error-overlay {
     position: absolute;
     inset: 0;
-    z-index: 7;
+    z-index: 45;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: rgba(15, 8, 26, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .rs-error-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .rs-error-sheet {
+    background: #FFFFFF;
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 36px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background: rgba(0,0,0,0.72);
-    backdrop-filter: blur(6px);
-    gap: 10px;
-    padding: 32px;
+    gap: 0;
+    animation: errorSheetUp 0.35s cubic-bezier(0.4,0,0.2,1) both;
   }
-  .rs-error-icon {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    border: 1.5px solid rgba(255,255,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    color: #fff;
-    margin-bottom: 4px;
+  @keyframes errorSheetUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+  /* triangle illustration */
+  .rs-error-illus {
+    width: 64px; height: 56px;
+    margin-bottom: 16px;
   }
   .rs-error-title {
     font-family: 'Inter', sans-serif;
     font-size: 17px; font-weight: 700;
-    color: #fff;
-    letter-spacing: -0.2px;
+    color: #150826;
+    text-align: center;
+    margin-bottom: 6px;
   }
   .rs-error-sub {
     font-family: 'Inter', sans-serif;
-    font-size: 13px; font-weight: 400;
-    color: rgba(255,255,255,0.5);
+    font-size: 14px; font-weight: 400;
+    color: #7B7484;
     text-align: center;
     line-height: 1.5;
+    margin-bottom: 24px;
   }
-  .rs-error-retry {
-    display: flex; align-items: center; gap: 6px;
-    margin-top: 6px;
-    padding: 10px 20px;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.22);
-    border-radius: 100px;
+  .rs-error-cancel {
+    width: 100%; padding: 15px;
+    background: #F2F0F5;
+    border: none; border-radius: 14px;
     font-family: 'Inter', sans-serif;
-    font-size: 14px; font-weight: 600;
+    font-size: 16px; font-weight: 600;
+    color: #150826;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background 0.15s, transform 0.12s;
+  }
+  .rs-error-cancel:active { background: #e5e0ee; transform: scale(0.97); }
+  .rs-error-retry {
+    width: 100%; padding: 15px;
+    background: #F95631;
+    border: none; border-radius: 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px; font-weight: 600;
     color: #fff;
     cursor: pointer;
     transition: background 0.15s, transform 0.12s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
   }
-  .rs-error-retry:active { background: rgba(255,255,255,0.22); transform: scale(0.95); }
+  .rs-error-retry:active { background: #e04920; transform: scale(0.97); }
 
   /* –– Quiz slide: light theme –– */
   .rs-quiz-slide {
@@ -2234,16 +2259,24 @@
       <img class="rs-photo" src="${v.photo}" alt="${v.title}" loading="lazy" />
       <div class="rs-scrim"></div>
       ${isError ? `
-      <div class="rs-error-overlay">
-        <div class="rs-error-icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div class="rs-error-overlay" id="rs-error-${i}">
+        <div class="rs-error-sheet">
+          <svg class="rs-error-illus" viewBox="0 0 64 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="errGrad" x1="32" y1="0" x2="32" y2="56" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#FF8FAB"/>
+                <stop offset="100%" stop-color="#F95631"/>
+              </linearGradient>
+            </defs>
+            <path d="M32 4 L60 52 H4 Z" fill="url(#errGrad)" rx="4"/>
+            <line x1="32" y1="22" x2="32" y2="36" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="32" cy="43" r="2" fill="#fff"/>
+          </svg>
+          <div class="rs-error-title">Failed to load</div>
+          <div class="rs-error-sub">Check your internet connection and try again.</div>
+          <button class="rs-error-cancel" onclick="goTo('screen-home')">Cancel</button>
+          <button class="rs-error-retry" onclick="retryVideo(this, ${i})">Try again</button>
         </div>
-        <div class="rs-error-title">Video unavailable</div>
-        <div class="rs-error-sub">Unable to load this video. Please try again later.</div>
-        <button class="rs-error-retry" onclick="retryVideo(this)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg>
-          Try again
-        </button>
       </div>` : ''}
       <div class="rs-info">
         <div class="rs-cat-badge">${v.cat}</div>
@@ -2557,8 +2590,17 @@
     loadedSlides.add(slideIdx);
     const loader = document.getElementById(`rs-loading-${slideIdx}`);
     if (!loader) return;
-    // show spinner for ~700ms, then fade out
-    setTimeout(() => loader.classList.add('done'), 700);
+    // check if this is an error slide (videoIdx === 1 → slideIdx === 2)
+    const isErrorSlide = document.getElementById(`rs-error-${slideIdx}`) !== null;
+    if (isErrorSlide) {
+      // show spinner for 2s, then reveal error sheet
+      setTimeout(() => {
+        loader.classList.add('done');
+        showErrorOverlay(slideIdx);
+      }, 2000);
+    } else {
+      setTimeout(() => loader.classList.add('done'), 700);
+    }
   }
 
   // Track which video is visible as user scrolls
@@ -2610,15 +2652,24 @@
     }, { passive: true });
   }
 
-  function retryVideo(btn) {
-    const overlay = btn.closest('.rs-error-overlay');
+  function showErrorOverlay(slideIdx) {
+    const overlay = document.getElementById(`rs-error-${slideIdx}`);
+    if (overlay) overlay.classList.add('show');
+  }
+
+  function retryVideo(btn, slideIdx) {
+    const overlay = document.getElementById(`rs-error-${slideIdx}`);
+    // hide overlay, show loading spinner
+    if (overlay) overlay.classList.remove('show');
+    const loading = document.getElementById(`rs-loading-${slideIdx}`);
+    if (loading) { loading.classList.remove('done'); }
     btn.disabled = true;
-    btn.innerHTML = '<div class="rs-spinner" style="width:14px;height:14px;border-width:2px"></div> Retrying…';
-    // simulate retry — still fails after 1.5s
+    // simulate retry — fails again after 2s
     setTimeout(() => {
       btn.disabled = false;
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.95"/></svg> Try again`;
-    }, 1500);
+      if (loading) loading.classList.add('done');
+      showErrorOverlay(slideIdx);
+    }, 2000);
   }
 
   // ───────────────── INIT ─────────────────
