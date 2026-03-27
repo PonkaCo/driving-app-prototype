@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Variants</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a1a;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        .phone-frame {
+            width: 360px;
+            height: 720px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 12px solid #000;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .status-bar {
+            background: #000;
+            color: white;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            height: 24px;
+        }
+
+        /* ===== VARIANT 1: Trapezoid ===== */
+        .variant-1 .screen-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .variant-1 .mascot {
+            width: 140px;
+            height: 160px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            transform: rotate(12deg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .variant-1 .content-card {
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transform: perspective(600px) rotateX(0deg);
+        }
+
+        .variant-1 .title {
+            color: #667eea;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .variant-1 .text {
+            color: #444;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .swipe-guides {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .swipe-bar {
+            width: 3px;
+            height: 30px;
+            background: #667eea;
+            border-radius: 2px;
+            animation: pulse 1.5s infinite;
+        }
+
+        .swipe-bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .swipe-bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ===== VARIANT 2: Side Mascot ===== */
+        .variant-2 .screen-content {
+            background: linear-gradient(to bottom, #ffeef5 0%, #fff9fb 100%);
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 15px;
+            padding: 25px 15px;
+            height: calc(100% - 24px);
+            align-items: start;
+        }
+
+        .variant-2 .mascot {
+            grid-column: 1;
+            width: 100%;
+            height: 200px;
+            background: #f0d5e8;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            margin-top: 20px;
+        }
+
+        .variant-2 .content-card {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .variant-2 .title {
+            color: #d946ef;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .variant-2 .text {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        .swipe-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: #d946ef;
+            border-radius: 50%;
+            animation: float 1.5s ease-in-out infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(8px); }
+        }
+
+        /* ===== VARIANT 3: Full Background ===== */
+        .variant-3 .screen-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0;
+            position: relative;
+        }
+
+        .variant-3 .mascot {
+            position: absolute;
+            bottom: 50%;
+            right: -30px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 150px;
+            opacity: 0.8;
+        }
+
+        .variant-3 .content-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px 30px 0 0;
+            padding: 30px;
+            margin-top: auto;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+        }
+
+        .variant-3 .title {
+            color: #0f172a;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .variant-3 .text {
+            color: #475569;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        .swipe-gesture {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .gesture-line {
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, #06b6d4 0%, transparent 100%);
+            animation: swipeMove 1.5s infinite;
+        }
+
+        @keyframes swipeMove {
+            0% { transform: translateX(-20px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(20px); opacity: 0; }
+        }
+
+        .gesture-text {
+            color: #06b6d4;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ===== VARIANT 4: Centered with Rings ===== */
+        .variant-4 .screen-content {
+            background: linear-gradient(180deg, #e8f4f8 0%, #f0f9fc 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 20px;
+        }
+
+        .mascot-ring {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-top: 20px;
+        }
+
+        .ring {
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            border-radius: 50%;
+            animation: expand 2s ease-out infinite;
+        }
+
+        .ring:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .ring:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes expand {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        .variant-4 .mascot {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+        }
+
+        .variant-4 .content-card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100%;
+        }
+
+        .variant-4 .title {
+            color: #06b6d4;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .variant-4 .text {
+            color: #0f172a;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .swipe-chevron {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-top: 15px;
+        }
+
+        .chevron {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #06b6d4;
+            border-left: none;
+            border-top: none;
+            transform: rotate(-45deg);
+            animation: chevronSlide 1.5s infinite;
+        }
+
+        .chevron:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .chevron:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes chevronSlide {
+            0% {
+                opacity: 0;
+                transform: translateX(-15px) rotate(-45deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(15px) rotate(-45deg);
+            }
+        }
+
+        .screen-content {
+            height: calc(100% - 24px);
+        }
+
+        .label {
+            color: #999;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .title {
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .text {
+            line-height: 1.5;
+        }
+
+        h2 {
+            position: absolute;
+            bottom: 10px;
+            left: 15px;
+            right: 15px;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- VARIANT 1 -->
+    <div>
+        <div class="phone-frame variant-1">
+            <div class="status-bar">
+                <span>12:30</span>
+                <span>📶 📡 🔋</span>
+            </div>
+            <div class="screen-content">
+                <div class="mascot">🐱</div>
+                <div class="content-card">
+                    <div class="label">Not quite</div>
+                    <div class="title">Safe Driving</div>
+                    <div class="text">If a deer suddenly runs onto the road, is it safer to swerve</div>
+                    <div class="swipe-guides">
+                        <div class="swipe-bar"></div>
+                        <div class="swipe-bar"></div>
+                        <div class="swipe-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>Variant 1: Gradient + Pulse Bars</h2>
+    </div>
+
+    <!-- VARIANT 2 -->
+    <div>
+        <div class="phone-frame variant-2">
+            <div class="status-bar">
+                <span>12:30</span>
+                <span>📶 📡 🔋</span>
+            </div>
+            <div class="screen-content">
+                <div class="mascot">🎭</div>
+                <div class="content-card">
+                    <div>
+                        <div class="label">Not quite</div>
+                        <div class="title">Surprising Fact</div>
+                        <div class="text">If a deer suddenly runs on the road?</div>
+                    </div>
+                    <div class="swipe-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>Variant 2: Side Layout + Floating Dots</h2>
+    </div>
+
+    <!-- VARIANT 3 -->
+    <div>
+        <div class="phone-frame variant-3">
+            <div class="status-bar">
+                <span>12:30</span>
+                <span>📶 📡 🔋</span>
+            </div>
+            <div class="screen-content">
+                <div class="mascot">🦁</div>
+                <div class="content-card">
+                    <div class="label">Important Question</div>
+                    <div class="title">Road Safety</div>
+                    <div class="text">If a deer suddenly runs onto the road, is safer to swerve than brake?</div>
+                    <div class="swipe-gesture">
+                        <div class="gesture-line"></div>
+                        <div class="gesture-text">SWIPE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>Variant 3: Dark Bottom Sheet + Line</h2>
+    </div>
+
+    <!-- VARIANT 4 -->
+    <div>
+        <div class="phone-frame variant-4">
+            <div class="status-bar">
+                <span>12:30</span>
+                <span>📶 📡 🔋</span>
+            </div>
+            <div class="screen-content">
+                <div class="mascot-ring">
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="ring"></div>
+                    <div class="mascot">🐻</div>
+                </div>
+                <div class="content-card">
+                    <div class="label">Think About It</div>
+                    <div class="title">Safety Question</div>
+                    <div class="text">Swerving or braking when a deer suddenly runs onto road?</div>
+                    <div class="swipe-chevron">
+                        <div class="chevron"></div>
+                        <div class="chevron"></div>
+                        <div class="chevron"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2>Variant 4: Rings + Chevrons</h2>
+    </div>
+</body>
+</html>
