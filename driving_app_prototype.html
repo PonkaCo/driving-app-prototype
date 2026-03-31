@@ -1340,7 +1340,7 @@
   .rs-info {
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    padding: 0 22px 72px;
+    padding: 0 22px 100px;
     z-index: 5;
   }
 
@@ -1485,6 +1485,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .rs-quiz-slide.no-snap {
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
   }
 
   .rs-quiz-slide::before { display: none; }
@@ -1724,7 +1728,7 @@
   /* –– Collapsed handle area –– */
   .bs-handle-area {
     background: #F5F5F7;
-    padding: 10px 20px 16px;
+    padding: 10px 20px 28px;
     cursor: pointer;
     user-select: none;
     transition: background 0.14s;
@@ -2624,14 +2628,15 @@
           triggerLoading(currentSlide);
         }
 
-        // auto-skip correct quiz slides
+        // auto-skip quiz slides when going backwards; skip correct quiz slides in any direction
+        const goingBack = prevSlide !== -1 && currentSlide < prevSlide;
         if (
           !skipPending &&
           slideData[currentSlide]?.type === 'quiz' &&
-          quizStates[currentSlide] === 'correct'
+          (goingBack || quizStates[currentSlide] === 'correct')
         ) {
           skipPending = true;
-          const dir = currentSlide > prevSlide ? 1 : -1;
+          const dir = goingBack ? -1 : 1;
           const target = Math.max(0, Math.min(slideData.length - 1, currentSlide + dir));
           setTimeout(() => {
             feed.scrollTo({ top: target * slideH, behavior: 'smooth' });
@@ -2672,12 +2677,70 @@
     }, 2000);
   }
 
+  // ───────────────── BACKWARD SWIPE: skip quiz snap ─────────────────
+  function initFeedSwipeDirection() {
+    const feed = document.getElementById('reels-feed');
+    if (!feed) return;
+    const slideH = 844;
+    let startY = 0;
+    let startScrollTop = 0;
+    let dirLocked = false;
+    let isBackward = false;
+
+    feed.addEventListener('touchstart', e => {
+      startY = e.touches[0].clientY;
+      startScrollTop = feed.scrollTop;
+      dirLocked = false;
+      isBackward = false;
+    }, { passive: true });
+
+    feed.addEventListener('touchmove', e => {
+      if (dirLocked) return;
+      const dy = startY - e.touches[0].clientY;
+      if (Math.abs(dy) < 12) return;
+      dirLocked = true;
+      isBackward = dy < 0;
+      if (isBackward) {
+        // disable all snapping immediately so quiz slide is invisible to scroll
+        feed.style.scrollSnapType = 'none';
+        feed.querySelectorAll('.rs-quiz-slide').forEach(s => s.classList.add('no-snap'));
+      }
+    }, { passive: true });
+
+    feed.addEventListener('touchend', e => {
+      if (!isBackward) return;
+
+      const endY = e.changedTouches[0].clientY;
+      const netDy = startY - endY;
+      if (netDy >= 0) {
+        // net forward — cancel, restore snap
+        feed.style.scrollSnapType = '';
+        feed.querySelectorAll('.rs-quiz-slide').forEach(s => s.classList.remove('no-snap'));
+        return;
+      }
+
+      // find previous video slide relative to where swipe started
+      const startSlide = Math.round(startScrollTop / slideH);
+      let target = startSlide - 1;
+      while (target >= 0 && slideData[target]?.type === 'quiz') target--;
+      target = Math.max(0, target);
+
+      feed.scrollTo({ top: target * slideH, behavior: 'smooth' });
+
+      setTimeout(() => {
+        feed.style.scrollSnapType = '';
+        feed.querySelectorAll('.rs-quiz-slide').forEach(s => s.classList.remove('no-snap'));
+      }, 500);
+    }, { passive: true });
+  }
+
   // ───────────────── INIT ─────────────────
   buildFeed();
   buildBsList(0);
-  document.addEventListener('DOMContentLoaded', () => { initScrollTracker(); initScrollIndicator(); });
+  document.addEventListener('DOMContentLoaded', () => { initScrollTracker(); initScrollIndicator(); initFeedSwipeDirection(); });
   initScrollTracker();
   initScrollIndicator();
+  initFeedSwipeDirection();
 </script>
 </body>
 </html>
