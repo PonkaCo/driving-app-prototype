@@ -3,77 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exam Prototypes</title>
+  <title>Exam prototypes</title>
+
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      padding: 40px;
-      background: #f7f7f7;
-      color: #222;
+      background: #f5f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
     }
 
     h1 {
       margin-bottom: 24px;
+      font-size: 28px;
     }
 
-    .section {
-      margin-bottom: 32px;
-      padding: 20px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      max-width: 700px;
-    }
-
-    h2 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    li {
-      margin-bottom: 12px;
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
     a {
-      color: #1565c0;
+      display: block;
+      padding: 16px 24px;
+      background: white;
+      border-radius: 12px;
       text-decoration: none;
+      color: #1565c0;
       font-size: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: 0.15s ease;
+      min-width: 260px;
     }
 
     a:hover {
-      text-decoration: underline;
-    }
-
-    .note {
-      margin-top: 40px;
-      font-size: 14px;
-      color: #666;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
   </style>
 </head>
+
 <body>
-  <h1>Exam prototypes</h1>
+  <div class="container">
+    <h1>Exam prototypes</h1>
 
-  <div class="section">
-    <h2>Exam</h2>
-    <ul>
-      <li><a href="./Exam/driving_app_prototype.html">Driving app prototype</a></li>
-      <li><a href="./redesign_variants.html">Redesign variants</a></li>
-    </ul>
+    <div class="list">
+      <a href="./Exam/Shorts%20USA.html">Shorts USA</a>
+      <a href="./Exam/UK%20videos.html">UK videos</a>
+    </div>
   </div>
-
-  <div class="section">
-    <h2>Videos</h2>
-    <ul>
-      <li><a href="./Exam/UK videos.html">UK videos</a></li>
-      <li><a href="./Exam/Youtube video UK.html">Youtube video UK</a></li>
-    </ul>
-  </div>
-
-  <p class="note">This page is used to quickly open saved prototypes.</p>
 </body>
 </html>
