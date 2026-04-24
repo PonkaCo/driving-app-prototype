@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>UK Drive – Video Lessons</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --brand:       #401971;
+  --brand2:      #6B2ABC;
+  --accent:      #FA5732;
+  --bg:          #F2F0F5;
+  --bg2:         #E9E7EB;
+  --card:        #FCFCFC;
+  --text:        #150826;
+  --muted:       #797282;
+  --success:     #00A850;
+  --card-shadow: 0px 6px 30px 0px rgba(55,22,97,0.08);
+  --upper-shadow:0px -2px 24px 0px rgba(55,21,97,0.04);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body { background: #2A1F4A; min-height: 100vh; }
+
+.view {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 24px;
+}
+.view.gone { display: none; }
+#view-landscape { padding: 20px; }
+
+/* ══════════════════════════════
+   PORTRAIT PHONE
+══════════════════════════════ */
+.portrait-phone {
+  width: 390px; height: 844px;
+  background: var(--bg); border-radius: 50px;
+  overflow: hidden; position: relative; flex-shrink: 0;
+  box-shadow: 0 0 0 10px #1A1A2E, 0 0 0 12px #2E2E50, 0 48px 100px rgba(0,0,0,.55);
+}
+
+.screen {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
+  transition: transform .38s cubic-bezier(.4,0,.2,1), opacity .38s ease;
+}
+.screen::-webkit-scrollbar { display: none; }
+.screen.hidden      { transform: translateX(100%);  opacity: 0; pointer-events: none; }
+.screen.hidden-left { transform: translateX(-100%); opacity: 0; pointer-events: none; }
+
+.sbar {
+  height: 48px; padding: 14px 24px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; z-index: 10; flex-shrink: 0;
+}
+.sbar .time { font-size: 15px; font-weight: 700; }
+.sbar-icons { display: flex; gap: 5px; align-items: center; }
+.sbar-icons svg { width: 15px; height: 15px; }
+
+/* HOME */
+#scr-home { background: var(--bg); }
+#scr-home .sbar { background: var(--brand); color: #FFFCFC; }
+
+.hero {
+  background: linear-gradient(151.6deg, #411A72 14%, #6D2BC0 90%);
+  margin: 12px 14px 0; border-radius: 20px; padding: 18px 18px 0;
+  position: relative; overflow: hidden; min-height: 148px; cursor: pointer;
+}
+.hero-badge { position: absolute; top: 16px; right: 16px; background: var(--accent); color: #fff; font-size: 13px; font-weight: 700; padding: 5px 11px; border-radius: 20px; display: flex; align-items: center; gap: 5px; }
+.hero-cat   { font-size: 12px; color: rgba(255,255,255,.55); margin-bottom: 6px; }
+.hero-title { font-size: 24px; font-weight: 800; color: #FFFCFC; line-height: 1.2; margin-bottom: 18px; }
+.hero-arrow { width: 44px; height: 44px; background: rgba(255,255,255,.15); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 20px; }
+.hero-illus { position: absolute; right: 0; bottom: 0; width: 150px; height: 130px; pointer-events: none; }
+
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 14px 0; }
+.tile { background: var(--card); border-radius: 18px; padding: 16px; cursor: pointer; box-shadow: var(--card-shadow); transition: transform .15s; }
+.tile:active { transform: scale(.97); }
+.tile-label { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 14px; line-height: 1.25; }
+.tile-icon  { width: 38px; height: 38px; background: var(--bg); border-radius: 11px; display: flex; align-items: center; justify-content: center; }
+.tile-icon svg { width: 20px; height: 20px; }
+
+.learn-row { margin: 10px 14px 0; background: var(--card); border-radius: 18px; padding: 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; box-shadow: var(--card-shadow); transition: transform .15s; }
+.learn-row:active { transform: scale(.98); }
+.learn-icon  { width: 42px; height: 42px; background: var(--bg); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.learn-label { font-size: 16px; font-weight: 600; color: var(--text); flex: 1; }
+.learn-chev  { color: var(--bg2); }
+.learn-chev svg { width: 18px; height: 18px; }
+
+.sec-title { font-size: 18px; font-weight: 800; color: var(--text); padding: 18px 14px 8px; }
+.explore-list { padding: 0 14px 100px; }
+.exp-item { display: flex; align-items: center; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--bg2); cursor: pointer; }
+.exp-item:last-child { border-bottom: none; }
+.exp-icon  { width: 36px; height: 36px; border-radius: 10px; background: var(--bg); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.exp-icon svg { width: 18px; height: 18px; }
+.exp-label { flex: 1; font-size: 15px; font-weight: 500; color: var(--text); }
+.exp-chev  { color: var(--bg2); }
+.exp-chev svg { width: 18px; height: 18px; }
+
+.bnav { position: absolute; bottom: 0; left: 0; right: 0; background: var(--card); box-shadow: 0px -2px 24px 0px rgba(55,21,97,.04); display: flex; justify-content: space-around; align-items: center; padding: 10px 0 22px; z-index: 10; }
+.bnav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; font-weight: 500; color: var(--muted); cursor: pointer; }
+.bnav-item.active { color: var(--brand); }
+.bnav-item svg { width: 22px; height: 22px; }
+
+/* VIDEO LIST */
+#scr-vlist { background: var(--bg); }
+.vl-header { background: var(--card); border-bottom: 1px solid var(--bg2); padding: 0 14px 14px; position: sticky; top: 0; z-index: 5; }
+.vl-topbar { display: flex; align-items: center; gap: 10px; }
+.back-btn { width: 36px; height: 36px; background: var(--bg); border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.back-btn svg { width: 20px; height: 20px; }
+.vl-title { font-size: 20px; font-weight: 800; color: var(--text); flex: 1; }
+.vl-count { font-size: 13px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+.vl-strip { display: flex; align-items: center; gap: 8px; padding: 10px 0 0; }
+.vl-strip-bar  { flex: 1; height: 5px; background: var(--bg); border-radius: 3px; }
+.vl-strip-fill { height: 100%; background: var(--brand); border-radius: 3px; width: 0%; transition: width .5s ease; }
+.vl-strip-label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+
+.vcard-list { padding: 12px 14px 80px; display: flex; flex-direction: column; gap: 10px; }
+.vcard { background: var(--card); border-radius: 16px; overflow: hidden; cursor: pointer; box-shadow: var(--card-shadow); transition: transform .15s; display: flex; gap: 12px; padding: 10px; align-items: center; }
+.vcard:active { transform: scale(.98); }
+.vcard-thumb-wrap { position: relative; width: 104px; flex-shrink: 0; border-radius: 10px; overflow: hidden; }
+.vcard-thumb { width: 104px; aspect-ratio: 16/9; object-fit: cover; display: block; }
+.vcard-dur { position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,.75); color: #fff; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 5px; }
+.vcard-watched-badge { position: absolute; top: 4px; right: 4px; width: 18px; height: 18px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity .3s; }
+.vcard-watched-badge.show { opacity: 1; }
+.vcard-watched-badge svg { width: 10px; height: 10px; }
+.vcard-pbar-wrap { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--bg); }
+.vcard-pbar { height: 100%; background: var(--brand); width: 0%; transition: width .3s; }
+.vcard-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.vcard-num   { font-size: 11px; font-weight: 600; color: var(--muted); }
+.vcard-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+.vcard-sub   { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+.vcard-play-btn { width: 32px; height: 32px; background: var(--brand); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(64,25,113,.3); }
+.vcard-play-btn svg { width: 12px; height: 12px; margin-left: 2px; }
+
+/* PORTRAIT PLAYER */
+#scr-player { background: var(--bg); display: flex; flex-direction: column; overflow: hidden; }
+#scr-player .sbar { background: #000; color: rgba(255,255,255,.65); }
+
+.pvid-wrap { width: 100%; aspect-ratio: 16/9; position: relative; background: #000; flex-shrink: 0; }
+.pvid-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pvid-scrim { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.45) 0%, transparent 30%, transparent 55%, rgba(0,0,0,.65) 100%); }
+
+.pctrl { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: space-between; transition: opacity .25s; }
+.pctrl.fade { opacity: 0; pointer-events: none; }
+.pctrl-top { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+.pctrl-back { width: 34px; height: 34px; background: rgba(0,0,0,.4); border: none; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.pctrl-back svg { width: 18px; height: 18px; }
+.pctrl-mid { display: flex; align-items: center; justify-content: center; gap: 30px; }
+.seek-btn { width: 52px; height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: rgba(255,255,255,.16); backdrop-filter: blur(10px); border: none; border-radius: 50%; color: #fff; cursor: pointer; font-size: 10px; font-weight: 700; }
+.seek-btn svg { width: 22px; height: 22px; }
+.p-play-btn { width: 56px; height: 56px; background: rgba(255,255,255,.16); backdrop-filter: blur(10px); border: none; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.p-play-btn svg { width: 24px; height: 24px; }
+.pctrl-bot { padding: 8px 14px 12px; }
+.prog-track-row { height: 3px; background: rgba(255,255,255,.3); border-radius: 2px; position: relative; cursor: pointer; margin-bottom: 8px; }
+.prog-fill { height: 100%; background: var(--brand2); border-radius: 2px; position: relative; width: 0%; }
+.prog-dot  { width: 12px; height: 12px; background: #fff; border-radius: 50%; position: absolute; right: -6px; top: -5px; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.prog-bottom-row { display: flex; align-items: center; justify-content: space-between; }
+.prog-time-label { font-size: 12px; color: rgba(255,255,255,.85); font-weight: 600; white-space: nowrap; }
+.go-fs-btn { background: none; border: none; color: rgba(255,255,255,.85); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; cursor: pointer; padding: 0; }
+.go-fs-btn svg { width: 18px; height: 18px; }
+
+.tap-zone { position: absolute; top: 0; bottom: 0; width: 36%; z-index: 2; }
+.tap-zone.l { left: 0; }
+.tap-zone.r { right: 0; }
+.seek-flash { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 62px; height: 62px; background: rgba(255,255,255,.2); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 700; gap: 1px; opacity: 0; pointer-events: none; }
+.seek-flash svg { width: 22px; height: 22px; }
+.seek-flash.pop { animation: sfPop .5s ease-out forwards; }
+@keyframes sfPop {
+  0%  { opacity:0; transform:translate(-50%,-50%) scale(.75) }
+  25% { opacity:1; transform:translate(-50%,-50%) scale(1) }
+  100%{ opacity:0; transform:translate(-50%,-50%) scale(1.1) }
+}
+
+.pbelow-header { background: var(--bg); padding: 12px 14px 0; flex-shrink: 0; }
+.pvid-counter  { font-size: 12px; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.pvtitle       { font-size: 16px; font-weight: 800; color: var(--text); line-height: 1.3; }
+.pinfo-divider { height: 1px; background: var(--bg2); margin: 12px 0 0; }
+.pinfo-area { flex: 1; overflow-y: auto; scrollbar-width: none; background: var(--bg); }
+.pinfo-area::-webkit-scrollbar { display: none; }
+.upnext-list { display: flex; flex-direction: column; padding: 24px 14px 30px; }
+
+.un-card { display: flex; gap: 12px; padding: 8px; cursor: pointer; border-radius: 10px; transition: background .15s; margin: 0 -8px; position: relative; }
+.un-card:active { background: var(--bg2); }
+.un-card.now    { background: var(--bg2); }
+.un-thumb-wrap  { width: 100px; flex-shrink: 0; border-radius: 8px; overflow: hidden; aspect-ratio: 16/9; position: relative; }
+.un-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
+.un-dur   { position: absolute; bottom: 3px; right: 4px; background: rgba(0,0,0,.75); color: #fff; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; }
+.un-watched { position: absolute; top: 8px; right: 8px; width: 18px; height: 18px; background: var(--success); border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; z-index: 2; box-shadow: 0 1px 4px rgba(0,0,0,.25); }
+.un-watched svg { width: 10px; height: 10px; }
+.un-watched.show { opacity: 1; }
+.un-body  { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.un-num   { font-size: 11px; color: var(--muted); font-weight: 500; margin-bottom: 3px; }
+.un-title { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+
+@keyframes vidNext { from { opacity:0; transform:translateX(40px); }  to { opacity:1; transform:translateX(0); } }
+@keyframes vidPrev { from { opacity:0; transform:translateX(-40px); } to { opacity:1; transform:translateX(0); } }
+.anim-next { animation: vidNext .25s ease; }
+.anim-prev { animation: vidPrev .25s ease; }
+
+/* ══════════════════════════════
+   LANDSCAPE PHONE
+══════════════════════════════ */
+.landscape-phone {
+  width: min(844px, calc(100vw - 40px));
+  aspect-ratio: 844 / 390;
+  background: #000; border-radius: 44px;
+  overflow: hidden; position: relative; flex-shrink: 0;
+  box-shadow: 0 0 0 10px #1A1A2E, 0 0 0 12px #2E2E50, 0 32px 80px rgba(0,0,0,.65);
+}
+
+.ls-vid-bg    { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ls-vid-scrim { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 25%, transparent 55%, rgba(0,0,0,.7) 100%); }
+
+#ls-tap-overlay { position: absolute; inset: 0; z-index: 3; }
+
+.ls-flash { position: absolute; top: 50%; width: 62px; height: 62px; background: rgba(255,255,255,.2); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-size: 10px; font-weight: 700; gap: 1px; opacity: 0; pointer-events: none; z-index: 9; }
+.ls-flash svg { width: 22px; height: 22px; }
+#ls-flash-l { left: 20%; transform: translate(-50%,-50%); --tx: -50%; }
+#ls-flash-r { right: 20%; transform: translate(50%,-50%);  --tx:  50%; }
+.ls-flash.pop { animation: lsPop .5s ease-out forwards; }
+@keyframes lsPop {
+  0%  { opacity:0; transform:translate(var(--tx,-50%),-50%) scale(.75); }
+  25% { opacity:1; transform:translate(var(--tx,-50%),-50%) scale(1); }
+  100%{ opacity:0; transform:translate(var(--tx,-50%),-50%) scale(1.1); }
+}
+
+.ls-ctrl { position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: space-between; transition: opacity .25s; cursor: pointer; }
+.ls-ctrl.fade { opacity: 0; pointer-events: none; }
+
+.ls-ctrl-top { display: flex; align-items: center; gap: 10px; padding: 14px 16px 8px; background: linear-gradient(to bottom, rgba(0,0,0,.55), transparent); cursor: default; }
+.ls-back { width: 34px; height: 34px; background: rgba(0,0,0,.4); border: none; border-radius: 50%; color: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; }
+.ls-back svg { width: 18px; height: 18px; }
+.ls-title { flex: 1; font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ls-vol   { width: 32px; height: 32px; background: none; border: none; color: rgba(255,255,255,.85); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; padding: 0; }
+.ls-vol svg { width: 20px; height: 20px; }
+
+.ls-ctrl-mid { display: flex; align-items: center; justify-content: center; gap: 30px; cursor: default; }
+
+.ls-ctrl-bot { padding: 8px 16px 14px; background: linear-gradient(to top, rgba(0,0,0,.55), transparent); cursor: default; }
+.ls-prog-row { height: 3px; background: rgba(255,255,255,.3); border-radius: 2px; position: relative; cursor: pointer; margin-bottom: 8px; }
+.ls-prog-fill { height: 100%; background: var(--brand2); border-radius: 2px; position: relative; width: 0%; }
+.ls-prog-dot  { width: 12px; height: 12px; background: #fff; border-radius: 50%; position: absolute; right: -6px; top: -5px; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+.ls-time-row  { display: flex; align-items: center; justify-content: space-between; }
+.ls-time-lbl  { font-size: 12px; color: rgba(255,255,255,.85); font-weight: 600; }
+.ls-list-btn  { background: none; border: none; color: rgba(255,255,255,.85); display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; cursor: pointer; padding: 0; }
+.ls-list-btn svg { width: 20px; height: 20px; }
+
+.ls-backdrop { position: absolute; inset: 0; z-index: 30; background: rgba(0,0,0,.4); opacity: 0; pointer-events: none; transition: opacity .3s; }
+.ls-backdrop.vis { opacity: 1; pointer-events: all; }
+
+.ls-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 40; height: 70%; background: var(--card); border-radius: 20px 20px 0 0; box-shadow: var(--upper-shadow); transform: translateY(100%); transition: transform .35s cubic-bezier(.4,0,.2,1); display: flex; flex-direction: column; }
+.ls-sheet.open { transform: translateY(0); }
+.ls-sheet-drag  { width: 36px; height: 4px; background: var(--bg2); border-radius: 2px; margin: 10px auto 0; flex-shrink: 0; }
+.ls-sheet-head  { padding: 12px 14px 16px; border-bottom: 1px solid var(--bg2); flex-shrink: 0; }
+.ls-sheet-title { font-size: 20px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.ls-sheet-list  { flex: 1; overflow-y: auto; scrollbar-width: none; padding: 0 14px 16px; }
+.ls-sheet-list::-webkit-scrollbar { display: none; }
+
+@keyframes lsNext { from { opacity:0; transform:translateX(24px); } to { opacity:1; transform:translateX(0); } }
+@keyframes lsPrev { from { opacity:0; transform:translateX(-24px); } to { opacity:1; transform:translateX(0); } }
+.ls-anim-next { animation: lsNext .25s ease; }
+.ls-anim-prev { animation: lsPrev .25s ease; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     PORTRAIT VIEW
+══════════════════════════════ -->
+<div class="view" id="view-portrait">
+<div class="portrait-phone">
+
+<!-- HOME -->
+<div class="screen" id="scr-home">
+  <div class="sbar">
+    <span class="time">9:41</span>
+    <div class="sbar-icons" style="color:#FFFCFC;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="hero" onclick="goTo('scr-vlist')">
+    <div class="hero-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      13
+    </div>
+    <div class="hero-cat">Category B</div>
+    <div class="hero-title">Start<br>learning</div>
+    <div class="hero-arrow">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>
+    <svg class="hero-illus" viewBox="0 0 150 130" fill="none">
+      <ellipse cx="88" cy="75" rx="52" ry="52" fill="rgba(255,255,255,.05)"/>
+      <ellipse cx="88" cy="75" rx="36" ry="36" fill="rgba(255,255,255,.07)"/>
+      <circle cx="88" cy="54" r="22" fill="url(#gH1)"/>
+      <path d="M56 106 Q88 86 120 106" fill="url(#gH2)"/>
+      <defs>
+        <linearGradient id="gH1" x1="66" y1="32" x2="110" y2="76" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9080"/><stop offset="1" stop-color="#C060FF"/></linearGradient>
+        <linearGradient id="gH2" x1="56" y1="86" x2="120" y2="106" gradientUnits="userSpaceOnUse"><stop stop-color="#6B2FD9" stop-opacity=".9"/><stop offset="1" stop-color="#9060F0" stop-opacity=".6"/></linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="tiles">
+    <div class="tile"><div class="tile-label">Skill<br>Boosters</div><div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div></div>
+    <div class="tile"><div class="tile-label">Mock<br>Test</div><div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div></div>
+  </div>
+  <div class="learn-row" onclick="openVideo(0)">
+    <div class="learn-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+    <span class="learn-label">Learn in 90 seconds</span>
+    <span class="learn-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+  </div>
+  <div class="sec-title">More to explore</div>
+  <div class="explore-list">
+    <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><span class="exp-label">Road signs quiz</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+    <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span class="exp-label">Highway code</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+    <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><span class="exp-label">Mistakes</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+  </div>
+  <div class="bnav">
+    <div class="bnav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
+    <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Statistics</div>
+    <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</div>
+    <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Settings</div>
+  </div>
+</div><!-- /scr-home -->
+
+<!-- VIDEO LIST -->
+<div class="screen hidden" id="scr-vlist">
+  <div class="sbar" style="background:#fff;color:var(--text);">
+    <span class="time">9:41</span>
+    <div class="sbar-icons" style="color:var(--text);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="vl-header">
+    <div class="vl-topbar">
+      <button class="back-btn" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <span class="vl-title">Learn in 90 sec</span>
+      <span class="vl-count" id="vl-count">0 / 10</span>
+    </div>
+    <div class="vl-strip">
+      <div class="vl-strip-bar"><div class="vl-strip-fill" id="vl-strip-fill"></div></div>
+      <span class="vl-strip-label" id="vl-strip-label">0%</span>
+    </div>
+  </div>
+  <div class="vcard-list" id="vcard-list"></div>
+</div><!-- /scr-vlist -->
+
+<!-- PORTRAIT PLAYER -->
+<div class="screen hidden" id="scr-player">
+  <div class="sbar" style="background:#000;color:rgba(255,255,255,.65);">
+    <span class="time">9:41</span>
+    <div class="sbar-icons" style="color:rgba(255,255,255,.65);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="pvid-wrap" id="pvid-wrap">
+    <img class="pvid-thumb" id="p-thumb" src="" alt=""/>
+    <div class="pvid-scrim"></div>
+    <div class="tap-zone l" onclick="pSeekTap('l')"><div class="seek-flash" id="p-flash-l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>10s</div></div>
+    <div class="tap-zone r" onclick="pSeekTap('r')"><div class="seek-flash" id="p-flash-r"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>10s</div></div>
+    <div class="pctrl" id="pctrl" onclick="togglePCtrl(event)">
+      <div class="pctrl-top">
+        <button class="pctrl-back" onclick="pausePlay(); goTo('scr-vlist'); event.stopPropagation();">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      </div>
+      <div class="pctrl-mid">
+        <button class="seek-btn" onclick="pSeek(-10); event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>10s</button>
+        <button class="p-play-btn" id="p-play-btn" onclick="togglePlay(); event.stopPropagation();"><span id="p-play-icon"><svg viewBox="0 0 24 24" fill="#fff" width="24" height="24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></button>
+        <button class="seek-btn" onclick="pSeek(10); event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>10s</button>
+      </div>
+      <div class="pctrl-bot">
+        <div class="prog-track-row" id="p-track" onclick="pTrackClick(event); event.stopPropagation();"><div class="prog-fill" id="p-prog"><div class="prog-dot"></div></div></div>
+        <div class="prog-bottom-row">
+          <span class="prog-time-label" id="p-time-label">0:00 / 1:30</span>
+          <button class="go-fs-btn" onclick="openFS(); event.stopPropagation();">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pbelow-header">
+    <div class="pvid-counter" id="upnext-label">Lesson 1 of 10</div>
+    <div class="pvtitle" id="p-title">Lesson title</div>
+    <div class="pinfo-divider"></div>
+  </div>
+  <div class="pinfo-area">
+    <div class="upnext-list" id="upnext-list"></div>
+  </div>
+</div><!-- /scr-player -->
+
+</div><!-- /portrait-phone -->
+</div><!-- /view-portrait -->
+
+
+<!-- ══════════════════════════════
+     LANDSCAPE VIEW
+══════════════════════════════ -->
+<div class="view gone" id="view-landscape">
+<div class="landscape-phone" id="ls-phone">
+
+  <img class="ls-vid-bg" id="ls-vid-bg" src="" alt=""/>
+  <div class="ls-vid-scrim"></div>
+  <div id="ls-tap-overlay" onclick="lsShowCtrl()"></div>
+
+  <div class="ls-flash" id="ls-flash-l">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>10s
+  </div>
+  <div class="ls-flash" id="ls-flash-r">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>10s
+  </div>
+
+  <div class="ls-ctrl" id="ls-ctrl" onclick="onLsTap(event)">
+    <div class="ls-ctrl-top">
+      <button class="ls-back" onclick="closeFS(); event.stopPropagation();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="ls-title" id="ls-title">Lesson title</div>
+      <button class="ls-vol" onclick="event.stopPropagation();">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+      </button>
+    </div>
+    <div class="ls-ctrl-mid">
+      <button class="seek-btn" onclick="lsSeek(-10); event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>10s</button>
+      <button class="p-play-btn" id="ls-play-btn" onclick="lsTogglePlay(); event.stopPropagation();"><span id="ls-play-icon"><svg viewBox="0 0 24 24" fill="#fff" width="24" height="24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></button>
+      <button class="seek-btn" onclick="lsSeek(10); event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>10s</button>
+    </div>
+    <div class="ls-ctrl-bot">
+      <div class="ls-prog-row" id="ls-prog-row" onclick="lsTrackClick(event); event.stopPropagation();"><div class="ls-prog-fill" id="ls-prog-fill"><div class="ls-prog-dot"></div></div></div>
+      <div class="ls-time-row">
+        <span class="ls-time-lbl" id="ls-time">0:00 / 1:30</span>
+        <button class="ls-list-btn" onclick="lsOpenSheet(); event.stopPropagation();">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="ls-backdrop" id="ls-backdrop" onclick="lsCloseSheet()"></div>
+  <div class="ls-sheet" id="ls-sheet">
+    <div class="ls-sheet-drag"></div>
+    <div class="ls-sheet-head">
+      <div class="ls-sheet-title" id="ls-sheet-title">Lesson 1 / 10</div>
+    </div>
+    <div class="ls-sheet-list" id="ls-sheet-list"></div>
+  </div>
+
+</div><!-- /landscape-phone -->
+</div><!-- /view-landscape -->
+
+<script>
+const VIDEOS = [
+  { title: 'Understanding the Highway Code',          dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Motorway driving & lane discipline',      dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Roundabouts: priority & lane choice',     dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Speed limits & smart motorways',          dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Road signs you must know',                dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Hazard perception skills',                dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Parking rules & restrictions',            dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1506521781263-d8422e82f27a?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Night driving & adverse conditions',      dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Stopping distances explained',            dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format&fit=crop' },
+  { title: 'Theory test: what to expect on the day', dur: '1:30', durSec: 90, thumb: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&q=80&auto=format&fit=crop' },
+];
+
+const watchedState = new Array(VIDEOS.length).fill(false);
+const progressPct  = new Array(VIDEOS.length).fill(0);
+let curIdx = 0;
+
+const CHECK_SVG  = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+const SVG_PLAY   = `<svg viewBox="0 0 24 24" fill="#fff" width="24" height="24"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+const SVG_PAUSE  = `<svg viewBox="0 0 24 24" fill="#fff" width="24" height="24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`;
+
+function fmt(s) { s = Math.max(0, Math.floor(s)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+
+/* ── Shared watched ── */
+function markWatched(idx) {
+  if (watchedState[idx]) return;
+  watchedState[idx] = true;
+  const wb = document.getElementById('vcard-w-' + idx);
+  if (wb) wb.classList.add('show');
+  const vc = document.getElementById('vcard-' + idx);
+  if (vc) { const s = vc.querySelector('.vcard-sub'); if (s) s.innerHTML = VIDEOS[idx].dur + ' · <span style="color:#00A850;">Watched</span>'; }
+  const uw = document.getElementById('un-w-' + idx);
+  if (uw) uw.classList.add('show');
+  const lw = document.getElementById('ls-un-w-' + idx);
+  if (lw) lw.classList.add('show');
+  updateListProgress();
+}
+
+/* ══════════════
+   PORTRAIT JS
+══════════════ */
+let isPlaying = false, playTimer = null, ctrlTimeout = null;
+
+function goTo(id) {
+  const order = ['scr-home','scr-vlist','scr-player'];
+  const all   = document.querySelectorAll('.screen');
+  const to    = order.indexOf(id);
+  const from  = [...all].findIndex(s => !s.classList.contains('hidden') && !s.classList.contains('hidden-left'));
+  const fwd   = to >= from;
+  all.forEach(s => {
+    if (s.id === id) { s.classList.remove('hidden','hidden-left'); }
+    else { s.classList.remove('hidden','hidden-left'); s.classList.add(fwd ? 'hidden-left' : 'hidden'); }
+  });
+}
+
+function goBack() {
+  const order = ['scr-home','scr-vlist','scr-player'];
+  const cur   = [...document.querySelectorAll('.screen')].findIndex(s => !s.classList.contains('hidden') && !s.classList.contains('hidden-left'));
+  if (cur > 0) { pausePlay(); goTo(order[cur - 1]); }
+}
+
+function buildVcardList() {
+  document.getElementById('vcard-list').innerHTML = VIDEOS.map((v, i) => `
+    <div class="vcard" id="vcard-${i}" onclick="openVideo(${i})">
+      <div class="vcard-thumb-wrap" style="position:relative;">
+        <img class="vcard-thumb" src="${v.thumb}" alt="${v.title}" loading="lazy"/>
+        <div class="vcard-dur">${v.dur}</div>
+        <div class="vcard-watched-badge ${watchedState[i]?'show':''}" id="vcard-w-${i}">${CHECK_SVG}</div>
+        <div class="vcard-pbar-wrap"><div class="vcard-pbar" id="vcard-pbar-${i}" style="width:${progressPct[i]}%"></div></div>
+      </div>
+      <div class="vcard-body">
+        <div class="vcard-num">Lesson ${i+1}</div>
+        <div class="vcard-title">${v.title}</div>
+        <div class="vcard-sub">${v.dur}${watchedState[i]?' · <span style="color:#00A850;">Watched</span>':''}</div>
+      </div>
+      <div class="vcard-play-btn"><svg viewBox="0 0 24 24" fill="#fff" width="12" height="12" style="margin-left:2px"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    </div>`).join('');
+  updateListProgress();
+}
+
+function updateListProgress() {
+  const watched = watchedState.filter(Boolean).length;
+  const pct = Math.round(watched / VIDEOS.length * 100);
+  const c = document.getElementById('vl-count');       if (c) c.textContent = `${watched} / ${VIDEOS.length}`;
+  const f = document.getElementById('vl-strip-fill');  if (f) f.style.width = pct + '%';
+  const l = document.getElementById('vl-strip-label'); if (l) l.textContent = pct + '%';
+}
+
+function openVideo(idx) {
+  curIdx = idx; pausePlay();
+  updatePortraitPlayer();
+  goTo('scr-player');
+  setTimeout(() => { document.getElementById('scr-player').scrollTop = 0; }, 50);
+  setTimeout(startPlay, 300);
+}
+
+function updatePortraitPlayer() {
+  const v = VIDEOS[curIdx];
+  document.getElementById('p-thumb').src = v.thumb;
+  document.getElementById('upnext-label').textContent = `Lesson ${curIdx+1} of ${VIDEOS.length}`;
+  document.getElementById('p-title').textContent = v.title;
+  syncProgUI(); buildUpNext(); resetCtrlTimer();
+}
+
+function togglePlay() { isPlaying ? pausePlay() : startPlay(); }
+
+function startPlay() {
+  isPlaying = true;
+  document.getElementById('p-play-icon').innerHTML = SVG_PAUSE;
+  clearInterval(playTimer);
+  playTimer = setInterval(() => {
+    progressPct[curIdx] = Math.min(100, progressPct[curIdx] + 0.5);
+    if (progressPct[curIdx] >= 85) markWatched(curIdx);
+    if (progressPct[curIdx] >= 100) { pausePlay(); return; }
+    syncProgUI();
+  }, 200);
+}
+
+function pausePlay() {
+  isPlaying = false; clearInterval(playTimer);
+  const b = document.getElementById('p-play-icon'); if (b) b.innerHTML = SVG_PLAY;
+}
+
+function pSeek(secs) {
+  progressPct[curIdx] = Math.max(0, Math.min(100, progressPct[curIdx] + (secs/VIDEOS[curIdx].durSec)*100));
+  syncProgUI(); resetCtrlTimer();
+}
+
+function pSeekTap(side) {
+  pSeek(side === 'l' ? -10 : 10);
+  const el = document.getElementById(side==='l' ? 'p-flash-l' : 'p-flash-r');
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+  document.getElementById('pctrl').classList.remove('fade'); resetCtrlTimer();
+}
+
+function pTrackClick(e) {
+  const rect = document.getElementById('p-track').getBoundingClientRect();
+  progressPct[curIdx] = Math.max(0, Math.min(100, (e.clientX - rect.left) / rect.width * 100));
+  syncProgUI(); resetCtrlTimer();
+}
+
+function togglePCtrl(e) {
+  const ctrl = document.getElementById('pctrl');
+  if (ctrl.classList.contains('fade')) { ctrl.classList.remove('fade'); resetCtrlTimer(); }
+  else { ctrl.classList.add('fade'); clearTimeout(ctrlTimeout); }
+}
+
+function resetCtrlTimer() {
+  clearTimeout(ctrlTimeout);
+  document.getElementById('pctrl').classList.remove('fade');
+  ctrlTimeout = setTimeout(() => { document.getElementById('pctrl').classList.add('fade'); }, 3500);
+}
+
+function syncProgUI() {
+  const v = VIDEOS[curIdx], pct = progressPct[curIdx], cur = pct/100*v.durSec;
+  const pp = document.getElementById('p-prog'); if (pp) pp.style.width = pct + '%';
+  const pl = document.getElementById('p-time-label'); if (pl) pl.textContent = fmt(cur) + ' / ' + v.dur;
+  const pb = document.getElementById('vcard-pbar-' + curIdx); if (pb) pb.style.width = pct + '%';
+}
+
+function buildUpNext() {
+  const list = document.getElementById('upnext-list'); if (!list) return;
+  list.innerHTML = VIDEOS.map((v, i) => `
+    <div class="un-card ${i===curIdx?'now':''}" onclick="openVideo(${i})">
+      <div class="un-thumb-wrap"><img class="un-thumb" src="${v.thumb}" alt="${v.title}" loading="lazy"/><div class="un-dur">${v.dur}</div></div>
+      <div class="un-body"><div class="un-num">Lesson ${i+1}</div><div class="un-title">${v.title}</div></div>
+      <div class="un-watched ${watchedState[i]?'show':''}" id="un-w-${i}">${CHECK_SVG}</div>
+    </div>`).join('');
+}
+
+/* Switch to landscape */
+function openFS() {
+  pausePlay();
+  document.getElementById('view-portrait').classList.add('gone');
+  document.getElementById('view-landscape').classList.remove('gone');
+  lsUpdatePlayer();
+  setTimeout(lsStartPlay, 300);
+}
+
+/* ══════════════
+   LANDSCAPE JS
+══════════════ */
+let lsPlaying = false, lsTimer = null, lsCtrlTO = null;
+let lsSwipeY = 0, lsSwipeX = 0;
+
+function closeFS() {
+  lsPausePlay();
+  document.getElementById('ls-sheet').classList.remove('open');
+  document.getElementById('ls-backdrop').classList.remove('vis');
+  document.getElementById('view-landscape').classList.add('gone');
+  document.getElementById('view-portrait').classList.remove('gone');
+  updatePortraitPlayer();
+}
+
+function lsOpenVideo(idx, anim) {
+  lsPausePlay(); curIdx = idx;
+  document.getElementById('ls-sheet').classList.remove('open');
+  document.getElementById('ls-backdrop').classList.remove('vis');
+  lsUpdatePlayer(anim);
+  setTimeout(lsStartPlay, 280);
+}
+
+function lsUpdatePlayer(anim) {
+  const v = VIDEOS[curIdx];
+  const bg = document.getElementById('ls-vid-bg');
+  bg.src = v.thumb;
+  if (anim) { bg.classList.remove('ls-anim-next','ls-anim-prev'); void bg.offsetWidth; bg.classList.add(anim); }
+  document.getElementById('ls-title').textContent = v.title;
+  const st = document.getElementById('ls-sheet-title');
+  if (st) st.textContent = `Lesson ${curIdx+1} / ${VIDEOS.length}`;
+  lsSyncProgUI(); lsShowCtrl();
+}
+
+function lsTogglePlay() { lsPlaying ? lsPausePlay() : lsStartPlay(); }
+
+function lsStartPlay() {
+  lsPlaying = true;
+  document.getElementById('ls-play-icon').innerHTML = SVG_PAUSE;
+  clearInterval(lsTimer);
+  lsTimer = setInterval(lsTick, 200);
+  lsResetCtrlTimer();
+}
+
+function lsPausePlay() {
+  lsPlaying = false; clearInterval(lsTimer);
+  const b = document.getElementById('ls-play-icon'); if (b) b.innerHTML = SVG_PLAY;
+}
+
+function lsTick() {
+  progressPct[curIdx] = Math.min(100, progressPct[curIdx] + 0.5);
+  if (progressPct[curIdx] >= 85) markWatched(curIdx);
+  if (progressPct[curIdx] >= 100) {
+    lsPausePlay();
+    if (curIdx < VIDEOS.length - 1) setTimeout(() => lsOpenVideo(curIdx + 1, 'ls-anim-next'), 400);
+    return;
+  }
+  lsSyncProgUI();
+}
+
+function lsSeek(secs) {
+  progressPct[curIdx] = Math.max(0, Math.min(100, progressPct[curIdx] + (secs/VIDEOS[curIdx].durSec)*100));
+  lsSyncProgUI(); lsResetCtrlTimer();
+}
+
+function lsTrackClick(e) {
+  const rect = document.getElementById('ls-prog-row').getBoundingClientRect();
+  progressPct[curIdx] = Math.max(0, Math.min(100, (e.clientX - rect.left) / rect.width * 100));
+  lsSyncProgUI(); lsResetCtrlTimer();
+}
+
+function lsSyncProgUI() {
+  const v = VIDEOS[curIdx], pct = progressPct[curIdx], cur = pct/100*v.durSec;
+  document.getElementById('ls-prog-fill').style.width = pct + '%';
+  document.getElementById('ls-time').textContent = fmt(cur) + ' / ' + v.dur;
+}
+
+function onLsTap(e) {
+  if (e.target.closest('.ls-ctrl-top, .ls-ctrl-bot')) return;
+  const rect = document.getElementById('ls-ctrl').getBoundingClientRect();
+  const xPct = (e.clientX - rect.left) / rect.width;
+  if (xPct < 0.30) { lsSeek(-10); lsFlash('l'); }
+  else if (xPct > 0.70) { lsSeek(10); lsFlash('r'); }
+  else { document.getElementById('ls-ctrl').classList.add('fade'); clearTimeout(lsCtrlTO); }
+}
+
+function lsFlash(side) {
+  const el = document.getElementById(side==='l' ? 'ls-flash-l' : 'ls-flash-r');
+  el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop');
+}
+
+function lsShowCtrl() {
+  document.getElementById('ls-ctrl').classList.remove('fade'); lsResetCtrlTimer();
+}
+function lsResetCtrlTimer() {
+  clearTimeout(lsCtrlTO);
+  lsCtrlTO = setTimeout(() => { document.getElementById('ls-ctrl').classList.add('fade'); }, 3500);
+}
+
+/* Landscape sheet */
+function lsBuildSheet() {
+  document.getElementById('ls-sheet-list').innerHTML = VIDEOS.map((v,i) => `
+    <div class="un-card ${i===curIdx?'now':''}" onclick="lsOpenVideo(${i})">
+      <div class="un-thumb-wrap"><img class="un-thumb" src="${v.thumb}" alt="${v.title}" loading="lazy"/><div class="un-dur">${v.dur}</div></div>
+      <div class="un-body"><div class="un-num">Lesson ${i+1}</div><div class="un-title">${v.title}</div></div>
+      <div class="un-watched ${watchedState[i]?'show':''}" id="ls-un-w-${i}">${CHECK_SVG}</div>
+    </div>`).join('');
+}
+
+function lsOpenSheet() {
+  lsPausePlay();
+  document.getElementById('ls-sheet-title').textContent = `Lesson ${curIdx+1} / ${VIDEOS.length}`;
+  lsBuildSheet();
+  document.getElementById('ls-sheet').classList.add('open');
+  document.getElementById('ls-backdrop').classList.add('vis');
+  setTimeout(() => {
+    const cards = document.querySelectorAll('#ls-sheet-list .un-card');
+    if (cards[curIdx]) cards[curIdx].scrollIntoView({ block:'nearest', behavior:'smooth' });
+  }, 370);
+}
+
+function lsCloseSheet() {
+  document.getElementById('ls-sheet').classList.remove('open');
+  document.getElementById('ls-backdrop').classList.remove('vis');
+  setTimeout(lsStartPlay, 300);
+}
+
+/* Swipe up on landscape phone to open sheet */
+const lsPhone = document.getElementById('ls-phone');
+lsPhone.addEventListener('touchstart', e => { lsSwipeY = e.touches[0].clientY; lsSwipeX = e.touches[0].clientX; }, { passive: true });
+lsPhone.addEventListener('touchend', e => {
+  if (document.getElementById('ls-sheet').classList.contains('open')) return;
+  const dy = lsSwipeY - e.changedTouches[0].clientY;
+  const dx = Math.abs(e.changedTouches[0].clientX - lsSwipeX);
+  const rect = lsPhone.getBoundingClientRect();
+  const localY = lsSwipeY - rect.top;
+  if (localY > rect.height * 0.65 && dy > 30 && dx < 80) lsOpenSheet();
+}, { passive: true });
+
+/* ── Init ── */
+buildVcardList();
+</script>
+</body>
+</html>
