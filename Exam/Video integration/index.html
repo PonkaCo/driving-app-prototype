@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Exam prototypes</title>
+  <title>Video integration</title>
 
   <style>
     body {
@@ -21,9 +21,19 @@
     }
 
     h1 {
-      margin-bottom: 24px;
+      margin-bottom: 8px;
       font-size: 28px;
     }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 24px;
+      font-size: 14px;
+      color: #888;
+      text-decoration: none;
+    }
+
+    .back:hover { color: #1565c0; }
 
     .list {
       display: flex;
@@ -31,7 +41,7 @@
       gap: 16px;
     }
 
-    a {
+    a.item {
       display: block;
       padding: 16px 24px;
       background: white;
@@ -44,7 +54,7 @@
       min-width: 260px;
     }
 
-    a:hover {
+    a.item:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.12);
     }
@@ -53,12 +63,13 @@
 
 <body>
   <div class="container">
-    <h1>Exam prototypes</h1>
+    <a class="back" href="../../index.html">← All prototypes</a>
+    <h1>Video integration</h1>
 
     <div class="list">
-      <a href="./Exam/Shorts%20USA.html">Shorts USA</a>
-      <a href="./Exam/UK%20video%20vertical.html">UK video vertical</a>
-      <a href="./Exam/Video%20integration/">Video integration</a>
+      <a class="item" href="./UK%20videos%20final%20prototype.html">UK videos final prototype</a>
+      <a class="item" href="./UK%20video%20vertical.html">UK video vertical</a>
+      <a class="item" href="./UK%20video%20horizontal.html">UK video horizontal</a>
     </div>
   </div>
 </body>
