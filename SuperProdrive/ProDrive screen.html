@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ProDrive Screen</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --brand:#401971;--brand2:#6B2ABC;--accent:#FA5732;
+  --bg:#F2F0F5;--bg2:#E9E7EB;--card:#FCFCFC;
+  --text:#150826;--muted:#797282;--success:#00A850;
+  --shadow:0px 6px 30px 0px rgba(55,22,97,0.08);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px 48px;}
+
+.phone{width:390px;height:844px;background:#fff;border-radius:50px;overflow:hidden;position:relative;flex-shrink:0;box-shadow:0 0 0 10px #1A1A2E,0 0 0 12px #2E2E50,0 48px 100px rgba(0,0,0,.6);}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .38s ease;}
+.screen::-webkit-scrollbar{display:none;}
+.screen.off-right{transform:translateX(100%);opacity:0;pointer-events:none;}
+.screen.off-left{transform:translateX(-100%);opacity:0;pointer-events:none;}
+.player-screen{overflow:hidden;display:flex;flex-direction:column;background:#fff;}
+
+/* STATUS BAR */
+.sbar{height:52px;padding:16px 24px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.sbar .time{font-size:15px;font-weight:700;color:var(--text);}
+.sbar-right{display:flex;align-items:center;gap:6px;}
+.sbar-right svg{width:16px;height:16px;color:var(--text);}
+
+/* ══════════════════════════════
+   HOME SCREEN
+══════════════════════════════ */
+#scr-home{background:var(--bg);}
+#scr-home .sbar{background:var(--bg);}
+
+.hero{background:var(--brand);margin:8px 14px 0;border-radius:24px;padding:20px 20px 0;position:relative;overflow:hidden;min-height:164px;cursor:pointer;}
+.hero-badge{position:absolute;top:18px;right:18px;background:var(--accent);color:#fff;font-size:13px;font-weight:700;padding:5px 11px;border-radius:20px;display:flex;align-items:center;gap:5px;}
+.hero-cat{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:6px;}
+.hero-title{font-size:26px;font-weight:800;color:#FFFCFC;line-height:1.2;margin-bottom:20px;max-width:56%;}
+.hero-arrow{width:48px;height:48px;background:#fff;border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:22px;}
+.hero-illus{position:absolute;right:-4px;bottom:0;width:180px;height:160px;pointer-events:none;}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 14px 0;}
+.tile{background:var(--card);border-radius:18px;padding:16px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s;}
+.tile:active{transform:scale(.97);}
+.tile-label{font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px;line-height:1.25;}
+.tile-icon{width:38px;height:38px;background:var(--bg);border-radius:11px;display:flex;align-items:center;justify-content:center;}
+.tile-icon svg{width:20px;height:20px;}
+
+.list-row{margin:10px 14px 0;background:var(--card);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s;}
+.list-row:active{transform:scale(.98);}
+.row-icon-wrap{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.row-label{font-size:16px;font-weight:600;color:var(--text);flex:1;}
+.row-chev{color:var(--bg2);}
+.row-chev svg{width:18px;height:18px;}
+
+.sec-title{font-size:18px;font-weight:800;color:var(--text);padding:16px 14px 8px;}
+.explore-list{padding:0 14px 100px;}
+.exp-item{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--bg2);cursor:pointer;}
+.exp-item:last-child{border-bottom:none;}
+.exp-icon{width:36px;height:36px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.exp-icon svg{width:18px;height:18px;}
+.exp-label{flex:1;font-size:15px;font-weight:500;color:var(--text);}
+.exp-chev{color:var(--bg2);}
+.exp-chev svg{width:18px;height:18px;}
+
+/* ══════════════════════════════
+   BOTTOM NAV (shared)
+══════════════════════════════ */
+.bnav{
+  position:absolute;bottom:0;left:0;right:0;
+  background:#fff;
+  border-top:1px solid rgba(0,0,0,.06);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:10px 0 26px;z-index:10;
+}
+.bnav-item{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:500;color:#9B99A7;cursor:pointer;}
+.bnav-item svg{width:24px;height:24px;}
+.bnav-item.active{color:var(--brand);}
+.bnav-pd{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;font-weight:600;cursor:pointer;}
+.bnav-pd .pd-ico{width:28px;height:28px;display:flex;align-items:center;justify-content:center;}
+.bnav-pd .pd-ico svg{width:28px;height:28px;}
+.bnav-pd.active{color:var(--brand2);}
+.bnav-pd:not(.active){color:#9B99A7;}
+
+/* ══════════════════════════════
+   PRODRIVE SCREEN
+══════════════════════════════ */
+#scr-prodrive{background:#fff;}
+#scr-prodrive .sbar{background:#fff;}
+
+.pd-scroll-content{padding-bottom:88px;}
+
+/* Hazard section */
+.pd-sec-head{display:flex;align-items:baseline;justify-content:space-between;padding:16px 18px 12px;}
+.pd-sec-title{font-size:22px;font-weight:800;color:var(--text);}
+.pd-see-all{font-size:15px;font-weight:500;color:#9B99A7;cursor:pointer;}
+
+.haz-scroll{
+  display:flex;gap:12px;
+  overflow-x:auto;padding:0 18px 4px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+}
+.haz-scroll::-webkit-scrollbar{display:none;}
+
+.haz-hcard{width:158px;flex-shrink:0;background:#fff;border-radius:18px;padding:8px;box-shadow:0 4px 20px rgba(55,22,97,.07);cursor:pointer;transition:transform .15s;}
+.haz-hcard:active{transform:scale(.97);}
+.haz-hthumb{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;display:block;}
+.haz-hfoot{display:flex;align-items:center;justify-content:space-between;padding:8px 4px 2px;}
+.haz-hnum{font-size:14px;font-weight:500;color:#9B99A7;}
+.haz-hpts-row{display:flex;align-items:center;gap:5px;}
+.haz-hdot{width:8px;height:8px;background:var(--success);border-radius:50%;flex-shrink:0;}
+.haz-hpts{font-size:14px;font-weight:600;color:var(--text);}
+
+/* Videos section */
+.vid-sec-head{padding:22px 18px 10px;}
+.vid-sec-title{font-size:24px;font-weight:800;color:var(--text);}
+
+/* Topic filter tabs */
+.topic-bar{overflow-x:auto;scrollbar-width:none;padding:0 16px 14px;-webkit-overflow-scrolling:touch;}
+.topic-bar::-webkit-scrollbar{display:none;}
+.topic-pills{display:flex;gap:8px;width:max-content;}
+.topic-pill{background:var(--bg);border:none;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
+.topic-pill.active{background:var(--brand);color:#fff;}
+
+.vid-list{display:flex;flex-direction:column;gap:2px;padding:0 12px;}
+
+.vid-row{
+  display:flex;align-items:center;gap:14px;
+  padding:10px 12px;border-radius:16px;
+  cursor:pointer;transition:background .15s;
+}
+.vid-row.unlocked:active{background:#EDE9F6;}
+.vid-row.active-lesson{background:#EDE9F6;}
+
+.vid-tw{position:relative;width:110px;height:72px;border-radius:10px;overflow:hidden;flex-shrink:0;}
+.vid-th{width:100%;height:100%;object-fit:cover;display:block;}
+.vid-dur{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.72);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;}
+.vid-body{flex:1;min-width:0;}
+.vid-lesson-lbl{font-size:12px;font-weight:500;color:#9B99A7;margin-bottom:3px;}
+.vid-title{font-size:17px;font-weight:700;color:var(--text);line-height:1.25;}
+.vid-lock{color:#CFCBD8;flex-shrink:0;}
+.vid-lock svg{width:18px;height:18px;}
+
+/* ProDrive screen: sticky bnav */
+#scr-prodrive{overflow:hidden;display:flex;flex-direction:column;}
+.pd-inner{flex:1;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.pd-inner::-webkit-scrollbar{display:none;}
+
+/* ══════════════════════════════
+   PLAYER SCREEN
+══════════════════════════════ */
+#scr-player .sbar{background:#000;color:rgba(255,255,255,.65);}
+
+.pvid-wrap{width:100%;aspect-ratio:16/9;position:relative;background:#000;flex-shrink:0;}
+.pvid-thumb{width:100%;height:100%;object-fit:cover;display:block;}
+.pvid-scrim{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.45) 0%,transparent 30%,transparent 55%,rgba(0,0,0,.65) 100%);}
+.pctrl{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;justify-content:space-between;transition:opacity .25s;}
+.pctrl.fade{opacity:0;pointer-events:none;}
+.pctrl-top{display:flex;align-items:center;padding:10px 12px;}
+.pctrl-back{width:34px;height:34px;background:rgba(0,0,0,.4);border:none;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.pctrl-back svg{width:18px;height:18px;}
+.pctrl-mid{display:flex;align-items:center;justify-content:center;gap:30px;}
+.seek-btn{width:52px;height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);border:none;border-radius:50%;color:#fff;cursor:pointer;font-size:10px;font-weight:700;font-family:inherit;}
+.seek-btn svg{width:22px;height:22px;}
+.p-play-btn{width:56px;height:56px;background:rgba(255,255,255,.16);backdrop-filter:blur(10px);border:none;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.p-play-btn svg{width:24px;height:24px;}
+.pctrl-bot{padding:8px 14px 12px;}
+.prog-track{height:3px;background:rgba(255,255,255,.3);border-radius:2px;position:relative;cursor:pointer;margin-bottom:8px;}
+.prog-fill{height:100%;background:var(--brand2);border-radius:2px;position:relative;width:0%;transition:width .2s;}
+.prog-dot{width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;right:-6px;top:-5px;box-shadow:0 1px 4px rgba(0,0,0,.5);}
+.prog-time-row{display:flex;align-items:center;}
+.prog-time{font-size:12px;color:rgba(255,255,255,.85);font-weight:600;}
+.pbelow{background:#fff;padding:14px 16px 0;flex-shrink:0;}
+.pcounter{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px;}
+.ptitle{font-size:18px;font-weight:800;color:var(--text);line-height:1.3;}
+.pdivider{height:1px;background:var(--bg2);margin:14px 0 0;}
+.pinfo{flex:1;overflow-y:auto;scrollbar-width:none;}
+.pinfo::-webkit-scrollbar{display:none;}
+.upnext-head{font-size:14px;font-weight:700;color:var(--muted);padding:14px 16px 8px;}
+.upnext{padding:0 12px 30px;display:flex;flex-direction:column;gap:2px;}
+.un{display:flex;gap:12px;padding:10px 8px;cursor:pointer;border-radius:12px;transition:background .15s;}
+.un:active{background:var(--bg);}
+.un.now{background:#EDE9F6;}
+.un-tw{width:90px;flex-shrink:0;border-radius:8px;overflow:hidden;aspect-ratio:16/9;position:relative;}
+.un-th{width:100%;height:100%;object-fit:cover;display:block;}
+.un-td{position:absolute;bottom:3px;right:4px;background:rgba(0,0,0,.72);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;}
+.un-body{flex:1;display:flex;flex-direction:column;justify-content:center;}
+.un-num{font-size:11px;color:var(--muted);font-weight:500;margin-bottom:3px;}
+.un-tit{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;}
+.un-lock{color:#CFCBD8;flex-shrink:0;display:flex;align-items:center;}
+.un-lock svg{width:14px;height:14px;}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+<!-- ══════════════════════════════
+     HOME SCREEN
+══════════════════════════════ -->
+<div class="screen" id="scr-home">
+  <div class="sbar">
+    <span class="time">9:41</span>
+    <div class="sbar-right">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>13</div>
+    <div class="hero-cat">Category B</div>
+    <div class="hero-title">Tap to start<br>learning</div>
+    <div class="hero-arrow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+    <svg class="hero-illus" viewBox="0 0 180 160" fill="none">
+      <ellipse cx="110" cy="90" rx="65" ry="65" fill="rgba(255,255,255,.04)"/>
+      <ellipse cx="110" cy="90" rx="45" ry="45" fill="rgba(255,255,255,.05)"/>
+      <path d="M130 20 C155 30 165 55 155 85 L135 120 L110 140 L90 125 L80 95 C70 65 80 35 105 25 Z" fill="url(#rG1)"/>
+      <path d="M130 20 C140 10 148 8 145 18 L135 45 L120 35 Z" fill="url(#rG2)"/>
+      <path d="M80 95 C65 100 58 120 70 130 L90 125 Z" fill="url(#rG3)" opacity=".85"/>
+      <path d="M110 140 C105 158 120 165 130 155 L135 120 Z" fill="url(#rG3)" opacity=".85"/>
+      <circle cx="115" cy="80" r="14" fill="rgba(255,255,255,.15)"/>
+      <circle cx="115" cy="80" r="9" fill="rgba(255,255,255,.25)"/>
+      <path d="M92 125 C85 140 88 160 100 158 C108 156 110 145 105 135 C102 128 95 125 92 125 Z" fill="url(#rG4)" opacity=".9"/>
+      <path d="M100 130 C96 142 98 155 105 153 C110 151 111 143 108 136 Z" fill="#FFD580" opacity=".7"/>
+      <defs>
+        <linearGradient id="rG1" x1="80" y1="20" x2="160" y2="140" gradientUnits="userSpaceOnUse"><stop stop-color="#C060FF"/><stop offset="1" stop-color="#7030C0"/></linearGradient>
+        <linearGradient id="rG2" x1="120" y1="10" x2="150" y2="45" gradientUnits="userSpaceOnUse"><stop stop-color="#FF9060"/><stop offset="1" stop-color="#FF5522"/></linearGradient>
+        <linearGradient id="rG3" x1="60" y1="95" x2="110" y2="160" gradientUnits="userSpaceOnUse"><stop stop-color="#FF7040"/><stop offset="1" stop-color="#D040A0" stop-opacity=".7"/></linearGradient>
+        <linearGradient id="rG4" x1="88" y1="125" x2="108" y2="165" gradientUnits="userSpaceOnUse"><stop stop-color="#FF8C00"/><stop offset="1" stop-color="#FF4400" stop-opacity=".6"/></linearGradient>
+      </defs>
+    </svg>
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="tile-label">Skill<br>Boosters</div><div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div></div>
+    <div class="tile"><div class="tile-label">Hazard<br>perception</div><div class="tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div></div>
+  </div>
+
+  <div class="list-row">
+    <div class="row-icon-wrap" style="background:linear-gradient(135deg,#FF6B35,#FA5732);">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><rect x="4" y="3" width="20" height="22" rx="4" fill="rgba(255,255,255,.25)"/><text x="14" y="20" font-size="14" font-weight="900" fill="#fff" text-anchor="middle" font-family="Arial,sans-serif">L</text></svg>
+    </div>
+    <span class="row-label">DVSA mock test</span>
+    <span class="row-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+  </div>
+
+  <div class="sec-title">More to explore</div>
+  <div class="explore-list">
+    <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div><span class="exp-label">Road signs quiz</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+    <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><span class="exp-label">Highway code</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+    <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg></div><span class="exp-label">Becoming a driver</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+    <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><span class="exp-label">Mistakes</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+  </div>
+
+  <div class="bnav">
+    <div class="bnav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+    </div>
+    <div class="bnav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Stat
+    </div>
+    <div class="bnav-pd" onclick="navigate('scr-prodrive')">
+      <div class="pd-ico">
+        <svg viewBox="0 0 28 28" fill="none">
+          <rect x="1" y="1" width="26" height="26" rx="7" fill="#EDE9F6"/>
+          <polygon points="14,5 17.5,11 24,12 19,17 20.5,24 14,20.5 7.5,24 9,17 4,12 10.5,11" fill="var(--brand2)"/>
+        </svg>
+      </div>
+      ProDrive
+    </div>
+    <div class="bnav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Settings
+    </div>
+  </div>
+</div><!-- /scr-home -->
+
+
+<!-- ══════════════════════════════
+     PRODRIVE SCREEN
+══════════════════════════════ -->
+<div class="screen off-right" id="scr-prodrive">
+  <div class="pd-inner">
+    <div class="sbar">
+      <span class="time">9:41</span>
+      <div class="sbar-right">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <div class="pd-scroll-content">
+
+      <!-- Hazard section -->
+      <div class="pd-sec-head">
+        <span class="pd-sec-title">Extra hazard 20</span>
+        <span class="pd-see-all">see all</span>
+      </div>
+      <div class="haz-scroll" id="haz-scroll"></div>
+
+      <!-- Videos section -->
+      <div class="vid-sec-head">
+        <div class="vid-sec-title">Learning videos 65</div>
+      </div>
+      <div class="topic-bar">
+        <div class="topic-pills">
+          <button class="topic-pill active" onclick="setTopic(this)">All</button>
+          <button class="topic-pill" onclick="setTopic(this)">Junctions</button>
+          <button class="topic-pill" onclick="setTopic(this)">Motorways</button>
+          <button class="topic-pill" onclick="setTopic(this)">Night driving</button>
+          <button class="topic-pill" onclick="setTopic(this)">Road signs</button>
+          <button class="topic-pill" onclick="setTopic(this)">Parking</button>
+          <button class="topic-pill" onclick="setTopic(this)">Hazards</button>
+        </div>
+      </div>
+      <div class="vid-list" id="vid-list"></div>
+
+    </div>
+  </div><!-- /pd-inner -->
+
+  <div class="bnav">
+    <div class="bnav-item" onclick="navigate('scr-home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+    </div>
+    <div class="bnav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Stat
+    </div>
+    <div class="bnav-pd active">
+      <div class="pd-ico">
+        <svg viewBox="0 0 28 28" fill="none">
+          <rect x="1" y="1" width="26" height="26" rx="7" fill="#EDE9F6"/>
+          <polygon points="14,5 17.5,11 24,12 19,17 20.5,24 14,20.5 7.5,24 9,17 4,12 10.5,11" fill="var(--brand2)"/>
+        </svg>
+      </div>
+      ProDrive
+    </div>
+    <div class="bnav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Settings
+    </div>
+  </div>
+</div><!-- /scr-prodrive -->
+
+
+<!-- ══════════════════════════════
+     PLAYER SCREEN
+══════════════════════════════ -->
+<div class="screen off-right player-screen" id="scr-player">
+  <div class="sbar" style="background:#000;color:rgba(255,255,255,.65);">
+    <span class="time">9:41</span>
+    <div class="sbar-right" style="color:rgba(255,255,255,.65);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="pvid-wrap">
+    <img class="pvid-thumb" id="p-thumb" src="" alt=""/>
+    <div class="pvid-scrim"></div>
+    <div class="pctrl" id="pctrl" onclick="toggleCtrl(event)">
+      <div class="pctrl-top">
+        <button class="pctrl-back" onclick="pausePlay();goBack();event.stopPropagation();">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+      </div>
+      <div class="pctrl-mid">
+        <button class="seek-btn" onclick="seek(-10);event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg>10s</button>
+        <button class="p-play-btn" onclick="togglePlay();event.stopPropagation();"><span id="p-pbtn-icon"><svg viewBox="0 0 24 24" fill="#fff" width="24" height="24"><polygon points="5 3 19 12 5 21 5 3"/></svg></span></button>
+        <button class="seek-btn" onclick="seek(10);event.stopPropagation();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>10s</button>
+      </div>
+      <div class="pctrl-bot">
+        <div class="prog-track" onclick="trackClick(event);event.stopPropagation();">
+          <div class="prog-fill" id="p-fill"><div class="prog-dot"></div></div>
+        </div>
+        <div class="prog-time-row"><span class="prog-time" id="p-time">0:00 / 7:14</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="pbelow">
+    <div class="pcounter" id="p-counter">Lesson 1 of 65</div>
+    <div class="ptitle" id="p-title">Tips for Nighttime Driving</div>
+    <div class="pdivider"></div>
+  </div>
+  <div class="pinfo">
+    <div class="upnext-head">Up next</div>
+    <div class="upnext" id="upnext"></div>
+  </div>
+</div><!-- /scr-player -->
+
+</div><!-- /phone -->
+
+<script>
+/* ── DATA ── */
+const HAZARDS_DATA = [
+  {num:'01',pts:5,thumb:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&q=80&auto=format&fit=crop'},
+  {num:'02',pts:5,thumb:'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80&auto=format&fit=crop'},
+  {num:'03',pts:4,thumb:'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=600&q=80&auto=format&fit=crop'},
+  {num:'04',pts:5,thumb:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&q=80&auto=format&fit=crop'},
+  {num:'05',pts:3,thumb:'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80&auto=format&fit=crop'},
+  {num:'06',pts:5,thumb:'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=600&q=80&auto=format&fit=crop'},
+  {num:'07',pts:4,thumb:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&q=80&auto=format&fit=crop'},
+  {num:'08',pts:5,thumb:'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=600&q=80&auto=format&fit=crop'},
+];
+
+const VIDEOS_DATA = [
+  {lesson:1,title:'Tips for Nighttime Driving',       dur:'7:14',durSec:434,thumb:'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=600&q=80&auto=format&fit=crop',locked:false},
+  {lesson:2,title:'Navigating Roundabouts',           dur:'7:32',durSec:452,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:3,title:'The Importance of Traffic Signs',  dur:'6:19',durSec:379,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:4,title:'Emergency Vehicle Protocols',      dur:'9:47',durSec:587,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:5,title:'Safe Pedestrian Practices',        dur:'5:22',durSec:322,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:6,title:'Bicycle Safety in Traffic',        dur:'8:01',durSec:481,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:7,title:'Motorway Driving Essentials',      dur:'6:55',durSec:415,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:8,title:'Adverse Weather Conditions',       dur:'7:40',durSec:460,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:9,title:'Stopping Distances & Braking',     dur:'5:50',durSec:350,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+  {lesson:10,title:'Junction Rules Explained',        dur:'8:12',durSec:492,thumb:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=600&q=80&auto=format&fit=crop',locked:true},
+];
+
+const LOCK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+const SVG_PLAY  = `<svg viewBox="0 0 24 24" fill="#fff" width="24" height="24"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+const SVG_PAUSE = `<svg viewBox="0 0 24 24" fill="#fff" width="24" height="24"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`;
+function fmt(s){s=Math.max(0,Math.floor(s));return`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;}
+
+/* ── NAVIGATION ── */
+let navHistory = ['scr-home'];
+function navigate(toId){
+  const fromId=navHistory[navHistory.length-1];
+  if(fromId===toId)return;
+  document.getElementById(fromId).classList.add('off-left');
+  document.getElementById(toId).classList.remove('off-right','off-left');
+  navHistory.push(toId);
+}
+function goBack(){
+  if(navHistory.length<2)return;
+  const fromId=navHistory.pop();
+  const toId=navHistory[navHistory.length-1];
+  document.getElementById(fromId).classList.add('off-right');
+  document.getElementById(toId).classList.remove('off-right','off-left');
+}
+
+/* ── BUILD HAZARD CAROUSEL ── */
+function buildHazCards(){
+  document.getElementById('haz-scroll').innerHTML=HAZARDS_DATA.map(h=>`
+    <div class="haz-hcard">
+      <img class="haz-hthumb" src="${h.thumb}" loading="lazy"/>
+      <div class="haz-hfoot">
+        <span class="haz-hnum">${h.num}</span>
+        <span class="haz-hpts-row"><span class="haz-hdot"></span><span class="haz-hpts">${h.pts} points</span></span>
+      </div>
+    </div>`).join('');
+}
+
+/* ── BUILD VIDEO LIST ── */
+function buildVidList(){
+  document.getElementById('vid-list').innerHTML=VIDEOS_DATA.map((v,i)=>`
+    <div class="vid-row ${i===0?'active-lesson':''} ${!v.locked?'unlocked':''}"
+         onclick="${!v.locked?`openVideo(${i})`:''}" >
+      <div class="vid-tw">
+        <img class="vid-th" src="${v.thumb}" loading="lazy"/>
+        <div class="vid-dur">${v.dur}</div>
+      </div>
+      <div class="vid-body">
+        <div class="vid-lesson-lbl">Lesson ${v.lesson}</div>
+        <div class="vid-title">${v.title}</div>
+      </div>
+      ${v.locked?`<div class="vid-lock">${LOCK_SVG}</div>`:''}
+    </div>`).join('');
+}
+
+/* ── PLAYER ── */
+let curIdx=0,isPlaying=false,playTimer=null,ctrlTO=null;
+let progressPct=new Array(VIDEOS_DATA.length).fill(0);
+
+function openVideo(idx){
+  curIdx=idx;pausePlay();
+  const v=VIDEOS_DATA[idx];
+  document.getElementById('p-thumb').src=v.thumb;
+  document.getElementById('p-counter').textContent=`Lesson ${v.lesson} of 65`;
+  document.getElementById('p-title').textContent=v.title;
+  document.getElementById('p-time').textContent=`0:00 / ${v.dur}`;
+  syncProg();buildUpNext();resetCtrl();
+  navigate('scr-player');
+  document.getElementById('scr-player').scrollTop=0;
+  setTimeout(startPlay,300);
+}
+
+function buildUpNext(){
+  document.getElementById('upnext').innerHTML=VIDEOS_DATA.map((v,i)=>`
+    <div class="un ${i===curIdx?'now':''}" onclick="${!v.locked?`openVideo(${i})`:''}" style="${v.locked?'cursor:default;':''}">
+      <div class="un-tw"><img class="un-th" src="${v.thumb}" loading="lazy"/><div class="un-td">${v.dur}</div></div>
+      <div class="un-body"><div class="un-num">Lesson ${v.lesson}</div><div class="un-tit">${v.title}</div></div>
+      ${v.locked?`<div class="un-lock">${LOCK_SVG}</div>`:''}
+    </div>`).join('');
+}
+
+function togglePlay(){isPlaying?pausePlay():startPlay();}
+function startPlay(){
+  isPlaying=true;
+  document.getElementById('p-pbtn-icon').innerHTML=SVG_PAUSE;
+  clearInterval(playTimer);
+  const v=VIDEOS_DATA[curIdx];
+  playTimer=setInterval(()=>{
+    progressPct[curIdx]=Math.min(100,progressPct[curIdx]+0.5);
+    if(progressPct[curIdx]>=100){pausePlay();return;}
+    syncProg();
+  },200);
+}
+function pausePlay(){
+  isPlaying=false;clearInterval(playTimer);
+  const b=document.getElementById('p-pbtn-icon');if(b)b.innerHTML=SVG_PLAY;
+}
+function seek(s){
+  const v=VIDEOS_DATA[curIdx];
+  progressPct[curIdx]=Math.max(0,Math.min(100,progressPct[curIdx]+(s/v.durSec)*100));
+  syncProg();resetCtrl();
+}
+function trackClick(e){
+  const r=document.getElementById('p-fill').parentElement.getBoundingClientRect();
+  progressPct[curIdx]=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));
+  syncProg();resetCtrl();
+}
+function toggleCtrl(e){
+  const c=document.getElementById('pctrl');
+  if(c.classList.contains('fade')){c.classList.remove('fade');resetCtrl();}
+  else{c.classList.add('fade');clearTimeout(ctrlTO);}
+}
+function resetCtrl(){
+  clearTimeout(ctrlTO);
+  document.getElementById('pctrl').classList.remove('fade');
+  ctrlTO=setTimeout(()=>document.getElementById('pctrl').classList.add('fade'),3500);
+}
+function syncProg(){
+  const v=VIDEOS_DATA[curIdx],pct=progressPct[curIdx],cur=pct/100*v.durSec;
+  const pf=document.getElementById('p-fill');if(pf)pf.style.width=pct+'%';
+  const pt=document.getElementById('p-time');if(pt)pt.textContent=fmt(cur)+' / '+v.dur;
+}
+
+function setTopic(el) {
+  document.querySelectorAll('.topic-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ── INIT ── */
+buildHazCards();
+buildVidList();
+</script>
+</body>
+</html>
