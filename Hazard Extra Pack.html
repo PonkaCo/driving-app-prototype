@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extra Hazard Pack — Варианты интеграции</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #EDE9F4;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  padding: 40px 24px 60px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #150826;
+  margin-bottom: 6px;
+}
+
+.page-sub {
+  text-align: center;
+  font-size: 14px;
+  color: #7C7585;
+  margin-bottom: 48px;
+}
+
+.variants {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.variant-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.variant-label {
+  font-size: 17px;
+  font-weight: 600;
+  color: #150826;
+  text-align: center;
+}
+
+.variant-hint {
+  font-size: 12px;
+  color: #7C7585;
+  text-align: center;
+  max-width: 300px;
+  line-height: 1.5;
+  margin-top: -8px;
+}
+
+/* ─── Phone ─── */
+.phone {
+  width: 320px;
+  height: 620px;
+  border-radius: 44px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(55,22,97,0.25), 0 0 0 9px #1c1c1c, 0 0 0 10px #333;
+  position: relative;
+  background: #FCFCFC;
+  flex-shrink: 0;
+}
+
+.screen {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #FCFCFC;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+}
+.screen::-webkit-scrollbar { display: none; }
+
+/* ─── Status bar ─── */
+.status-bar {
+  height: 20px;
+  background: #FCFCFC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px 0 16px;
+  flex-shrink: 0;
+}
+.sb-left { font-size: 11px; font-weight: 600; color: #150826; letter-spacing: -0.2px; }
+.sb-right { display: flex; gap: 5px; align-items: center; }
+.sb-icon { font-size: 10px; color: #150826; }
+
+/* ─── App bar ─── */
+.app-bar {
+  height: 44px;
+  background: #FCFCFC;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+.ab-back {
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: #150826; cursor: pointer;
+  line-height: 1;
+}
+.ab-title { font-size: 16px; font-weight: 600; color: #150826; }
+.ab-help {
+  width: 28px; height: 28px;
+  background: #F2F0F5; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: #7C7585; cursor: pointer;
+}
+
+/* ─── Collection switcher (Variant A) ─── */
+.coll-switcher {
+  display: flex;
+  padding: 8px 16px 4px;
+  gap: 8px;
+  background: #FCFCFC;
+  flex-shrink: 0;
+}
+.cs-tab {
+  flex: 1; height: 36px;
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  gap: 5px;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer;
+  border: none; outline: none;
+  transition: background 0.18s, color 0.18s;
+}
+.cs-tab.cs-active { background: #401971; color: #FCFCFC; }
+.cs-tab.cs-inactive { background: #F2F0F5; color: #7C7585; }
+.cs-star { font-size: 11px; color: #FA5732; }
+.cs-tab.cs-active .cs-star { color: #FFE0B2; }
+
+/* ─── Pill tabs ─── */
+.pill-tabs {
+  display: flex; align-items: center;
+  padding: 0 16px;
+  gap: 2px;
+  background: #FCFCFC;
+  height: 44px;
+  flex-shrink: 0;
+}
+.pt {
+  padding: 7px 12px; border-radius: 20px;
+  font-size: 14px; font-weight: 500;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+  color: #7C7585;
+}
+.pt.pt-active { background: #F2F0F5; color: #401971; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.dot-red { background: #FF2346; }
+.dot-green { background: #00A850; }
+
+/* ─── Progress card ─── */
+.progress-card {
+  margin: 10px 16px 6px;
+  background: #FCFCFC;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0px 6px 30px 0px rgba(55,22,97,0.08);
+  flex-shrink: 0;
+}
+.pc-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.pc-title { font-size: 13px; font-weight: 500; color: #150826; }
+.pc-chevron { font-size: 12px; color: #7C7585; }
+.pc-bar-track {
+  height: 6px; background: #F2F0F5; border-radius: 3px;
+  margin-bottom: 10px; overflow: hidden;
+  position: relative;
+}
+.pc-bar-fill {
+  position: absolute; left: 0; top: 0; height: 100%; border-radius: 3px;
+}
+.pc-bar-red { background: #FF2346; width: 13%; }
+.pc-bar-green { background: #00A850; left: 13%; width: 28%; }
+.pc-stats { display: flex; flex-direction: column; gap: 8px; }
+.pc-stat {
+  display: flex; align-items: center;
+  justify-content: space-between;
+}
+.pc-stat-left { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #150826; }
+.pc-stat-right { font-size: 13px; font-weight: 500; color: #150826; }
+
+/* ─── Video grid ─── */
+.video-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 8px 16px 24px;
+}
+.vc {
+  background: #FCFCFC;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 6px 30px 0px rgba(55,22,97,0.08);
+  position: relative;
+  height: 104px;
+  cursor: pointer;
+}
+.vc-thumb {
+  position: absolute;
+  top: 8px; left: 8px; right: 8px; bottom: 34px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vc-thumb.std {
+  background: linear-gradient(165deg, #2d4a2d 0%, #1a3020 35%, #253228 65%, #1b2e20 100%);
+}
+.vc-thumb.ext {
+  background: linear-gradient(165deg, #1a2e48 0%, #0e1e30 35%, #1c2838 65%, #102030 100%);
+}
+/* Road lane marking */
+.vc-thumb::before {
+  content: '';
+  position: absolute;
+  bottom: 4px; left: 50%; transform: translateX(-50%);
+  width: 2px; height: 50%;
+  background: repeating-linear-gradient(
+    to top,
+    rgba(255,255,255,0.55) 0, rgba(255,255,255,0.55) 5px,
+    transparent 5px, transparent 10px
+  );
+}
+.vc-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.2), transparent 60%);
+}
+.vc-num {
+  position: absolute; bottom: 8px; left: 8px;
+  font-size: 13px; color: #7C7585;
+}
+.vc-points {
+  position: absolute; bottom: 8px; right: 8px;
+  display: flex; align-items: center; gap: 4px;
+  font-size: 13px; font-weight: 500; color: #150826;
+}
+.vc-start {
+  position: absolute; bottom: 8px; right: 8px;
+  font-size: 13px; font-weight: 500; color: #6B2ABC;
+}
+.vc-lock-overlay {
+  position: absolute; inset: 0;
+  background: rgba(252,252,252,0.75);
+  backdrop-filter: blur(1.5px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+/* ─── Upgrade banner (Extra tab locked) ─── */
+.upgrade-banner {
+  margin: 4px 16px 8px;
+  background: linear-gradient(138deg, #411A72 14%, #6D2BC0 90%);
+  border-radius: 18px;
+  padding: 18px 16px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.upgrade-banner::after {
+  content: '★';
+  position: absolute;
+  right: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 56px; color: rgba(255,255,255,0.07);
+  pointer-events: none;
+}
+.ub-badge {
+  background: #FA5732; color: white;
+  font-size: 9px; font-weight: 600;
+  padding: 2px 8px; border-radius: 20px;
+  width: fit-content; text-transform: uppercase; letter-spacing: 0.6px;
+  margin-bottom: 8px;
+}
+.ub-title { font-size: 16px; font-weight: 600; color: #FFFCFC; margin-bottom: 4px; line-height: 1.3; }
+.ub-sub { font-size: 12px; color: #CFBBE2; margin-bottom: 14px; line-height: 1.5; }
+.ub-btn {
+  background: #FA5732; color: white;
+  border: none; border-radius: 22px;
+  padding: 10px 20px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+}
+
+/* ─── Promo card (Variant B) ─── */
+.promo-card {
+  margin: 6px 16px 4px;
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: linear-gradient(138deg, #411A72 14%, #6D2BC0 90%);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; cursor: pointer;
+  position: relative; overflow: hidden;
+  flex-shrink: 0;
+}
+.promo-card::before {
+  content: '★';
+  position: absolute; right: 56px; top: 50%; transform: translateY(-50%);
+  font-size: 52px; color: rgba(255,255,255,0.07);
+  pointer-events: none;
+}
+.pc2-badge {
+  background: #FA5732; color: white;
+  font-size: 9px; font-weight: 600;
+  padding: 2px 7px; border-radius: 20px;
+  width: fit-content; text-transform: uppercase; letter-spacing: 0.6px;
+  margin-bottom: 5px;
+}
+.pc2-title { font-size: 14px; font-weight: 600; color: #FFFCFC; margin-bottom: 2px; }
+.pc2-sub { font-size: 11px; color: #CFBBE2; }
+.pc2-arrow {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: white; flex-shrink: 0;
+}
+
+/* unlocked promo (after purchase) */
+.promo-card.unlocked {
+  background: linear-gradient(138deg, #004d26 14%, #007a3d 90%);
+}
+
+/* ─── State controls ─── */
+.state-controls {
+  display: flex; gap: 8px;
+  justify-content: center; flex-wrap: wrap;
+  max-width: 320px;
+}
+.sc-btn {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1.5px solid #401971;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: transparent; color: #401971;
+  font-family: 'Inter', sans-serif;
+}
+.sc-btn.sc-active { background: #401971; color: white; border-color: #401971; }
+
+/* ─── Legend ─── */
+.legend {
+  margin-top: 52px;
+  background: #FCFCFC;
+  border-radius: 20px;
+  padding: 24px 28px;
+  max-width: 700px;
+  margin-left: auto; margin-right: auto;
+  box-shadow: 0 6px 30px rgba(55,22,97,0.08);
+}
+.legend h3 { font-size: 15px; font-weight: 600; color: #150826; margin-bottom: 16px; }
+.legend-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.legend-col h4 { font-size: 13px; font-weight: 600; color: #401971; margin-bottom: 10px; }
+.legend-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.legend-col ul li { font-size: 12px; color: #4a3d5c; line-height: 1.5; padding-left: 14px; position: relative; }
+.legend-col ul li::before { content: '·'; position: absolute; left: 0; color: #FA5732; font-size: 16px; top: -2px; }
+
+@media (max-width: 720px) {
+  .variants { gap: 32px; }
+  .legend-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<h1>Extra Hazard Pack — Варианты интеграции</h1>
+<p class="page-sub">Интерактивный прототип · нажимай на табы и кнопки</p>
+
+<div class="variants">
+
+  <!-- ═══════════════════════════════════════════
+       VARIANT A — SWITCHER
+  ════════════════════════════════════════════ -->
+  <div class="variant-wrap">
+    <div class="variant-label">Вариант A — Переключатель коллекций</div>
+    <p class="variant-hint">Два таба над фильтрами: Standard / Extra ★. При переключении меняется весь экран.</p>
+
+    <div class="phone">
+      <div class="screen" id="screen-a">
+
+        <!-- Status bar -->
+        <div class="status-bar">
+          <span class="sb-left">9:41</span>
+          <div class="sb-right">
+            <span class="sb-icon">▲▲▲</span>
+            <span class="sb-icon">WiFi</span>
+            <span class="sb-icon">▊</span>
+          </div>
+        </div>
+
+        <!-- App bar -->
+        <div class="app-bar">
+          <div class="ab-back">‹</div>
+          <div class="ab-title">Hazard perception</div>
+          <div class="ab-help">?</div>
+        </div>
+
+        <!-- Collection switcher -->
+        <div class="coll-switcher">
+          <button class="cs-tab cs-active" id="cs-std" onclick="switchCollection('std')">
+            Standard · 32
+          </button>
+          <button class="cs-tab cs-inactive" id="cs-ext" onclick="switchCollection('ext')">
+            <span class="cs-star">★</span> Extra · 20
+          </button>
+        </div>
+
+        <!-- Pill tabs -->
+        <div class="pill-tabs" id="ptabs-a">
+          <div class="pt pt-active">All</div>
+          <div class="pt"><span class="dot dot-red"></span>0-3</div>
+          <div class="pt"><span class="dot dot-green"></span>4-5</div>
+          <div class="pt">Unviewed</div>
+        </div>
+
+        <!-- Content area (switches) -->
+        <div id="content-std">
+          <!-- Progress card standard -->
+          <div class="progress-card">
+            <div class="pc-header">
+              <span class="pc-title">13/32 videos viewed</span>
+              <span class="pc-chevron">∧</span>
+            </div>
+            <div class="pc-bar-track">
+              <div class="pc-bar-fill pc-bar-red"></div>
+              <div class="pc-bar-fill pc-bar-green"></div>
+            </div>
+            <div class="pc-stats">
+              <div class="pc-stat">
+                <div class="pc-stat-left"><span class="dot dot-red"></span> 0-3 points</div>
+                <div class="pc-stat-right">4 videos</div>
+              </div>
+              <div class="pc-stat">
+                <div class="pc-stat-left"><span class="dot dot-green"></span> 4-5 points</div>
+                <div class="pc-stat-right">12 videos</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Standard video grid -->
+          <div class="video-grid">
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">01</span><div class="vc-points"><span class="dot dot-green"></span>5 pts</div></div>
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">02</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">03</span><div class="vc-points"><span class="dot dot-red"></span>2 pts</div></div>
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">04</span><div class="vc-points"><span class="dot dot-green"></span>5 pts</div></div>
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">05</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">06</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">07</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">08</span><span class="vc-start">Start</span></div>
+          </div>
+        </div>
+
+        <!-- Extra content: LOCKED state -->
+        <div id="content-ext-locked" style="display:none; flex-direction:column;">
+          <div class="upgrade-banner">
+            <div class="ub-badge">Super Pack</div>
+            <div class="ub-title">20 Extra Hazard Videos</div>
+            <div class="ub-sub">More challenging real-world scenarios to sharpen your skills before the test.</div>
+            <button class="ub-btn" onclick="unlockExtra()">Upgrade to Super ↗</button>
+          </div>
+          <!-- Blurred locked grid preview -->
+          <div class="video-grid">
+            <div class="vc"><div class="vc-thumb ext"></div><div class="vc-lock-overlay">🔒</div><span class="vc-num">01</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><div class="vc-lock-overlay">🔒</div><span class="vc-num">02</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><div class="vc-lock-overlay">🔒</div><span class="vc-num">03</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><div class="vc-lock-overlay">🔒</div><span class="vc-num">04</span></div>
+          </div>
+        </div>
+
+        <!-- Extra content: UNLOCKED state -->
+        <div id="content-ext-unlocked" style="display:none; flex-direction:column;">
+          <!-- Progress card extra -->
+          <div class="progress-card">
+            <div class="pc-header">
+              <span class="pc-title">0/20 videos viewed</span>
+              <span class="pc-chevron">∧</span>
+            </div>
+            <div class="pc-bar-track">
+              <!-- empty bar -->
+            </div>
+            <div class="pc-stats">
+              <div class="pc-stat">
+                <div class="pc-stat-left"><span class="dot dot-red"></span> 0-3 points</div>
+                <div class="pc-stat-right">0 videos</div>
+              </div>
+              <div class="pc-stat">
+                <div class="pc-stat-left"><span class="dot dot-green"></span> 4-5 points</div>
+                <div class="pc-stat-right">0 videos</div>
+              </div>
+            </div>
+          </div>
+          <!-- Extra video grid (unlocked, blue thumbnails) -->
+          <div class="video-grid">
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">01</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">02</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">03</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">04</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">05</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">06</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">07</span><span class="vc-start">Start</span></div>
+            <div class="vc"><div class="vc-thumb ext"></div><span class="vc-num">08</span><span class="vc-start">Start</span></div>
+          </div>
+        </div>
+
+      </div><!-- /screen-a -->
+    </div><!-- /phone -->
+
+    <div class="state-controls">
+      <button class="sc-btn sc-active" id="sc-std" onclick="setStateA('std')">Standard</button>
+      <button class="sc-btn" id="sc-locked" onclick="setStateA('locked')">Extra (заблокирован)</button>
+      <button class="sc-btn" id="sc-unlocked" onclick="setStateA('unlocked')">Extra (куплен)</button>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       VARIANT B — PROMO CARD
+  ════════════════════════════════════════════ -->
+  <div class="variant-wrap">
+    <div class="variant-label">Вариант B — Промо-карточка в списке</div>
+    <p class="variant-hint">Карточка между прогресс-баром и первым видео. Всегда видна, не трогает архитектуру.</p>
+
+    <div class="phone">
+      <div class="screen" id="screen-b">
+
+        <!-- Status bar -->
+        <div class="status-bar">
+          <span class="sb-left">9:41</span>
+          <div class="sb-right">
+            <span class="sb-icon">▲▲▲</span>
+            <span class="sb-icon">WiFi</span>
+            <span class="sb-icon">▊</span>
+          </div>
+        </div>
+
+        <!-- App bar -->
+        <div class="app-bar">
+          <div class="ab-back">‹</div>
+          <div class="ab-title">Hazard perception</div>
+          <div class="ab-help">?</div>
+        </div>
+
+        <!-- Pill tabs -->
+        <div class="pill-tabs">
+          <div class="pt pt-active">All</div>
+          <div class="pt"><span class="dot dot-red"></span>0-3</div>
+          <div class="pt"><span class="dot dot-green"></span>4-5</div>
+          <div class="pt">Unviewed</div>
+        </div>
+
+        <!-- Progress card -->
+        <div class="progress-card">
+          <div class="pc-header">
+            <span class="pc-title">13/32 videos viewed</span>
+            <span class="pc-chevron">∧</span>
+          </div>
+          <div class="pc-bar-track">
+            <div class="pc-bar-fill pc-bar-red"></div>
+            <div class="pc-bar-fill pc-bar-green"></div>
+          </div>
+          <div class="pc-stats">
+            <div class="pc-stat">
+              <div class="pc-stat-left"><span class="dot dot-red"></span> 0-3 points</div>
+              <div class="pc-stat-right">4 videos</div>
+            </div>
+            <div class="pc-stat">
+              <div class="pc-stat-left"><span class="dot dot-green"></span> 4-5 points</div>
+              <div class="pc-stat-right">12 videos</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promo card (toggles between locked/unlocked) -->
+        <div class="promo-card" id="promo-card-b" onclick="togglePromo()">
+          <div>
+            <div class="pc2-badge" id="promo-badge">Super Pack</div>
+            <div class="pc2-title" id="promo-title">Extra Hazard Pack · 20 videos</div>
+            <div class="pc2-sub" id="promo-sub">More challenging scenarios →</div>
+          </div>
+          <div class="pc2-arrow" id="promo-arrow">↗</div>
+        </div>
+
+        <!-- Standard video grid (always shown) -->
+        <div class="video-grid">
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">01</span><div class="vc-points"><span class="dot dot-green"></span>5 pts</div></div>
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">02</span><span class="vc-start">Start</span></div>
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">03</span><div class="vc-points"><span class="dot dot-red"></span>2 pts</div></div>
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">04</span><div class="vc-points"><span class="dot dot-green"></span>5 pts</div></div>
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">05</span><span class="vc-start">Start</span></div>
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">06</span><span class="vc-start">Start</span></div>
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">07</span><span class="vc-start">Start</span></div>
+          <div class="vc"><div class="vc-thumb std"></div><span class="vc-num">08</span><span class="vc-start">Start</span></div>
+        </div>
+
+      </div><!-- /screen-b -->
+    </div><!-- /phone -->
+
+    <div class="state-controls">
+      <button class="sc-btn sc-active" id="sc-b-locked" onclick="setStateB('locked')">До покупки</button>
+      <button class="sc-btn" id="sc-b-unlocked" onclick="setStateB('unlocked')">После покупки</button>
+    </div>
+  </div>
+
+</div><!-- /variants -->
+
+<!-- Legend -->
+<div class="legend">
+  <h3>Ключевые различия</h3>
+  <div class="legend-grid">
+    <div class="legend-col">
+      <h4>Вариант A — Переключатель</h4>
+      <ul>
+        <li>Пользователь явно видит что есть две коллекции — сильный апсейл-момент</li>
+        <li>Extra tab с замком создаёт интригу и мотивирует купить Super Pack</li>
+        <li>После покупки — полноценный отдельный экран со своим прогрессом и фильтрами</li>
+        <li>Стандартные 32 видео и Extra 20 полностью изолированы</li>
+        <li>Чуть сложнее в разработке: два уровня навигации, два progress state</li>
+      </ul>
+    </div>
+    <div class="legend-col">
+      <h4>Вариант B — Промо-карточка</h4>
+      <ul>
+        <li>Минимальные изменения в текущем экране — карточка просто вставляется</li>
+        <li>После покупки ведёт на отдельный самостоятельный экран хазардов</li>
+        <li>Цвет карточки меняется: фиолетовый (продаём) → зелёный (открыто)</li>
+        <li>Проще в разработке, легко убрать или переместить</li>
+        <li>Менее агрессивный апсейл — кто не хочет, проигнорирует</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── Variant A state ───
+  let stateA = 'std';
+
+  function switchCollection(col) {
+    if (col === 'std') {
+      setStateA('std');
+    } else {
+      // Switch to whatever extra state we're in (locked by default)
+      if (stateA === 'std') setStateA('locked');
+      else setStateA(stateA); // keep current extra state
+    }
+  }
+
+  function setStateA(state) {
+    stateA = state;
+
+    // Update switcher tabs
+    document.getElementById('cs-std').className = 'cs-tab ' + (state === 'std' ? 'cs-active' : 'cs-inactive');
+    document.getElementById('cs-ext').className = 'cs-tab ' + (state !== 'std' ? 'cs-active' : 'cs-inactive');
+
+    // Pill tabs visibility
+    document.getElementById('ptabs-a').style.display = (state === 'std' || state === 'unlocked') ? 'flex' : 'none';
+
+    // Content areas
+    document.getElementById('content-std').style.display = state === 'std' ? 'block' : 'none';
+    document.getElementById('content-ext-locked').style.display = state === 'locked' ? 'flex' : 'none';
+    document.getElementById('content-ext-unlocked').style.display = state === 'unlocked' ? 'flex' : 'none';
+
+    // State buttons
+    document.getElementById('sc-std').className = 'sc-btn' + (state === 'std' ? ' sc-active' : '');
+    document.getElementById('sc-locked').className = 'sc-btn' + (state === 'locked' ? ' sc-active' : '');
+    document.getElementById('sc-unlocked').className = 'sc-btn' + (state === 'unlocked' ? ' sc-active' : '');
+
+    // Scroll to top
+    document.getElementById('screen-a').scrollTop = 0;
+  }
+
+  function unlockExtra() {
+    setStateA('unlocked');
+    document.getElementById('sc-b-unlocked').className = 'sc-btn sc-active';
+    document.getElementById('sc-b-locked').className = 'sc-btn';
+    updatePromoCard('unlocked');
+  }
+
+  // ─── Variant B state ───
+  let stateB = 'locked';
+
+  function setStateB(state) {
+    stateB = state;
+    document.getElementById('sc-b-locked').className = 'sc-btn' + (state === 'locked' ? ' sc-active' : '');
+    document.getElementById('sc-b-unlocked').className = 'sc-btn' + (state === 'unlocked' ? ' sc-active' : '');
+    updatePromoCard(state);
+  }
+
+  function togglePromo() {
+    setStateB(stateB === 'locked' ? 'unlocked' : 'locked');
+  }
+
+  function updatePromoCard(state) {
+    const card = document.getElementById('promo-card-b');
+    const badge = document.getElementById('promo-badge');
+    const title = document.getElementById('promo-title');
+    const sub = document.getElementById('promo-sub');
+    const arrow = document.getElementById('promo-arrow');
+    if (state === 'locked') {
+      card.className = 'promo-card';
+      badge.textContent = 'Super Pack';
+      badge.style.background = '#FA5732';
+      title.textContent = 'Extra Hazard Pack · 20 videos';
+      sub.textContent = 'Upgrade to unlock more scenarios';
+      arrow.textContent = '↗';
+    } else {
+      card.className = 'promo-card unlocked';
+      badge.textContent = '✓ Unlocked';
+      badge.style.background = 'rgba(255,255,255,0.25)';
+      title.textContent = 'Extra Hazard Pack · 20 videos';
+      sub.textContent = 'Go to Extra Pack →';
+      arrow.textContent = '→';
+    }
+  }
+</script>
+</body>
+</html>
