@@ -48,7 +48,9 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
 /* ══════════════════
    HOME SCREEN
 ══════════════════ */
-#scr-home{background:var(--bg);}
+#scr-home{background:var(--bg);overflow:hidden;display:flex;flex-direction:column;}
+.home-inner{flex:1;overflow-y:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.home-inner::-webkit-scrollbar{display:none;}
 .hero{background:var(--brand);margin:8px 14px 0;border-radius:24px;padding:20px 20px 0;position:relative;overflow:hidden;min-height:164px;cursor:pointer;}
 .hero-badge{position:absolute;top:18px;right:18px;background:var(--accent);color:#fff;font-size:13px;font-weight:700;padding:5px 11px;border-radius:20px;display:flex;align-items:center;gap:5px;}
 .hero-cat{font-size:12px;color:rgba(255,255,255,.55);margin-bottom:6px;}
@@ -68,7 +70,7 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
 .row-chev{color:var(--bg2);}
 .row-chev svg{width:18px;height:18px;}
 .sec-title{font-size:18px;font-weight:800;color:var(--text);padding:16px 14px 8px;}
-.explore-list{padding:0 14px 100px;}
+.explore-list{padding:0 14px 24px;}
 .exp-item{display:flex;align-items:center;gap:14px;padding:13px 0;border-bottom:1px solid var(--bg2);cursor:pointer;}
 .exp-item:last-child{border-bottom:none;}
 .exp-icon{width:36px;height:36px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -108,25 +110,17 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
 .haz-sec-title{font-size:20px;font-weight:800;color:var(--text);}
 .haz-sec-count{font-size:14px;font-weight:500;color:var(--muted);}
 
-/* Hazard vertical list */
-.haz-vlist{padding:0 14px 20px;display:flex;flex-direction:column;gap:8px;}
-.haz-vcard{background:var(--card);border-radius:16px;padding:10px;display:flex;align-items:center;gap:12px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s;}
-.haz-vcard:active{transform:scale(.98);}
-.haz-vtw{position:relative;width:110px;height:72px;border-radius:10px;overflow:hidden;flex-shrink:0;}
+/* Hazard grid */
+.haz-vlist{padding:0 14px 24px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.haz-vcard{background:var(--card);border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s;}
+.haz-vcard:active{transform:scale(.97);}
+.haz-vtw{position:relative;width:100%;aspect-ratio:16/10;overflow:hidden;}
 .haz-vth{width:100%;height:100%;object-fit:cover;display:block;}
-.haz-vnum-badge{position:absolute;top:5px;left:6px;background:rgba(0,0,0,.55);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;}
-.haz-vbody{flex:1;display:flex;flex-direction:column;justify-content:center;gap:5px;}
-.haz-vnum{font-size:11px;font-weight:600;color:var(--muted);}
-.haz-vtitle{font-size:14px;font-weight:700;color:var(--text);line-height:1.3;}
-.haz-vpts{display:flex;align-items:center;gap:4px;}
-.haz-vdot{width:7px;height:7px;background:var(--success);border-radius:50%;flex-shrink:0;}
-.haz-vpts-lbl{font-size:12px;color:var(--muted);font-weight:500;}
-.haz-vstart{
-  background:var(--brand);color:#fff;border:none;border-radius:8px;
-  padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;
-  font-family:inherit;flex-shrink:0;display:flex;align-items:center;gap:4px;
-}
-.haz-vstart svg{width:9px;height:9px;}
+.haz-vfooter{display:flex;align-items:center;justify-content:space-between;padding:8px 10px 9px;}
+.haz-vnum{font-size:13px;font-weight:600;color:var(--muted);}
+.haz-vpts{display:flex;align-items:center;gap:5px;}
+.haz-vdot{width:8px;height:8px;background:var(--success);border-radius:50%;flex-shrink:0;}
+.haz-vpts-lbl{font-size:13px;color:var(--text);font-weight:600;}
 
 /* ══════════════════════════════
    VIDEOS SCREEN
@@ -137,12 +131,19 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
 .vids-title{font-size:20px;font-weight:800;color:var(--text);flex:1;}
 .vids-count{font-size:13px;color:var(--muted);font-weight:500;}
 
-/* Topic filter tabs */
+/* Topic filter tabs (videos screen) */
 .topic-bar{overflow-x:auto;scrollbar-width:none;padding:10px 14px 0;-webkit-overflow-scrolling:touch;}
 .topic-bar::-webkit-scrollbar{display:none;}
 .topic-pills{display:flex;gap:8px;width:max-content;}
 .topic-pill{background:var(--bg);border:none;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
 .topic-pill.active{background:var(--brand);color:#fff;}
+
+/* Topic filter tabs (player screen) */
+.p-topic-bar{overflow-x:auto;scrollbar-width:none;padding:10px 14px 8px;border-bottom:1px solid var(--bg2);flex-shrink:0;background:#fff;}
+.p-topic-bar::-webkit-scrollbar{display:none;}
+.p-topic-pills{display:flex;gap:8px;width:max-content;}
+.p-topic-pill{background:var(--bg);border:none;border-radius:20px;padding:7px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;}
+.p-topic-pill.active{background:var(--brand);color:#fff;}
 
 /* Video list */
 .vid-list{padding:10px 12px 40px;display:flex;flex-direction:column;gap:2px;}
@@ -179,8 +180,9 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
 .prog-track{height:3px;background:rgba(255,255,255,.3);border-radius:2px;position:relative;cursor:pointer;margin-bottom:8px;}
 .prog-fill{height:100%;background:var(--brand2);border-radius:2px;position:relative;width:0%;transition:width .2s;}
 .prog-dot{width:12px;height:12px;background:#fff;border-radius:50%;position:absolute;right:-6px;top:-5px;box-shadow:0 1px 4px rgba(0,0,0,.5);}
-.prog-time-row{display:flex;}<br>.prog-time{font-size:12px;color:rgba(255,255,255,.85);font-weight:600;}
-.pbelow{background:#fff;padding:14px 16px 0;flex-shrink:0;}
+.prog-time-row{display:flex;}
+.prog-time{font-size:12px;color:rgba(255,255,255,.85);font-weight:600;}
+.pbelow{background:#fff;padding:14px 16px 12px;flex-shrink:0;}
 .pcounter{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:4px;}
 .ptitle{font-size:18px;font-weight:800;color:var(--text);line-height:1.3;}
 .pdivider{height:1px;background:var(--bg2);margin:14px 0 0;}
@@ -207,7 +209,8 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
 <!-- ══════════════════════════════
      HOME
 ══════════════════════════════ -->
-<div class="screen" id="scr-home">
+<div class="screen flex-screen" id="scr-home">
+  <div class="home-inner">
   <div class="sbar" style="background:var(--bg);">
     <span class="time">9:41</span>
     <div class="sbar-icons">
@@ -255,6 +258,7 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
     <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/></svg></div><span class="exp-label">Becoming a driver</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
     <div class="exp-item"><div class="exp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#6B2ABC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><span class="exp-label">Mistakes</span><span class="exp-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></div>
   </div>
+  </div><!-- /home-inner -->
   <div class="bnav">
     <div class="bnav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</div>
     <div class="bnav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Stat</div>
@@ -281,7 +285,7 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
     </div>
 
     <!-- Videos entry card -->
-    <div class="ventry" onclick="navigate('scr-videos')">
+    <div class="ventry" onclick="openVideo(0)">
       <div class="ventry-thumbs">
         <img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=200&q=80&auto=format&fit=crop"/>
         <img src="https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=200&q=80&auto=format&fit=crop"/>
@@ -380,10 +384,19 @@ body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify
   <div class="pbelow">
     <div class="pcounter" id="p-counter">Lesson 1 of 65</div>
     <div class="ptitle" id="p-title">Tips for Nighttime Driving</div>
-    <div class="pdivider"></div>
+  </div>
+  <div class="p-topic-bar">
+    <div class="p-topic-pills">
+      <button class="p-topic-pill active" onclick="setPlayerTopic(this)">All</button>
+      <button class="p-topic-pill" onclick="setPlayerTopic(this)">Junctions</button>
+      <button class="p-topic-pill" onclick="setPlayerTopic(this)">Motorways</button>
+      <button class="p-topic-pill" onclick="setPlayerTopic(this)">Night driving</button>
+      <button class="p-topic-pill" onclick="setPlayerTopic(this)">Road signs</button>
+      <button class="p-topic-pill" onclick="setPlayerTopic(this)">Parking</button>
+      <button class="p-topic-pill" onclick="setPlayerTopic(this)">Hazards</button>
+    </div>
   </div>
   <div class="pinfo">
-    <div class="upnext-head">Up next</div>
     <div class="upnext" id="upnext"></div>
   </div>
 </div><!-- /scr-player -->
@@ -449,6 +462,10 @@ function setTopic(el){
   document.querySelectorAll('.topic-pill').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
 }
+function setPlayerTopic(el){
+  document.querySelectorAll('.p-topic-pill').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
 
 /* ── BUILD HAZARD LIST ── */
 function buildHazList(){
@@ -456,19 +473,14 @@ function buildHazList(){
     <div class="haz-vcard">
       <div class="haz-vtw">
         <img class="haz-vth" src="${HAZ_THUMBS[i%3]}" loading="lazy"/>
-        <div class="haz-vnum-badge">Clip ${String(i+1).padStart(2,'0')}</div>
       </div>
-      <div class="haz-vbody">
-        <div class="haz-vtitle">${t}</div>
+      <div class="haz-vfooter">
+        <span class="haz-vnum">${String(i+1).padStart(2,'0')}</span>
         <div class="haz-vpts">
           <span class="haz-vdot"></span>
-          <span class="haz-vpts-lbl">${HAZ_PTS[i]} points max</span>
+          <span class="haz-vpts-lbl">${HAZ_PTS[i]} points</span>
         </div>
       </div>
-      <button class="haz-vstart">
-        <svg viewBox="0 0 24 24" fill="#fff" width="9" height="9"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        Start
-      </button>
     </div>`).join('');
 }
 
