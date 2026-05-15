@@ -604,7 +604,7 @@ function goBack() {
 ══════════════════════════════ */
 function buildHRow() {
   document.getElementById('vid-hrow').innerHTML = VIDEOS.map((v,i) => `
-    <div class="vhcard" onclick="openLandscape(${i})">
+    <div class="vhcard" onclick="openPortraitPlayer(${i})">
       <div class="vhcard-thumb">
         <img class="vhcard-img" src="${v.thumb}" loading="lazy"/>
         <div class="vhcard-badge">Lesson ${i+1}</div>
