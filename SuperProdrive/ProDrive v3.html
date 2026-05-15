@@ -102,8 +102,7 @@ body{background:#2A1F4A;min-height:100vh;}
 .vhcard:active{transform:scale(.97);}
 .vhcard-thumb{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#e0e0e0;}
 .vhcard-img{width:100%;height:100%;object-fit:cover;display:block;}
-.vhcard-badge{position:absolute;top:10px;left:10px;background:rgba(20,8,40,.72);color:#fff;font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;backdrop-filter:blur(4px);}
-.vhcard-dur{position:absolute;bottom:6px;right:8px;background:rgba(0,0,0,.72);color:#fff;font-size:10px;font-weight:700;padding:2px 6px;border-radius:5px;}
+.vhcard-badge{position:absolute;top:10px;left:10px;background:#11E1C5;color:#08221A;font-size:12px;font-weight:600;padding:5px 11px;border-radius:20px;}
 .vhcard-body{padding:10px 12px 12px;}
 .vhcard-title{font-size:15px;font-weight:400;color:var(--text);line-height:1.35;}
 
@@ -167,8 +166,8 @@ body{background:#2A1F4A;min-height:100vh;}
 .pp-ctrl button,.pp-ctrl .pp-prog-row{pointer-events:all;}
 .pp-ctrl.fade button,.pp-ctrl.fade .pp-prog-row{pointer-events:none;}
 .pp-ctrl-top{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:linear-gradient(to bottom,rgba(0,0,0,.5),transparent);}
-.pp-back{width:32px;height:32px;background:rgba(0,0,0,.35);border:none;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
-.pp-back svg{width:16px;height:16px;}
+.pp-back-fixed{position:absolute;top:10px;left:12px;z-index:10;width:32px;height:32px;background:rgba(0,0,0,.4);border:none;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.pp-back-fixed svg{width:16px;height:16px;}
 .pp-mute{width:32px;height:32px;background:none;border:none;color:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;flex-shrink:0;}
 .pp-mute svg{width:18px;height:18px;}
 .pp-ctrl-mid{display:flex;align-items:center;justify-content:center;}
@@ -197,6 +196,30 @@ body{background:#2A1F4A;min-height:100vh;}
 .pp-vlist{padding:8px 14px 100px;display:flex;flex-direction:column;gap:8px;}
 .vcard.pp-now{background:#f0ebf8;}
 .vcard.pp-now .vcard-num{color:var(--brand2);font-weight:700;}
+
+/* Locked video card state */
+.pp-vcard-locked .vcard-thumb-wrap::after{content:'';position:absolute;inset:0;background:rgba(242,240,245,.55);}
+.pp-vcard-locked .vcard-play-btn{background:var(--bg2);}
+
+/* ── PAYWALL ── */
+.pw-backdrop{position:absolute;inset:0;z-index:60;background:rgba(21,8,38,.5);opacity:0;pointer-events:none;transition:opacity .3s;}
+.pw-backdrop.vis{opacity:1;pointer-events:all;}
+.pw-sheet{position:absolute;left:0;right:0;bottom:0;z-index:61;background:#fff;border-radius:28px 28px 0 0;transform:translateY(100%);transition:transform .38s cubic-bezier(.4,0,.2,1);padding-bottom:32px;}
+.pw-sheet.open{transform:translateY(0);}
+.pw-drag{width:36px;height:4px;background:var(--bg2);border-radius:2px;margin:12px auto 0;}
+.pw-close{position:absolute;top:14px;right:16px;width:32px;height:32px;background:var(--bg);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.pw-close svg{width:16px;height:16px;color:var(--muted);}
+.pw-icon{width:68px;height:68px;background:linear-gradient(151.6deg,#411A72 14%,#6D2BC0 90%);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:18px auto 0;}
+.pw-icon svg{width:34px;height:34px;}
+.pw-title{font-size:22px;font-weight:800;color:var(--text);text-align:center;margin:14px 20px 6px;line-height:1.2;}
+.pw-sub{font-size:14px;color:var(--muted);text-align:center;margin:0 28px 20px;line-height:1.45;}
+.pw-feats{padding:0 20px 20px;display:flex;flex-direction:column;gap:11px;}
+.pw-feat{display:flex;align-items:center;gap:12px;}
+.pw-feat-ic{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#411A72,#6D2BC0);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pw-feat-ic svg{width:13px;height:13px;}
+.pw-feat-text{font-size:14px;font-weight:500;color:var(--text);}
+.pw-cta{display:block;margin:0 20px;background:var(--accent);color:#fff;border:none;border-radius:14px;height:52px;width:calc(100% - 40px);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;}
+.pw-dismiss{display:block;text-align:center;padding:14px 0 0;font-size:14px;color:var(--muted);cursor:pointer;background:none;border:none;font-family:inherit;width:100%;}
 
 /* ══════════════════════════════
    LANDSCAPE PHONE
@@ -362,8 +385,7 @@ body{background:#2A1F4A;min-height:100vh;}
     </div>
 
     <div class="sec-head">
-      <div><span class="sec-head-title">Video Lessons</span><span class="sec-head-count">· 65</span></div>
-      <button class="sec-see-all" onclick="openPortraitPlayer(0)">See all</button>
+      <span class="sec-head-title">Real driving basics</span>
     </div>
     <div class="vid-hscroll">
       <div class="vid-hrow" id="vid-hrow"></div>
@@ -425,12 +447,13 @@ body{background:#2A1F4A;min-height:100vh;}
   <div class="pp-vid-wrap">
     <img class="pp-vid-bg" id="pp-vid-bg" src="" alt=""/>
     <div class="pp-vid-scrim"></div>
+    <!-- Always-visible back button (outside fade container) -->
+    <button class="pp-back-fixed" onclick="goBack(); ppPausePlay();">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
     <div class="pp-tap-ov" onclick="ppToggleCtrl()"></div>
     <div class="pp-ctrl" id="pp-ctrl">
-      <div class="pp-ctrl-top">
-        <button class="pp-back" onclick="goBack(); ppPausePlay(); event.stopPropagation();">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
+      <div class="pp-ctrl-top" style="justify-content:flex-end;">
         <button class="pp-mute" onclick="event.stopPropagation();">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         </button>
@@ -446,7 +469,7 @@ body{background:#2A1F4A;min-height:100vh;}
         </div>
         <div class="pp-time-row">
           <span class="pp-time-lbl" id="pp-time">0:00 / 0:00</span>
-          <button class="pp-fs-btn" onclick="openLandscape(curIdx); event.stopPropagation();">
+          <button class="pp-fs-btn" onclick="openLandscape(0); event.stopPropagation();">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
           </button>
         </div>
@@ -462,17 +485,41 @@ body{background:#2A1F4A;min-height:100vh;}
     </div>
     <div class="pp-divider"></div>
     <div class="pp-tabs-wrap">
-      <div class="pp-tabs-row" id="pp-tabs-row">
-        <div class="pp-tab active" onclick="ppSetTab(this)">All</div>
-        <div class="pp-tab" onclick="ppSetTab(this)">Theory</div>
-        <div class="pp-tab" onclick="ppSetTab(this)">Road rules</div>
-        <div class="pp-tab" onclick="ppSetTab(this)">Safety</div>
-        <div class="pp-tab" onclick="ppSetTab(this)">Hazards</div>
-      </div>
+      <div class="pp-tabs-row" id="pp-tabs-row"></div>
     </div>
     <div class="pp-vlist" id="pp-vlist"></div>
   </div>
 </div><!-- /scr-player -->
+
+<!-- PAYWALL -->
+<div class="pw-backdrop" id="pw-backdrop" onclick="hidePaywall()"></div>
+<div class="pw-sheet" id="pw-sheet">
+  <div class="pw-drag"></div>
+  <button class="pw-close" onclick="hidePaywall()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="pw-icon">
+    <svg viewBox="0 0 28 28" fill="none"><polygon points="14,3 17.5,9.5 25,10.5 19.5,16 21,23.5 14,20 7,23.5 8.5,16 3,10.5 10.5,9.5" fill="#fff" opacity=".95"/></svg>
+  </div>
+  <div class="pw-title">Unlock ProDrive</div>
+  <div class="pw-sub">Get full access to all video lessons and fast-track your theory test preparation</div>
+  <div class="pw-feats">
+    <div class="pw-feat">
+      <div class="pw-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <span class="pw-feat-text">65 video lessons across 5 categories</span>
+    </div>
+    <div class="pw-feat">
+      <div class="pw-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <span class="pw-feat-text">20 extra hazard perception clips</span>
+    </div>
+    <div class="pw-feat">
+      <div class="pw-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <span class="pw-feat-text">Offline access — watch anywhere</span>
+    </div>
+  </div>
+  <button class="pw-cta" onclick="hidePaywall()">Get ProDrive — £4.99 / month</button>
+  <button class="pw-dismiss" onclick="hidePaywall()">Not now</button>
+</div>
 
 </div><!-- /phone -->
 </div><!-- /view-portrait -->
@@ -541,6 +588,109 @@ body{background:#2A1F4A;min-height:100vh;}
 /* ══════════════════════════════
    DATA
 ══════════════════════════════ */
+const _VT = [
+  'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=800&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1489824904134-891ab64532f1?w=800&q=80&auto=format&fit=crop',
+];
+
+const CATEGORIES = [
+  {title:'Test Day Essentials', lessons:12, thumb:_VT[0], tabs:[
+    {name:'Preparation', vids:[
+      {title:'What to bring on test day',    dur:'4:12',durSec:252},
+      {title:'Route familiarisation tips',   dur:'3:45',durSec:225},
+      {title:'Managing nerves',              dur:'5:20',durSec:320},
+    ]},
+    {name:'At the centre', vids:[
+      {title:'Check-in procedure',           dur:'2:30',durSec:150},
+      {title:'Meeting your examiner',        dur:'3:10',durSec:190},
+      {title:'The independent drive',        dur:'6:00',durSec:360},
+    ]},
+    {name:'After the test', vids:[
+      {title:'If you pass — next steps',     dur:'4:00',durSec:240},
+      {title:'If you fail — how to improve', dur:'5:15',durSec:315},
+      {title:'Booking your retest',          dur:'2:55',durSec:175},
+    ]},
+  ]},
+  {title:'Core Driving Skills', lessons:22, thumb:_VT[1], tabs:[
+    {name:'Steering & control', vids:[
+      {title:'Steering technique',           dur:'5:30',durSec:330},
+      {title:'Clutch control basics',        dur:'7:10',durSec:430},
+      {title:'Smooth braking',               dur:'4:50',durSec:290},
+      {title:'Hill starts',                  dur:'6:00',durSec:360},
+    ]},
+    {name:'Manoeuvres', vids:[
+      {title:'Parallel parking',             dur:'8:20',durSec:500},
+      {title:'Bay parking',                  dur:'7:45',durSec:465},
+      {title:'3-point turn',                 dur:'5:10',durSec:310},
+    ]},
+    {name:'Observations', vids:[
+      {title:'Mirror-signal-manoeuvre',      dur:'5:00',durSec:300},
+      {title:'Blind spot checks',            dur:'4:20',durSec:260},
+      {title:'MSPSL routine',                dur:'5:45',durSec:345},
+    ]},
+    {name:'Speed & space', vids:[
+      {title:'Following distance',           dur:'4:30',durSec:270},
+      {title:'Speed awareness',              dur:'5:10',durSec:310},
+    ]},
+  ]},
+  {title:'Junctions & Roundabouts', lessons:19, thumb:_VT[2], tabs:[
+    {name:'Junctions', vids:[
+      {title:'T-junctions explained',        dur:'6:20',durSec:380},
+      {title:'Crossroads priority',          dur:'5:40',durSec:340},
+      {title:'Emerging safely',              dur:'4:55',durSec:295},
+    ]},
+    {name:'Roundabouts', vids:[
+      {title:'Mini roundabouts',             dur:'4:30',durSec:270},
+      {title:'Multi-lane roundabouts',       dur:'7:15',durSec:435},
+      {title:'Spiral roundabouts',           dur:'6:10',durSec:370},
+    ]},
+    {name:'Turning', vids:[
+      {title:'Turning right safely',         dur:'5:00',durSec:300},
+      {title:'U-turns & 3-point turns',      dur:'6:30',durSec:390},
+      {title:'Left turns at junctions',      dur:'4:15',durSec:255},
+    ]},
+  ]},
+  {title:'Motorway & Dual Carriageway', lessons:15, thumb:_VT[3], tabs:[
+    {name:'Joining & leaving', vids:[
+      {title:'Motorway slip roads',          dur:'5:20',durSec:320},
+      {title:'Smart motorway joining',       dur:'4:45',durSec:285},
+      {title:'Exiting safely',               dur:'3:50',durSec:230},
+    ]},
+    {name:'Lane discipline', vids:[
+      {title:'Overtaking on motorways',      dur:'6:00',durSec:360},
+      {title:'Middle lane hogging',          dur:'4:15',durSec:255},
+      {title:'Lane changing signals',        dur:'3:40',durSec:220},
+    ]},
+    {name:'Smart motorways', vids:[
+      {title:'Variable speed limits',        dur:'5:30',durSec:330},
+      {title:'All-lane running',             dur:'6:45',durSec:405},
+      {title:'Red X signs',                  dur:'4:00',durSec:240},
+    ]},
+  ]},
+  {title:'Road Signs & Markings', lessons:18, thumb:_VT[4], tabs:[
+    {name:'Warning signs', vids:[
+      {title:'Hazard ahead signs',           dur:'5:10',durSec:310},
+      {title:'Speed limit signs',            dur:'4:30',durSec:270},
+      {title:'Give way & stop signs',        dur:'3:50',durSec:230},
+    ]},
+    {name:'Road markings', vids:[
+      {title:'White line rules',             dur:'5:40',durSec:340},
+      {title:'Yellow lines & boxes',         dur:'4:20',durSec:260},
+      {title:'Box junctions',                dur:'4:50',durSec:290},
+      {title:'Hatched markings',             dur:'3:30',durSec:210},
+    ]},
+    {name:'Info & direction', vids:[
+      {title:'Motorway signs',               dur:'5:00',durSec:300},
+      {title:'Direction & route signs',      dur:'4:10',durSec:250},
+      {title:'Tourist signs',                dur:'3:20',durSec:200},
+    ]},
+  ]},
+];
+
 const VIDEOS = [
   {title:'Understanding the Highway Code',     dur:'7:14',durSec:434,thumb:'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=800&q=80&auto=format&fit=crop'},
   {title:'Motorway driving & lane discipline', dur:'7:32',durSec:452,thumb:'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&q=80&auto=format&fit=crop'},
@@ -603,16 +753,14 @@ function goBack() {
    BUILD PRODRIVE CONTENT
 ══════════════════════════════ */
 function buildHRow() {
-  document.getElementById('vid-hrow').innerHTML = VIDEOS.map((v,i) => `
+  document.getElementById('vid-hrow').innerHTML = CATEGORIES.map((c,i) => `
     <div class="vhcard" onclick="openPortraitPlayer(${i})">
       <div class="vhcard-thumb">
-        <img class="vhcard-img" src="${v.thumb}" loading="lazy"/>
-        <div class="vhcard-badge">Lesson ${i+1}</div>
-        <div class="vhcard-dur">${v.dur}</div>
-        ${watchedState[i] ? `<div style="position:absolute;top:10px;right:10px;width:20px;height:20px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;">${CHECK_SVG}</div>` : ''}
+        <img class="vhcard-img" src="${c.thumb}" loading="lazy"/>
+        <div class="vhcard-badge">${c.lessons} lessons</div>
       </div>
       <div class="vhcard-body">
-        <div class="vhcard-title">${v.title}</div>
+        <div class="vhcard-title">${c.title}</div>
       </div>
     </div>`).join('');
 }
@@ -836,35 +984,52 @@ lsPhone.addEventListener('touchend', e => {
 /* ══════════════════════════════
    PORTRAIT PLAYER
 ══════════════════════════════ */
-let ppPlaying = false, ppTimer = null, ppCtrlTO = null;
+let ppPlaying = false, ppTimer = null, ppCtrlTO = null, ppPaywallTO = null;
+// curTabIdx = -1 means "All" tab; curActualTabIdx/curActualVidIdx = real position of playing video
+let curCatIdx = 0, curTabIdx = -1, curActualTabIdx = 0, curActualVidIdx = 0;
+const ppProgress = {}, ppWatched = {};
 
 const PP_SVG_PLAY  = `<svg viewBox="0 0 24 24" fill="#fff" width="20" height="20"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
 const PP_SVG_PAUSE = `<svg viewBox="0 0 24 24" fill="#fff" width="20" height="20"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>`;
 
-function openPortraitPlayer(idx) {
-  curIdx = idx;
+function ppKey() { return `${curCatIdx}-${curActualTabIdx}-${curActualVidIdx}`; }
+function ppCurVid() { return CATEGORIES[curCatIdx].tabs[curActualTabIdx].vids[curActualVidIdx]; }
+function ppIsFree(c,t,v) { return c===0 && t===0 && v===0; }
+
+// Returns flat list of {tIdx, vIdx, vid} for current view (All or specific tab)
+function ppFlatList() {
+  const cat = CATEGORIES[curCatIdx];
+  if (curTabIdx === -1) {
+    const out = [];
+    cat.tabs.forEach((tab, tIdx) => tab.vids.forEach((vid, vIdx) => out.push({tIdx, vIdx, vid})));
+    return out;
+  }
+  return cat.tabs[curTabIdx].vids.map((vid, vIdx) => ({tIdx: curTabIdx, vIdx, vid}));
+}
+
+function openPortraitPlayer(catIdx) {
+  curCatIdx = catIdx; curTabIdx = -1; curActualTabIdx = 0; curActualVidIdx = 0;
   goTo('scr-player');
   ppUpdatePlayer();
+  buildPPTabs();
   buildPPList();
   setTimeout(ppStartPlay, 350);
 }
 
-function ppOpenVideo(idx) {
+function ppOpenVideo(tIdx, vIdx) {
   ppPausePlay();
-  curIdx = idx;
+  curActualTabIdx = tIdx; curActualVidIdx = vIdx;
   ppUpdatePlayer();
   buildPPList();
-  const below = document.querySelector('.pp-below');
-  if (below) below.scrollTop = 0;
   setTimeout(ppStartPlay, 200);
 }
 
 function ppUpdatePlayer() {
-  const v = VIDEOS[curIdx];
+  const v = ppCurVid(), cat = CATEGORIES[curCatIdx];
   const bg = document.getElementById('pp-vid-bg');
-  if (bg) bg.src = v.thumb;
+  if (bg) bg.src = _VT[(curCatIdx * 3 + curActualVidIdx) % _VT.length];
   const lbl = document.getElementById('pp-lesson-lbl');
-  if (lbl) lbl.textContent = `Lesson ${curIdx+1} · ${VIDEOS.length} lessons`;
+  if (lbl) lbl.textContent = cat.title;
   const ttl = document.getElementById('pp-vtitle');
   if (ttl) ttl.textContent = v.title;
   ppSyncProg();
@@ -877,38 +1042,65 @@ function ppStartPlay() {
   if (ico) ico.innerHTML = PP_SVG_PAUSE;
   clearInterval(ppTimer);
   ppTimer = setInterval(ppTick, 200);
+  if (ppIsFree(curCatIdx, curActualTabIdx, curActualVidIdx)) {
+    clearTimeout(ppPaywallTO);
+    ppPaywallTO = setTimeout(showPaywall, 5000);
+  }
   ppResetCtrlTimer();
 }
 
 function ppPausePlay() {
   ppPlaying = false;
   clearInterval(ppTimer);
+  clearTimeout(ppPaywallTO);
   const ico = document.getElementById('pp-play-icon');
   if (ico) ico.innerHTML = PP_SVG_PLAY;
+}
+
+function showPaywall() {
+  ppPausePlay();
+  document.getElementById('pw-backdrop').classList.add('vis');
+  document.getElementById('pw-sheet').classList.add('open');
+}
+
+function hidePaywall() {
+  document.getElementById('pw-backdrop').classList.remove('vis');
+  document.getElementById('pw-sheet').classList.remove('open');
 }
 
 function ppTogglePlay() { ppPlaying ? ppPausePlay() : ppStartPlay(); }
 
 function ppTick() {
-  progressPct[curIdx] = Math.min(100, progressPct[curIdx] + 0.5);
-  if (progressPct[curIdx] >= 85) markWatched(curIdx);
-  if (progressPct[curIdx] >= 100) {
+  const key = ppKey();
+  ppProgress[key] = Math.min(100, (ppProgress[key]||0) + 0.5);
+  if ((ppProgress[key]||0) >= 85 && !ppWatched[key]) {
+    ppWatched[key] = true; buildPPList();
+  }
+  if ((ppProgress[key]||0) >= 100) {
     ppPausePlay();
-    if (curIdx < VIDEOS.length - 1) setTimeout(() => ppOpenVideo(curIdx + 1), 400);
+    const flat = ppFlatList();
+    const ci = flat.findIndex(e => e.tIdx===curActualTabIdx && e.vIdx===curActualVidIdx);
+    if (ci >= 0 && ci < flat.length - 1) {
+      const next = flat[ci + 1];
+      ppIsFree(curCatIdx, next.tIdx, next.vIdx)
+        ? setTimeout(() => ppOpenVideo(next.tIdx, next.vIdx), 400)
+        : setTimeout(showPaywall, 400);
+    }
     return;
   }
   ppSyncProg();
 }
 
 function ppSyncProg() {
-  const v = VIDEOS[curIdx], pct = progressPct[curIdx], cur = pct/100*v.durSec;
+  const v = ppCurVid(), key = ppKey();
+  const pct = ppProgress[key]||0, cur = pct/100*v.durSec;
   const fill = document.getElementById('pp-prog-fill'); if (fill) fill.style.width = pct + '%';
-  const time = document.getElementById('pp-time'); if (time) time.textContent = fmt(cur) + ' / ' + v.dur;
+  const time = document.getElementById('pp-time'); if (time) time.textContent = fmt(cur)+' / '+v.dur;
 }
 
 function ppTrackClick(e) {
   const rect = document.getElementById('pp-prog-row').getBoundingClientRect();
-  progressPct[curIdx] = Math.max(0, Math.min(100, (e.clientX - rect.left) / rect.width * 100));
+  ppProgress[ppKey()] = Math.max(0, Math.min(100, (e.clientX-rect.left)/rect.width*100));
   ppSyncProg(); ppResetCtrlTimer();
 }
 
@@ -930,31 +1122,51 @@ function ppResetCtrlTimer() {
   ppCtrlTO = setTimeout(() => { const c = document.getElementById('pp-ctrl'); if (c) c.classList.add('fade'); }, 3500);
 }
 
-function ppSetTab(el) {
-  document.querySelectorAll('.pp-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
+function ppSetTab(tabIdx) {
+  curTabIdx = tabIdx;
+  ppPausePlay();
+  buildPPTabs();
+  buildPPList();
+}
+
+function buildPPTabs() {
+  const tabs = CATEGORIES[curCatIdx].tabs;
+  const allBtn = `<div class="pp-tab ${curTabIdx===-1?'active':''}" onclick="ppSetTab(-1)">All</div>`;
+  const rest = tabs.map((t,i) =>
+    `<div class="pp-tab ${i===curTabIdx?'active':''}" onclick="ppSetTab(${i})">${t.name}</div>`
+  ).join('');
+  document.getElementById('pp-tabs-row').innerHTML = allBtn + rest;
 }
 
 function buildPPList() {
   const list = document.getElementById('pp-vlist');
   if (!list) return;
-  list.innerHTML = VIDEOS.map((v,i) => `
-    <div class="vcard ${i===curIdx?'pp-now':''}" onclick="ppOpenVideo(${i})">
+  const entries = ppFlatList();
+  list.innerHTML = entries.map((entry, i) => {
+    const {tIdx, vIdx, vid} = entry;
+    const locked = !ppIsFree(curCatIdx, tIdx, vIdx);
+    const key = `${curCatIdx}-${tIdx}-${vIdx}`;
+    const watched = ppWatched[key];
+    const pct = ppProgress[key]||0;
+    const isCurrent = tIdx===curActualTabIdx && vIdx===curActualVidIdx;
+    return `
+    <div class="vcard ${isCurrent?'pp-now':''} ${locked?'pp-vcard-locked':''}" onclick="${locked?'showPaywall()':'ppOpenVideo('+tIdx+','+vIdx+')'}">
       <div class="vcard-thumb-wrap">
-        <img class="vcard-thumb" src="${v.thumb}" alt="${v.title}" loading="lazy"/>
-        <div class="vcard-dur">${v.dur}</div>
-        <div class="vcard-watched-badge ${watchedState[i]?'show':''}">${CHECK_SVG}</div>
-        <div class="vcard-pbar-wrap"><div class="vcard-pbar" style="width:${progressPct[i]}%"></div></div>
+        <img class="vcard-thumb" src="${_VT[(curCatIdx*3+i)%_VT.length]}" loading="lazy"/>
+        <div class="vcard-dur">${vid.dur}</div>
+        <div class="vcard-watched-badge ${watched?'show':''}">${CHECK_SVG}</div>
+        <div class="vcard-pbar-wrap"><div class="vcard-pbar" style="width:${pct}%"></div></div>
       </div>
       <div class="vcard-body">
         <div class="vcard-num">Lesson ${i+1}</div>
-        <div class="vcard-title">${v.title}</div>
-        <div class="vcard-sub">${v.dur}${watchedState[i]?' · <span style="color:#00A850;">Watched</span>':''}</div>
+        <div class="vcard-title">${vid.title}</div>
+        <div class="vcard-sub">${vid.dur}${watched?' · <span style="color:#00A850;">Watched</span>':''}</div>
       </div>
       <div class="vcard-play-btn">
-        <svg viewBox="0 0 24 24" fill="#fff" width="15" height="15"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        ${locked ? LOCK_SVG : '<svg viewBox="0 0 24 24" fill="#fff" width="15" height="15"><polygon points="5 3 19 12 5 21 5 3"/></svg>'}
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 /* ══════════════════════════════
