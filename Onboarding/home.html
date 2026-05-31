@@ -203,20 +203,20 @@ body{
 .topics-list{padding:10px 0 0;display:flex;flex-direction:column;gap:8px;}
 
 /* Topic card — base */
-.topic-card{background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;transition:filter .15s;}
+.topic-card{background:#fff;border-radius:16px;overflow:hidden;cursor:pointer;transition:filter .15s;height:86px;display:flex;flex-direction:column;justify-content:center;}
 .topic-card:active{filter:brightness(.97);}
 /* Old-style head (cards 4-7 without progress) */
-.topic-head{padding:16px 18px;}
+.topic-head{padding:0 18px;}
 .topic-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.25;}
 .topic-sub{font-size:14px;color:var(--muted);}
 /* New-style head (cards 1-3 with before/after states) */
-.tc-head{padding:16px 18px 0;}
+.tc-head{padding:0 18px 2px;}
 .tc-name{font-size:16px;font-weight:700;color:var(--text);line-height:1.25;}
-.tc-before{padding:4px 18px 16px;font-size:14px;}
+.tc-before{padding:2px 18px 0;font-size:14px;}
 .tc-before .lbl-start{color:var(--brand2);font-weight:600;}
 .tc-before .lbl-cnt{color:var(--muted);}
 .tc-before .topic-sub{font-size:14px;}
-.tc-after{padding:10px 18px 16px;display:none;}
+.tc-after{padding:4px 18px 0;display:none;}
 .tc-prog-lbl{font-size:14px;font-weight:600;color:var(--brand2);margin-bottom:8px;}
 .tc-done-lbl{font-size:14px;font-weight:600;color:var(--success);margin-bottom:8px;}
 .tc-bar{height:4px;background:var(--bg2);border-radius:2px;}
@@ -296,6 +296,49 @@ body{
   cursor:pointer;transition:filter .15s;
 }
 .bs-cancel:active{filter:brightness(.96);}
+
+/* ════════════════════════════
+   SETTINGS PAGE
+════════════════════════════ */
+#p-settings{background:var(--bg);}
+#p-settings .sbar-s{
+  height:50px;padding:14px 24px 0;background:var(--bg);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+#p-settings .sbar-s .time{font-size:15px;font-weight:700;color:var(--text);}
+#p-settings .sbar-s .icons{display:flex;align-items:center;gap:5px;color:var(--text);}
+#p-settings .sbar-s .icons svg{width:16px;height:16px;}
+.settings-appbar{
+  background:var(--bg);padding:8px 20px 14px;
+  flex-shrink:0;display:flex;align-items:center;gap:10px;
+}
+.settings-title{
+  font-size:18px;font-weight:700;color:var(--text);
+  flex:1;text-align:center;
+}
+.settings-list{margin:4px 16px 0;display:flex;flex-direction:column;gap:10px;}
+.settings-row{
+  background:var(--card);border-radius:20px;
+  padding:16px 18px;box-shadow:var(--shadow);
+  display:flex;align-items:flex-start;gap:14px;
+}
+.settings-txt{flex:1;}
+.settings-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3;}
+.settings-sub{font-size:13px;color:var(--muted);line-height:1.4;}
+/* Toggle */
+.tog{
+  width:51px;height:31px;border-radius:16px;flex-shrink:0;
+  position:relative;cursor:pointer;transition:background .2s;
+  border:none;padding:0;background:#E5E5EA;
+}
+.tog.on{background:var(--accent);}
+.tog::after{
+  content:'';position:absolute;top:2px;left:2px;
+  width:27px;height:27px;border-radius:50%;background:#fff;
+  box-shadow:0 2px 4px rgba(0,0,0,.2);
+  transition:transform .2s cubic-bezier(.4,0,.2,1);
+}
+.tog.on::after{transform:translateX(20px);}
 
 /* ════════════════════════════
    QUESTION PAGE
@@ -563,8 +606,8 @@ body{
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
     <span class="appbar-title">Learning</span>
-    <button class="icon-btn icon-btn-right">
-      <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    <button class="icon-btn icon-btn-right" onclick="navTo('p-settings')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
     </button>
   </div>
 
@@ -611,10 +654,12 @@ body{
           </div>
 
           <!-- Card 2 -->
-          <div class="topic-card">
-            <div class="topic-head">
-              <div class="topic-name">Incidents, accidents and emergencies</div>
-              <div class="topic-sub">45 questions</div>
+          <div class="topic-card" id="tc-2">
+            <div class="tc-head">
+              <div class="tc-name">Road signs</div>
+            </div>
+            <div class="tc-before" id="tc-2-before">
+              <span class="lbl-cnt">45 questions</span>
             </div>
           </div>
 
@@ -896,6 +941,73 @@ body{
   </div>
 </div>
 
+<!-- ══════════════════════════
+     PAGE — SETTINGS
+══════════════════════════ -->
+<div class="page p-right" id="p-settings">
+  <div class="sbar-s">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <div class="settings-appbar">
+    <button class="icon-btn" onclick="navBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="settings-title">Test settings</span>
+    <div style="width:34px"></div>
+  </div>
+
+  <div class="scroll" style="background:var(--bg);padding:4px 0 40px;">
+    <div class="settings-list">
+
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Mix variants of the answer</div>
+          <div class="settings-sub">The answers will appear in a different order each time to help you remember the answer, not the position of the answer.</div>
+        </div>
+        <button class="tog on" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Confirm quitting the test</div>
+          <div class="settings-sub">The application will ask you to confirm before quitting to prevent accidental exits.</div>
+        </div>
+        <button class="tog on" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Explain mistakes</div>
+          <div class="settings-sub">You'll see a hint in case if your answer is wrong.</div>
+        </div>
+        <button class="tog on" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Show hints</div>
+          <div class="settings-sub">You will see a hint before you answer.</div>
+        </div>
+        <button class="tog" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Confirm answer</div>
+          <div class="settings-sub">The application will ask you to confirm the answer before going to the next question.</div>
+        </div>
+        <button class="tog on" onclick="this.classList.toggle('on')"></button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 </div><!-- /phone -->
 
 <script>
@@ -1010,33 +1122,22 @@ function applyState1() {
     bar.style.transition = 'width 0.75s cubic-bezier(.4,0,.2,1)';
     bar.style.width = '50%';
   }, 420);
+
 }
 
 function applyState2() {
-  /* Card 1: Perfect score — bar animates from 50% to 100%, turns green, text fades */
   document.getElementById('tc-1').removeAttribute('onclick');
   document.getElementById('tc-1').style.cursor = 'default';
 
   const lbl = document.getElementById('tc-1-after').querySelector('.tc-prog-lbl');
-  const bar = document.getElementById('bar-1');
+  lbl.className = 'tc-done-lbl';
+  lbl.textContent = 'Perfect score';
 
-  /* Fade text out, swap, fade in */
-  setTimeout(() => {
-    lbl.style.transition = 'opacity 0.2s';
-    lbl.style.opacity = '0';
-    setTimeout(() => {
-      lbl.className = 'tc-done-lbl';
-      lbl.textContent = 'Perfect score';
-      lbl.style.opacity = '1';
-    }, 220);
-  }, 380);
+  document.getElementById('bar-1').parentElement.style.display = 'none';
 
-  /* Hide bar — Perfect score shows text only */
-  setTimeout(() => {
-    bar.style.transition = 'opacity 0.3s';
-    bar.style.opacity = '0';
-    setTimeout(() => { bar.parentElement.style.display = 'none'; }, 320);
-  }, 380);
+  /* Card 2: unlock — show "Start topic · 45 questions" */
+  document.getElementById('tc-2-before').innerHTML =
+    '<span class="lbl-start">Start topic</span><span class="lbl-cnt"> · 45 questions</span>';
 }
 
 function animateBar(id, pct, delay) {
