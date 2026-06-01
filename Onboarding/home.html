@@ -68,6 +68,7 @@ body{
   padding:24px 24px 28px;position:relative;overflow:hidden;
   cursor:pointer;transition:filter .15s;min-height:220px;
   display:flex;flex-direction:column;
+  margin:16px 16px 0;border-radius:24px;
 }
 .hero:active{filter:brightness(.92);}
 .hero-cat{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);margin-bottom:8px;}
@@ -709,19 +710,15 @@ body{
       </div>
     </div>
 
-    <div class="two-col">
-      <div class="mc">
-        <div class="mc-icon" style="background:#FFE8E3;">
+    <div style="padding:16px 16px 0;">
+      <div class="mc" style="display:flex;align-items:center;gap:14px;padding:18px 18px 20px;">
+        <div class="mc-icon" style="background:#FFE8E3;margin-bottom:0;flex-shrink:0;">
           <svg viewBox="0 0 24 24" fill="none">
             <rect x="3" y="3" width="18" height="18" rx="3" fill="#FA5732" opacity=".15"/>
             <text x="12" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="800" fill="#FA5732">L</text>
           </svg>
         </div>
-        <div class="mc-lbl">DVSA mock<br>test</div>
-      </div>
-      <div class="mc">
-        <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10 8 16 11 10 14 10 8" fill="var(--brand)" stroke="none"/><path d="M8 21h8m-4-4v4"/></svg></div>
-        <div class="mc-lbl">Hazard perception test</div>
+        <div class="mc-lbl">DVSA mock test</div>
       </div>
     </div>
 
