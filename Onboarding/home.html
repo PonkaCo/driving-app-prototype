@@ -223,6 +223,23 @@ body{
 .tc-bar-fill{height:100%;border-radius:2px;background:var(--brand);width:0%;}
 .tc-bar-green{background:var(--success);}
 
+/* Quick-action grid (Mistakes / Saved) */
+.qa-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0 4px;}
+.qa-card{
+  background:#fff;border-radius:16px;padding:14px 14px 16px;cursor:pointer;
+  transition:filter .15s;display:flex;flex-direction:column;gap:10px;
+}
+.qa-card:active{filter:brightness(.97);}
+.qa-ico{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.qa-ico svg{width:18px;height:18px;}
+.qa-ico-error{background:var(--error-muted);}
+.qa-ico-brand{background:#EDE8F5;}
+.qa-name{font-size:14px;font-weight:700;color:var(--text);line-height:1.25;margin-bottom:2px;}
+.qa-sub{font-size:12px;color:var(--muted);}
+
 /* Hazard body */
 .hz-bg{background:var(--bg);padding:20px 12px 14px;}
 .hz-tabs{
@@ -300,7 +317,7 @@ body{
 /* ════════════════════════════
    SETTINGS PAGE
 ════════════════════════════ */
-#p-settings{background:var(--bg);}
+#p-settings{background:var(--bg);display:flex;flex-direction:column;}
 #p-settings .sbar-s{
   height:50px;padding:14px 24px 0;background:var(--bg);
   display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
@@ -316,15 +333,40 @@ body{
   font-size:18px;font-weight:700;color:var(--text);
   flex:1;text-align:center;
 }
-.settings-list{margin:4px 16px 0;display:flex;flex-direction:column;gap:10px;}
+/* Number of questions picker */
+.st-section-lbl{
+  font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+  color:var(--muted);padding:0 20px;margin-bottom:8px;
+}
+.st-nq-ttl{font-size:18px;font-weight:800;color:var(--text);padding:4px 20px 16px;}
+.nq-picker{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;margin-bottom:24px;
+}
+.nq-opt{
+  width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;
+  font-family:inherit;font-size:16px;font-weight:600;color:var(--muted);
+  background:transparent;transition:background .15s,color .15s;
+}
+.nq-opt.sel{background:var(--card);color:var(--brand);font-weight:800;box-shadow:var(--shadow);}
+/* Grouped settings */
+.st-group{background:var(--card);border-radius:20px;margin:0 16px;box-shadow:var(--shadow);overflow:hidden;}
 .settings-row{
-  background:var(--card);border-radius:20px;
-  padding:16px 18px;box-shadow:var(--shadow);
+  padding:16px 18px;
   display:flex;align-items:flex-start;gap:14px;
 }
+.settings-row+.settings-row{border-top:1px solid var(--bg);}
 .settings-txt{flex:1;}
-.settings-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.3;}
+.settings-name{font-size:16px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.3;}
 .settings-sub{font-size:13px;color:var(--muted);line-height:1.4;}
+/* Apply button */
+.st-apply-wrap{padding:16px 16px 32px;flex-shrink:0;}
+.btn-apply{
+  width:100%;height:52px;background:var(--accent);border:none;border-radius:30px;
+  font-family:inherit;font-size:17px;font-weight:700;color:#fff;cursor:pointer;
+  transition:filter .15s;
+}
+.btn-apply:active{filter:brightness(.92);}
 /* Toggle */
 .tog{
   width:51px;height:31px;border-radius:16px;flex-shrink:0;
@@ -477,6 +519,37 @@ body{
   transition:filter .15s;
 }
 .btn-nextvid:active{filter:brightness(.92);}
+
+/* ════════════════════════════
+   SKILL BOOSTERS PAGE
+════════════════════════════ */
+#p-boosters{background:var(--bg);}
+#p-boosters .sbar-b{
+  height:50px;padding:14px 24px 0;background:var(--bg);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+#p-boosters .sbar-b .time{font-size:15px;font-weight:700;color:var(--text);}
+#p-boosters .sbar-b .icons{display:flex;align-items:center;gap:5px;color:var(--text);}
+#p-boosters .sbar-b .icons svg{width:16px;height:16px;}
+.boosters-appbar{
+  background:var(--bg);padding:8px 20px 14px;
+  flex-shrink:0;display:flex;align-items:center;gap:10px;
+}
+.boosters-title{font-size:18px;font-weight:700;color:var(--text);flex:1;text-align:center;}
+.boosters-list{display:flex;flex-direction:column;gap:10px;padding:4px 16px 40px;}
+.booster-row{
+  background:var(--card);border-radius:20px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:16px;padding:16px 18px;
+  cursor:pointer;transition:filter .15s;
+}
+.booster-row:active{filter:brightness(.97);}
+.booster-art{
+  width:56px;height:56px;border-radius:16px;flex-shrink:0;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.booster-txt{flex:1;min-width:0;}
+.booster-name{font-size:16px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.25;}
+.booster-sub{font-size:13px;color:var(--muted);line-height:1.35;}
 </style>
 </head>
 <body>
@@ -510,26 +583,40 @@ body{
         13
       </div>
       <div class="hero-art">
-        <svg viewBox="0 0 180 180" fill="none">
-          <ellipse cx="90" cy="88" rx="68" ry="58" fill="rgba(255,255,255,.06)"/>
-          <path d="M90 28 C90 28 128 48 128 93 L90 128 L52 93 C52 48 90 28 90 28Z" fill="rgba(255,255,255,.13)" stroke="rgba(255,255,255,.25)" stroke-width="1.5"/>
-          <path d="M90 28 C90 28 108 58 108 78 L90 73 L72 78 C72 58 90 28 90 28Z" fill="rgba(255,255,255,.22)"/>
-          <circle cx="90" cy="86" r="10" fill="rgba(255,255,255,.18)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
-          <path d="M52 93 L34 118 L58 108Z" fill="rgba(250,87,50,.65)"/>
-          <path d="M128 93 L146 118 L122 108Z" fill="rgba(250,87,50,.65)"/>
-          <ellipse cx="90" cy="136" rx="11" ry="18" fill="rgba(250,195,42,.65)"/>
-          <ellipse cx="90" cy="144" rx="6.5" ry="11" fill="rgba(250,87,50,.75)"/>
-          <circle cx="46" cy="44" r="2" fill="rgba(255,255,255,.5)"/>
-          <circle cx="138" cy="58" r="1.5" fill="rgba(255,255,255,.4)"/>
-          <circle cx="52" cy="130" r="1.5" fill="rgba(255,255,255,.3)"/>
-          <circle cx="143" cy="108" r="2" fill="rgba(255,255,255,.35)"/>
+        <svg viewBox="0 0 180 200" fill="none">
+          <!-- Glow blob -->
+          <ellipse cx="100" cy="100" rx="70" ry="70" fill="rgba(180,100,255,.18)"/>
+          <!-- Rocket body -->
+          <path d="M100 20 C100 20 140 55 140 105 L100 140 L60 105 C60 55 100 20 100 20Z" fill="rgba(220,150,255,.25)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+          <!-- Rocket window -->
+          <circle cx="100" cy="90" r="16" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+          <circle cx="100" cy="90" r="9" fill="rgba(255,255,255,.22)"/>
+          <!-- Left fin -->
+          <path d="M62 108 L38 138 L68 124Z" fill="#FA5732" opacity=".8"/>
+          <!-- Right fin -->
+          <path d="M138 108 L162 138 L132 124Z" fill="#FA5732" opacity=".8"/>
+          <!-- Flame outer -->
+          <ellipse cx="100" cy="158" rx="16" ry="24" fill="#FAC32A" opacity=".7"/>
+          <!-- Flame inner -->
+          <ellipse cx="100" cy="164" rx="9" ry="16" fill="#FA5732" opacity=".9"/>
+          <!-- Stars -->
+          <circle cx="44" cy="38" r="2.5" fill="rgba(255,255,255,.6)"/>
+          <circle cx="158" cy="52" r="1.8" fill="rgba(255,255,255,.5)"/>
+          <circle cx="48" cy="140" r="1.5" fill="rgba(255,255,255,.35)"/>
+          <circle cx="155" cy="118" r="2" fill="rgba(255,255,255,.4)"/>
+          <circle cx="130" cy="30" r="1.5" fill="rgba(255,255,255,.45)"/>
         </svg>
       </div>
     </div>
 
     <div class="two-col">
       <div class="mc">
-        <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <div class="mc-icon" style="background:#FFE8E3;">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" fill="#FA5732" opacity=".15"/>
+            <text x="12" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="800" fill="#FA5732">L</text>
+          </svg>
+        </div>
         <div class="mc-lbl">DVSA mock test</div>
       </div>
       <div class="mc">
@@ -540,7 +627,7 @@ body{
 
     <div class="expl-ttl">More to explore</div>
     <div class="expl-list">
-      <div class="expl-row">
+      <div class="expl-row" onclick="navTo('p-boosters')">
         <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill="none"/></svg></div>
         <span class="expl-lbl">Skill boosters</span>
         <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
@@ -551,18 +638,8 @@ body{
         <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="expl-row">
-        <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m0 0V11a1 1 0 011-1h2a1 1 0 011 1v10m0 0h3a1 1 0 001-1V10"/></svg></div>
-        <span class="expl-lbl">Road signs quiz</span>
-        <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="expl-row">
         <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
         <span class="expl-lbl">Highway code</span>
-        <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="expl-row">
-        <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
-        <span class="expl-lbl">Mistakes</span>
         <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
     </div>
@@ -700,6 +777,29 @@ body{
           </div>
 
         </div>
+
+        <!-- Quick-action cards: Mistakes + Saved -->
+        <div class="qa-grid">
+          <div class="qa-card">
+            <div class="qa-ico qa-ico-error">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--error)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+            </div>
+            <div class="qa-txt">
+              <div class="qa-name">Mistakes to fix</div>
+              <div class="qa-sub">3 questions</div>
+            </div>
+          </div>
+          <div class="qa-card">
+            <div class="qa-ico qa-ico-brand">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="qa-txt">
+              <div class="qa-name">Saved for later</div>
+              <div class="qa-sub">8 questions</div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -961,47 +1061,194 @@ body{
     <div style="width:34px"></div>
   </div>
 
-  <div class="scroll" style="background:var(--bg);padding:4px 0 40px;">
-    <div class="settings-list">
+  <div class="scroll" style="background:var(--bg);padding:4px 0 16px;">
 
+    <!-- Number of questions -->
+    <div class="st-nq-ttl">Number of questions</div>
+    <div class="nq-picker">
+      <button class="nq-opt" onclick="nqSel(this)">10</button>
+      <button class="nq-opt" onclick="nqSel(this)">20</button>
+      <button class="nq-opt sel" onclick="nqSel(this)">40</button>
+      <button class="nq-opt" onclick="nqSel(this)">60</button>
+      <button class="nq-opt" onclick="nqSel(this)">80</button>
+    </div>
+
+    <!-- ANSWERS -->
+    <div class="st-section-lbl">Answers</div>
+    <div class="st-group" style="margin-bottom:20px;">
       <div class="settings-row">
         <div class="settings-txt">
-          <div class="settings-name">Mix variants of the answer</div>
-          <div class="settings-sub">The answers will appear in a different order each time to help you remember the answer, not the position of the answer.</div>
+          <div class="settings-name">Shuffle answers</div>
+          <div class="settings-sub">Answer order changes each time to test recall, not position</div>
         </div>
         <button class="tog on" onclick="this.classList.toggle('on')"></button>
       </div>
-
-      <div class="settings-row">
-        <div class="settings-txt">
-          <div class="settings-name">Confirm quitting the test</div>
-          <div class="settings-sub">The application will ask you to confirm before quitting to prevent accidental exits.</div>
-        </div>
-        <button class="tog on" onclick="this.classList.toggle('on')"></button>
-      </div>
-
-      <div class="settings-row">
-        <div class="settings-txt">
-          <div class="settings-name">Explain mistakes</div>
-          <div class="settings-sub">You'll see a hint in case if your answer is wrong.</div>
-        </div>
-        <button class="tog on" onclick="this.classList.toggle('on')"></button>
-      </div>
-
-      <div class="settings-row">
-        <div class="settings-txt">
-          <div class="settings-name">Show hints</div>
-          <div class="settings-sub">You will see a hint before you answer.</div>
-        </div>
-        <button class="tog" onclick="this.classList.toggle('on')"></button>
-      </div>
-
       <div class="settings-row">
         <div class="settings-txt">
           <div class="settings-name">Confirm answer</div>
-          <div class="settings-sub">The application will ask you to confirm the answer before going to the next question.</div>
+          <div class="settings-sub">App will ask before moving to the next question</div>
         </div>
         <button class="tog on" onclick="this.classList.toggle('on')"></button>
+      </div>
+    </div>
+
+    <!-- HINTS & EXPLANATIONS -->
+    <div class="st-section-lbl">Hints &amp; Explanations</div>
+    <div class="st-group" style="margin-bottom:20px;">
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Show hints</div>
+          <div class="settings-sub">See a hint before you answer</div>
+        </div>
+        <button class="tog" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Explain mistakes</div>
+          <div class="settings-sub">See an explanation when your answer is wrong</div>
+        </div>
+        <button class="tog on" onclick="this.classList.toggle('on')"></button>
+      </div>
+    </div>
+
+    <!-- OTHER -->
+    <div class="st-section-lbl">Other</div>
+    <div class="st-group">
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Time limit</div>
+          <div class="settings-sub">Set a timer for the test</div>
+        </div>
+        <button class="tog" onclick="this.classList.toggle('on')"></button>
+      </div>
+      <div class="settings-row">
+        <div class="settings-txt">
+          <div class="settings-name">Confirm quit</div>
+          <div class="settings-sub">App will ask before exiting to prevent accidental exits</div>
+        </div>
+        <button class="tog on" onclick="this.classList.toggle('on')"></button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="st-apply-wrap">
+    <button class="btn-apply" onclick="navBack()">Apply</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     PAGE — SKILL BOOSTERS
+══════════════════════════ -->
+<div class="page p-right" id="p-boosters">
+  <div class="sbar-b">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="18" height="11" rx="2"/><path d="M22 11v3" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="boosters-appbar">
+    <button class="icon-btn" onclick="navBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <span class="boosters-title">Skill boosters</span>
+    <div style="width:34px"></div>
+  </div>
+
+  <div class="scroll" style="background:var(--bg);">
+    <div class="boosters-list">
+
+      <!-- Adaptive mode -->
+      <div class="booster-row">
+        <div class="booster-art" style="background:linear-gradient(135deg,#8B3FCC 0%,#C4547A 100%);">
+          <svg viewBox="0 0 56 56" fill="none" width="56" height="56">
+            <path d="M28 10 C28 10 42 20 42 36 L28 46 L14 36 C14 20 28 10 28 10Z" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+            <circle cx="28" cy="33" r="7" fill="rgba(255,255,255,.3)" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/>
+            <path d="M14 36 L6 46 L18 42Z" fill="#FA5732" opacity=".85"/>
+            <path d="M42 36 L50 46 L38 42Z" fill="#FA5732" opacity=".85"/>
+            <ellipse cx="28" cy="50" rx="5" ry="7" fill="#FAC32A" opacity=".8"/>
+          </svg>
+        </div>
+        <div class="booster-txt">
+          <div class="booster-name">Adaptive mode</div>
+          <div class="booster-sub">Focuses on your weak areas and skips what you've mastered</div>
+        </div>
+      </div>
+
+      <!-- Road signs -->
+      <div class="booster-row">
+        <div class="booster-art" style="background:linear-gradient(135deg,#D94F7A 0%,#F07060 100%);">
+          <svg viewBox="0 0 56 56" fill="none" width="56" height="56">
+            <polygon points="28,10 46,42 10,42" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+            <text x="28" y="36" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="800" fill="#fff" opacity=".9">GIVE WAY</text>
+          </svg>
+        </div>
+        <div class="booster-txt">
+          <div class="booster-name">Road signs</div>
+          <div class="booster-sub">All 45</div>
+        </div>
+      </div>
+
+      <!-- Video questions -->
+      <div class="booster-row">
+        <div class="booster-art" style="background:linear-gradient(135deg,#C4547A 0%,#F07840 100%);">
+          <svg viewBox="0 0 56 56" fill="none" width="56" height="56">
+            <rect x="10" y="14" width="36" height="24" rx="4" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+            <polygon points="23,20 23,32 36,26" fill="rgba(255,255,255,.7)"/>
+            <rect x="20" y="40" width="16" height="3" rx="1.5" fill="rgba(255,255,255,.4)"/>
+          </svg>
+        </div>
+        <div class="booster-txt">
+          <div class="booster-name">Video questions</div>
+          <div class="booster-sub">No time or mistakes limits</div>
+        </div>
+      </div>
+
+      <!-- Quiz battle -->
+      <div class="booster-row">
+        <div class="booster-art" style="background:linear-gradient(135deg,#F07840 0%,#C4547A 100%);">
+          <svg viewBox="0 0 56 56" fill="none" width="56" height="56">
+            <circle cx="28" cy="28" r="16" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+            <circle cx="28" cy="28" r="9" fill="rgba(255,255,255,.2)"/>
+            <path d="M24 24 Q28 20 32 24 Q36 28 32 32 Q28 36 24 32 Q20 28 24 24Z" fill="rgba(255,255,255,.5)"/>
+          </svg>
+        </div>
+        <div class="booster-txt">
+          <div class="booster-name">Quiz battle</div>
+          <div class="booster-sub">10 questions against an opponent</div>
+        </div>
+      </div>
+
+      <!-- Non-stop -->
+      <div class="booster-row">
+        <div class="booster-art" style="background:linear-gradient(135deg,#8B3FCC 0%,#F07840 100%);">
+          <svg viewBox="0 0 56 56" fill="none" width="56" height="56">
+            <circle cx="28" cy="28" r="15" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+            <polyline points="1,4 1,10 7,10" transform="translate(14,14) scale(.85)" stroke="rgba(255,255,255,.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M16.5 21.5 a9 9 0 1 0 .4-3.8" transform="translate(0,0)" stroke="rgba(255,255,255,.8)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="booster-txt">
+          <div class="booster-name">Non-stop</div>
+          <div class="booster-sub">All questions, no time or mistake limits</div>
+        </div>
+      </div>
+
+      <!-- Marathon -->
+      <div class="booster-row">
+        <div class="booster-art" style="background:linear-gradient(135deg,#F0A030 0%,#D94F7A 100%);">
+          <svg viewBox="0 0 56 56" fill="none" width="56" height="56">
+            <circle cx="28" cy="22" r="12" fill="rgba(255,255,255,.2)" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+            <polygon points="28,16 29.5,20.5 34,20.5 30.5,23.5 31.5,28 28,25.5 24.5,28 25.5,23.5 22,20.5 26.5,20.5" fill="rgba(255,255,255,.7)"/>
+            <path d="M22 32 L20 44 M34 32 L36 44" stroke="rgba(255,255,255,.5)" stroke-width="3" stroke-linecap="round"/>
+            <ellipse cx="28" cy="44" rx="8" ry="4" fill="rgba(255,255,255,.25)" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="booster-txt">
+          <div class="booster-name">Marathon</div>
+          <div class="booster-sub">35 sec per question, answer until first mistake</div>
+        </div>
       </div>
 
     </div>
@@ -1111,7 +1358,7 @@ let testPass = 0;
 
 function applyState1() {
   /* Card 1: show progress, bar animates to 50% */
-  document.getElementById('tc-1').setAttribute('onclick', 'openBS()');
+  document.getElementById('tc-1').setAttribute('onclick', "navTo('p-question')");
   document.getElementById('tc-1-before').style.display = 'none';
   const after = document.getElementById('tc-1-after');
   after.style.display = 'block';
@@ -1138,6 +1385,11 @@ function applyState2() {
   /* Card 2: unlock — show "Start topic · 45 questions" */
   document.getElementById('tc-2-before').innerHTML =
     '<span class="lbl-start">Start topic</span><span class="lbl-cnt"> · 45 questions</span>';
+}
+
+function nqSel(btn) {
+  btn.closest('.nq-picker').querySelectorAll('.nq-opt').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
 }
 
 function animateBar(id, pct, delay) {
