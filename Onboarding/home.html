@@ -65,17 +65,20 @@ body{
 /* Hero */
 .hero{
   background:linear-gradient(151.6deg,#411A72 14%,#6D2BC0 90%);
-  padding:20px 24px 28px;position:relative;overflow:hidden;
-  cursor:pointer;transition:filter .15s;
+  padding:24px 24px 28px;position:relative;overflow:hidden;
+  cursor:pointer;transition:filter .15s;min-height:220px;
+  display:flex;flex-direction:column;
 }
 .hero:active{filter:brightness(.92);}
-.hero-cat{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);margin-bottom:6px;}
-.hero-ttl{font-size:32px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:24px;}
+.hero-cat{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);margin-bottom:8px;}
+.hero-ttl{font-size:34px;font-weight:800;color:#fff;line-height:1.1;flex:1;}
+.hero-cta{display:flex;align-items:flex-end;justify-content:flex-start;}
 .hero-btn{
-  width:44px;height:44px;background:#fff;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
+  width:48px;height:48px;background:#fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .hero-btn svg{width:20px;height:20px;color:var(--text);}
+.hero-start{font-size:16px;font-weight:700;color:#fff;}
 .hero-badge{
   position:absolute;top:16px;right:16px;
   background:rgba(0,0,0,.25);border-radius:20px;
@@ -88,7 +91,7 @@ body{
   position:absolute;right:-8px;top:-8px;bottom:0;width:200px;
   pointer-events:none;display:flex;align-items:center;justify-content:center;
 }
-.hero-art svg{width:180px;height:180px;opacity:.85;}
+.hero-art svg{width:190px;height:190px;opacity:.85;}
 
 /* Two-col cards */
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px 16px 0;}
@@ -623,9 +626,11 @@ body{
   <div class="scroll">
     <div class="hero" onclick="navTo('p-learning')">
       <div class="hero-cat">Category B</div>
-      <div class="hero-ttl">Learn here</div>
-      <div class="hero-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <div class="hero-ttl">Start here</div>
+      <div class="hero-cta">
+        <div class="hero-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
       </div>
       <div class="hero-badge">
         <svg viewBox="0 0 24 24" fill="#FA5732"><path d="M12 2c0 0-5 5.5-5 10a5 5 0 0 0 10 0C17 7.5 12 2 12 2z"/></svg>
@@ -666,7 +671,7 @@ body{
             <text x="12" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="800" fill="#FA5732">L</text>
           </svg>
         </div>
-        <div class="mc-lbl">DVSA mock test</div>
+        <div class="mc-lbl">DVSA mock<br>test</div>
       </div>
       <div class="mc">
         <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><polygon points="10 8 16 11 10 14 10 8" fill="var(--brand)" stroke="none"/><path d="M8 21h8m-4-4v4"/></svg></div>
@@ -904,18 +909,10 @@ body{
     <div class="ob-step" id="ob-1" style="display:block;">
       <div class="ob-dim"></div>
       <div class="ob-tip" style="top:260px;z-index:2;">
-        <div class="ob-tip-title">Prepare for both<br>parts of the test</div>
-        <div class="ob-parts">
-          <div class="ob-part">
-            <span class="ob-part-emoji">📘</span>
-            <span class="ob-part-txt">Theory questions</span>
+        <div class="ob-tip-row">
+          <div class="ob-tip-text">
+            <div class="ob-tip-title">Prepare for both parts of the test</div>
           </div>
-          <div class="ob-part">
-            <span class="ob-part-emoji">🎥</span>
-            <span class="ob-part-txt">Hazard perception clips</span>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:14px;">
           <button class="ob-tip-btn" onclick="obNext(2)">Next</button>
         </div>
       </div>
@@ -928,8 +925,7 @@ body{
       <div class="ob-tip" style="top:226px;">
         <div class="ob-tip-row">
           <div class="ob-tip-text">
-            <div class="ob-tip-title">Official DVSA questions</div>
-            <div class="ob-tip-sub">Practice with licensed questions from the same topics you'll be tested on.</div>
+            <div class="ob-tip-title">Practice with official DVSA licensed questions</div>
           </div>
           <button class="ob-tip-btn" onclick="obNext(3)">Next</button>
         </div>
@@ -943,8 +939,7 @@ body{
       <div class="ob-tip" style="top:350px;">
         <div class="ob-tip-row">
           <div class="ob-tip-text">
-            <div class="ob-tip-title">Learn to spot hazards</div>
-            <div class="ob-tip-sub">Watch real driving clips and identify developing hazards.</div>
+            <div class="ob-tip-title">Practice hazard awareness with video clips</div>
           </div>
           <button class="ob-tip-btn" onclick="obNext(4)">Next</button>
         </div>
