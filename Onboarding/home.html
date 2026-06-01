@@ -521,6 +521,55 @@ body{
 .btn-nextvid:active{filter:brightness(.92);}
 
 /* ════════════════════════════
+   LEARNING ONBOARDING — coach marks
+════════════════════════════ */
+.ob-overlay{
+  position:absolute;inset:0;z-index:20;
+  pointer-events:all;
+}
+/* Full-dim used on step 1 (no spotlight) */
+.ob-dim{
+  position:absolute;inset:0;background:rgba(21,8,38,.72);z-index:0;
+}
+/* Spotlight frame — white border around highlighted element */
+.ob-spot{
+  position:absolute;
+  border:2.5px solid rgba(255,255,255,.9);
+  border-radius:22px;
+  pointer-events:none;
+  box-shadow:0 0 0 9999px rgba(21,8,38,.62);
+  z-index:1;
+}
+/* Tooltip card */
+.ob-tip{
+  position:absolute;
+  left:20px;right:20px;
+  background:#fff;border-radius:20px;
+  border:2px solid var(--brand);
+  padding:18px 20px 16px;
+  z-index:2;
+  box-shadow:0 8px 32px rgba(21,8,38,.2);
+}
+.ob-tip-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:6px;line-height:1.25;}
+.ob-tip-sub{font-size:14px;color:var(--muted);line-height:1.45;}
+.ob-tip-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;}
+.ob-tip-text{flex:1;}
+.ob-tip-btn{
+  font-family:inherit;font-size:15px;font-weight:700;color:var(--brand2);
+  background:none;border:none;cursor:pointer;white-space:nowrap;padding:0;flex-shrink:0;
+}
+/* Step 1 extra: two-part list inside tooltip */
+.ob-parts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
+.ob-part{
+  display:flex;align-items:center;gap:12px;
+  background:var(--bg);border-radius:12px;padding:11px 14px;
+}
+.ob-part-emoji{font-size:20px;line-height:1;}
+.ob-part-txt{font-size:14px;font-weight:600;color:var(--text);}
+/* Steps hidden by default */
+.ob-step{display:none;position:absolute;inset:0;}
+
+/* ════════════════════════════
    SKILL BOOSTERS PAGE
 ════════════════════════════ */
 #p-boosters{background:var(--bg);}
@@ -703,8 +752,8 @@ body{
             <div class="sec-step step-t">Step 1</div>
             <div class="sec-ttl">Theory</div>
             <div class="sec-prow">
-              <div class="sec-pb"><div class="sec-pb-fill fill-brand" id="theory-pbar-fill" style="width:7%"></div></div>
-              <span class="sec-pcnt" id="theory-pcnt">1 / 15</span>
+              <div class="sec-pb"><div class="sec-pb-fill fill-brand" id="theory-pbar-fill" style="width:0.1%"></div></div>
+              <span class="sec-pcnt" id="theory-pcnt">1 / 776</span>
             </div>
           </div>
           <div class="sec-chev">
@@ -847,6 +896,78 @@ body{
     </div>
 
   </div>
+
+  <!-- ── Onboarding overlay (coach marks) ── -->
+  <div class="ob-overlay" id="ob-overlay">
+
+    <!-- STEP 1 — intro, full dim, tooltip centered -->
+    <div class="ob-step" id="ob-1" style="display:block;">
+      <div class="ob-dim"></div>
+      <div class="ob-tip" style="top:260px;z-index:2;">
+        <div class="ob-tip-title">The theory test<br>has 2 parts</div>
+        <div class="ob-parts">
+          <div class="ob-part">
+            <span class="ob-part-emoji">📘</span>
+            <span class="ob-part-txt">Theory questions</span>
+          </div>
+          <div class="ob-part">
+            <span class="ob-part-emoji">🎥</span>
+            <span class="ob-part-txt">Hazard perception clips</span>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:14px;">
+          <button class="ob-tip-btn" onclick="obNext(2)">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 — Theory card spotlight + tooltip below -->
+    <div class="ob-step" id="ob-2">
+      <!-- spotlight frame around theory card -->
+      <div class="ob-spot" style="top:108px;left:10px;right:10px;height:100px;"></div>
+      <div class="ob-tip" style="top:226px;">
+        <div class="ob-tip-row">
+          <div class="ob-tip-text">
+            <div class="ob-tip-title">Learn 776 theory questions</div>
+            <div class="ob-tip-sub">Practice by topic and build your knowledge step by step.</div>
+          </div>
+          <button class="ob-tip-btn" onclick="obNext(3)">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 — Hazard card spotlight + tooltip below -->
+    <div class="ob-step" id="ob-3">
+      <!-- spotlight frame around hazard card -->
+      <div class="ob-spot" style="top:232px;left:10px;right:10px;height:100px;"></div>
+      <div class="ob-tip" style="top:350px;">
+        <div class="ob-tip-row">
+          <div class="ob-tip-text">
+            <div class="ob-tip-title">Learn to spot hazards</div>
+            <div class="ob-tip-sub">Watch real driving clips and identify developing hazards.</div>
+          </div>
+          <button class="ob-tip-btn" onclick="obNext(4)">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 — Settings gear spotlight + tooltip -->
+    <div class="ob-step" id="ob-4">
+      <!-- spotlight: gear icon top-right of appbar -->
+      <div class="ob-spot" style="top:57px;right:14px;left:auto;width:46px;height:46px;border-radius:50%;"></div>
+      <div class="ob-tip" style="top:122px;">
+        <div class="ob-tip-row">
+          <div class="ob-tip-text">
+            <div class="ob-tip-title">Customise your test</div>
+            <div class="ob-tip-sub">Set the number of questions, shuffle answers, hints, and more.</div>
+          </div>
+          <button class="ob-tip-btn" onclick="obDone()">Got it</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- ── /Onboarding overlay ── -->
 
   <!-- Bottom sheet — inside p-learning, hidden by default -->
   <div class="bs-overlay" id="bs-overlay" onclick="closeBS()"></div>
@@ -1385,6 +1506,20 @@ function applyState2() {
   /* Card 2: unlock — show "Start topic · 45 questions" */
   document.getElementById('tc-2-before').innerHTML =
     '<span class="lbl-start">Start topic</span><span class="lbl-cnt"> · 45 questions</span>';
+}
+
+/* ── Onboarding ── */
+function obNext(step) {
+  [1,2,3,4].forEach(n => {
+    document.getElementById('ob-' + n).style.display = 'none';
+  });
+  document.getElementById('ob-' + step).style.display = 'block';
+}
+function obDone() {
+  const overlay = document.getElementById('ob-overlay');
+  overlay.style.transition = 'opacity .3s';
+  overlay.style.opacity = '0';
+  setTimeout(() => { overlay.style.display = 'none'; }, 300);
 }
 
 function nqSel(btn) {
