@@ -513,14 +513,20 @@ body{
 .res-stat-val{font-size:16px;font-weight:700;color:var(--text);}
 .res-divider{height:1px;background:var(--bg);margin:8px 0 16px;}
 .res-actions{display:flex;flex-direction:column;gap:10px;}
+.res-btn-row{display:flex;gap:10px;}
+.btn-replay{
+  width:52px;height:52px;flex-shrink:0;background:var(--bg);border:none;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:filter .15s;
+}
+.btn-replay:active{filter:brightness(.95);}
+.btn-replay svg{width:20px;height:20px;color:var(--text);}
 .btn-review{
-  width:100%;height:52px;background:var(--bg);border:none;border-radius:30px;
-  font-family:inherit;font-size:17px;font-weight:600;color:var(--text);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:8px;
+  flex:1;height:52px;background:var(--bg);border:none;border-radius:30px;
+  font-family:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
   transition:filter .15s;
 }
 .btn-review:active{filter:brightness(.95);}
-.btn-review svg{width:18px;height:18px;}
 .btn-nextvid{
   width:100%;height:52px;background:var(--accent);border:none;border-radius:30px;
   font-family:inherit;font-size:17px;font-weight:700;color:#fff;cursor:pointer;
@@ -596,6 +602,10 @@ body{
 .ob-tip-btn{
   font-family:inherit;font-size:15px;font-weight:700;color:var(--brand2);
   background:none;border:none;cursor:pointer;white-space:nowrap;padding:0;flex-shrink:0;
+}
+.ob-skip-btn{
+  font-family:inherit;font-size:14px;font-weight:500;color:var(--muted);
+  background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;
 }
 /* Step 1 extra: two-part list inside tooltip */
 .ob-parts{display:flex;flex-direction:column;gap:8px;margin-top:12px;}
@@ -794,7 +804,7 @@ body{
             <div class="sec-ttl">Theory</div>
             <div class="sec-prow">
               <div class="sec-pb"><div class="sec-pb-fill fill-brand" id="theory-pbar-fill" style="width:0.1%"></div></div>
-              <span class="sec-pcnt" id="theory-pcnt">1 / 776</span>
+              <span class="sec-pcnt" id="theory-pcnt">776 questions</span>
             </div>
           </div>
           <div class="sec-chev">
@@ -907,7 +917,7 @@ body{
             <div class="sec-ttl">Hazard Perception</div>
             <div class="sec-prow">
               <div class="sec-pb"><div class="sec-pb-fill fill-accent" style="width:3%"></div></div>
-              <span class="sec-pcnt">1 / 32</span>
+              <span class="sec-pcnt">32 clips</span>
             </div>
           </div>
           <div class="sec-chev">
@@ -920,7 +930,7 @@ body{
         <div class="hz-bg">
           <div class="hz-tabs">
             <button class="hz-tab active" onclick="hzTab(this,'hz-all')">To do</button>
-            <button class="hz-tab" onclick="hzTab(this,'hz-redo')">Redo</button>
+            <button class="hz-tab" onclick="hzTab(this,'hz-redo')">Failed</button>
             <button class="hz-tab" onclick="hzTab(this,'hz-nailed')">Mastered</button>
           </div>
 
@@ -937,7 +947,7 @@ body{
           <!-- REDO — пустой (0–3 балла, пока нет) -->
           <div class="hz-empty" id="hz-redo" style="display:none;">
             <svg viewBox="0 0 24 24" fill="none" stroke="var(--bg2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="48" height="48"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
-            <div class="hz-empty-ttl">No clips to redo</div>
+            <div class="hz-empty-ttl">No failed clips</div>
             <div class="hz-empty-sub">Clips scored 0–3 pts will appear here</div>
           </div>
 
@@ -966,7 +976,10 @@ body{
           <div class="ob-tip-text">
             <div class="ob-tip-title">Prepare for both parts of the test</div>
           </div>
-          <button class="ob-tip-btn" onclick="obNext(2)">Next</button>
+          <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+            <button class="ob-skip-btn" onclick="obDone()">Skip</button>
+            <button class="ob-tip-btn" onclick="obNext(2)">Next</button>
+          </div>
         </div>
       </div>
     </div>
@@ -980,7 +993,10 @@ body{
           <div class="ob-tip-text">
             <div class="ob-tip-title">Practice with official DVSA licensed questions</div>
           </div>
-          <button class="ob-tip-btn" onclick="obNext(3)">Next</button>
+          <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+            <button class="ob-skip-btn" onclick="obDone()">Skip</button>
+            <button class="ob-tip-btn" onclick="obNext(3)">Next</button>
+          </div>
         </div>
       </div>
     </div>
@@ -994,7 +1010,10 @@ body{
           <div class="ob-tip-text">
             <div class="ob-tip-title">Practice hazard awareness with video clips</div>
           </div>
-          <button class="ob-tip-btn" onclick="obNext(4)">Next</button>
+          <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+            <button class="ob-skip-btn" onclick="obDone()">Skip</button>
+            <button class="ob-tip-btn" onclick="obNext(4)">Next</button>
+          </div>
         </div>
       </div>
     </div>
@@ -1139,72 +1158,78 @@ body{
   </div>
 
   <div class="res-top">
-    <div class="res-title">Keep going!<br>Aim higher!</div>
-    <!-- Character illustration -->
-    <svg class="res-char" viewBox="0 0 180 200" fill="none">
+    <div class="res-title">Great Job!<br>Test completed!</div>
+    <!-- Character illustration — happy, fist raised -->
+    <svg class="res-char" viewBox="0 0 180 210" fill="none">
       <!-- Shadow -->
-      <ellipse cx="90" cy="192" rx="46" ry="7" fill="rgba(0,0,0,0.18)"/>
+      <ellipse cx="90" cy="200" rx="46" ry="7" fill="rgba(0,0,0,0.18)"/>
       <!-- Body -->
-      <ellipse cx="90" cy="155" rx="44" ry="42" fill="#C17B3A"/>
+      <ellipse cx="90" cy="162" rx="44" ry="42" fill="#C17B3A"/>
       <!-- Purple jacket/outfit -->
-      <path d="M50 155 Q50 130 56 120 L90 110 L124 120 Q130 130 130 155Z" fill="#5B2AB0"/>
+      <path d="M50 162 Q50 137 56 127 L90 117 L124 127 Q130 137 130 162Z" fill="#5B2AB0"/>
       <!-- Head -->
-      <circle cx="90" cy="100" r="42" fill="#D4894A"/>
+      <circle cx="90" cy="107" r="42" fill="#D4894A"/>
       <!-- Ears -->
-      <circle cx="52" cy="64" r="15" fill="#D4894A"/>
-      <circle cx="128" cy="64" r="15" fill="#D4894A"/>
-      <circle cx="52" cy="64" r="8" fill="#F0A870"/>
-      <circle cx="128" cy="64" r="8" fill="#F0A870"/>
+      <circle cx="52" cy="71" r="15" fill="#D4894A"/>
+      <circle cx="128" cy="71" r="15" fill="#D4894A"/>
+      <circle cx="52" cy="71" r="8" fill="#F0A870"/>
+      <circle cx="128" cy="71" r="8" fill="#F0A870"/>
       <!-- Spots on head -->
-      <circle cx="72" cy="75" r="5" fill="rgba(0,0,0,0.12)"/>
-      <circle cx="108" cy="70" r="4" fill="rgba(0,0,0,0.12)"/>
-      <circle cx="80" cy="60" r="3" fill="rgba(0,0,0,0.10)"/>
-      <circle cx="100" cy="85" r="3.5" fill="rgba(0,0,0,0.10)"/>
+      <circle cx="72" cy="82" r="5" fill="rgba(0,0,0,0.12)"/>
+      <circle cx="108" cy="77" r="4" fill="rgba(0,0,0,0.12)"/>
+      <circle cx="80" cy="67" r="3" fill="rgba(0,0,0,0.10)"/>
       <!-- Face - muzzle -->
-      <ellipse cx="90" cy="114" rx="18" ry="12" fill="#F0A870"/>
-      <!-- Sad eyes -->
-      <ellipse cx="76" cy="96" rx="7" ry="8" fill="#1A0A2E"/>
-      <ellipse cx="104" cy="96" rx="7" ry="8" fill="#1A0A2E"/>
-      <circle cx="78" cy="94" r="2.5" fill="#fff"/>
-      <circle cx="106" cy="94" r="2.5" fill="#fff"/>
-      <!-- Eyebrows sad (angled down toward center) -->
-      <path d="M69 87 Q76 83 82 86" stroke="#8B4513" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M98 86 Q104 83 111 87" stroke="#8B4513" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <!-- Sad mouth -->
-      <path d="M80 118 Q90 112 100 118" stroke="#8B4513" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <!-- Arms down -->
-      <path d="M48 135 Q36 148 40 162" stroke="#C17B3A" stroke-width="14" fill="none" stroke-linecap="round"/>
-      <path d="M132 135 Q144 148 140 162" stroke="#C17B3A" stroke-width="14" fill="none" stroke-linecap="round"/>
-      <!-- Purple sleeve ends -->
-      <path d="M50 133 Q40 146 42 158" stroke="#5B2AB0" stroke-width="10" fill="none" stroke-linecap="round"/>
-      <path d="M130 133 Q140 146 138 158" stroke="#5B2AB0" stroke-width="10" fill="none" stroke-linecap="round"/>
-      <!-- Hands -->
-      <circle cx="40" cy="163" r="8" fill="#D4894A"/>
-      <circle cx="140" cy="163" r="8" fill="#D4894A"/>
+      <ellipse cx="90" cy="121" rx="18" ry="12" fill="#F0A870"/>
+      <!-- Happy eyes -->
+      <ellipse cx="76" cy="103" rx="7" ry="8" fill="#1A0A2E"/>
+      <ellipse cx="104" cy="103" rx="7" ry="8" fill="#1A0A2E"/>
+      <circle cx="78" cy="101" r="2.5" fill="#fff"/>
+      <circle cx="106" cy="101" r="2.5" fill="#fff"/>
+      <!-- Eyebrows happy (relaxed arch) -->
+      <path d="M70 91 Q76 87 83 91" stroke="#8B4513" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M97 91 Q104 87 110 91" stroke="#8B4513" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Happy smile -->
+      <path d="M80 124 Q90 132 100 124" stroke="#8B4513" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Left arm down -->
+      <path d="M50 140 Q38 153 42 168" stroke="#C17B3A" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M52 138 Q42 150 44 164" stroke="#5B2AB0" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <circle cx="42" cy="170" r="8" fill="#D4894A"/>
+      <!-- Right arm raised with fist -->
+      <path d="M130 128 Q148 100 158 68" stroke="#C17B3A" stroke-width="14" fill="none" stroke-linecap="round"/>
+      <path d="M128 130 Q146 103 155 72" stroke="#5B2AB0" stroke-width="10" fill="none" stroke-linecap="round"/>
+      <!-- Fist -->
+      <rect x="148" y="52" width="20" height="18" rx="6" fill="#D4894A"/>
+      <rect x="148" y="47" width="20" height="10" rx="5" fill="#C17B3A"/>
+      <line x1="152" y1="47" x2="152" y2="57" stroke="#B06828" stroke-width="1.5"/>
+      <line x1="158" y1="47" x2="158" y2="57" stroke="#B06828" stroke-width="1.5"/>
+      <line x1="164" y1="47" x2="164" y2="57" stroke="#B06828" stroke-width="1.5"/>
     </svg>
   </div>
 
   <div class="res-sheet">
+    <div style="font-size:18px;font-weight:800;color:var(--text);margin-bottom:14px;">Test #1</div>
     <div class="res-stat-row">
       <div class="res-stat-left">
         <svg viewBox="0 0 24 24" fill="#FAC32A"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Points
+        Questions passed
       </div>
-      <span class="res-stat-val">2 / 5</span>
+      <span class="res-stat-val">20/20</span>
     </div>
     <div class="res-stat-row">
       <div class="res-stat-left">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-        Misclicks
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="6" x2="12" y2="12"/><line x1="16" y1="14" x2="12" y2="12"/></svg>
+        Total time
       </div>
-      <span class="res-stat-val">6</span>
+      <span class="res-stat-val">10:45</span>
     </div>
     <div class="res-divider"></div>
     <div class="res-actions">
-      <button class="btn-review">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
-        Review
-      </button>
+      <div class="res-btn-row">
+        <button class="btn-replay">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+        </button>
+        <button class="btn-review">Review answers</button>
+      </div>
       <button class="btn-nextvid">Next test</button>
     </div>
   </div>
