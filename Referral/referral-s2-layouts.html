@@ -71,7 +71,7 @@ CTA сразу в скролле, шаги ниже с иконками
   <div style="background:var(--card);flex:1;display:flex;flex-direction:column;position:relative;">
     <div class="sbar" style="background:var(--card);"><div class="sbar-left"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><rect x="1" y="15" width="3" height="6" rx="1"/><rect x="6" y="11" width="3" height="10" rx="1"/><rect x="11" y="7" width="3" height="14" rx="1"/><rect x="16" y="4" width="3" height="17" rx="1" opacity=".3"/></svg>Carrier</div><span class="sbar-time">9:41</span><svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0" y="1" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity=".08"/><rect x="1" y="2" width="16" height="8" rx="1" fill="currentColor"/><path d="M20 4v4a2 2 0 000-4z" fill="currentColor" opacity=".4"/></svg></div>
 
-    <div class="scroll">
+    <div class="scroll" style="padding-bottom:140px;">
       <!-- Illustration zone -->
       <div style="background:var(--brand-grad);padding:28px 24px 32px;display:flex;flex-direction:column;align-items:center;gap:0;position:relative;overflow:hidden;">
         <!-- Close X -->
@@ -119,11 +119,6 @@ CTA сразу в скролле, шаги ниже с иконками
         </div>
       </div>
 
-      <!-- CTA (в скролле, ранний) -->
-      <div style="background:var(--card);padding:20px 20px 0;">
-        <button class="btn-primary">Send invite</button>
-      </div>
-
       <!-- Divider + steps -->
       <div style="background:var(--card);padding:24px 20px;display:flex;flex-direction:column;gap:20px;">
         <div style="font-size:16px;font-weight:700;color:var(--text);">How it works…</div>
@@ -155,11 +150,14 @@ CTA сразу в скролле, шаги ниже с иконками
             <div style="font-size:14px;font-weight:400;color:var(--muted);line-height:1.45;">No expiry date on your trial</div>
           </div>
         </div>
-        <div style="border-top:1px solid var(--bg);padding-top:12px;display:flex;align-items:center;justify-content:space-between;">
-          <button class="btn-tertiary" style="width:auto;padding:0;font-size:14px;">Terms apply →</button>
-          <button class="btn-tertiary" style="width:auto;padding:0;font-size:14px;color:var(--muted);">Maybe later</button>
-        </div>
       </div>
+    </div>
+    <!-- Fixed bottom: Terms + button -->
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);padding:12px 20px 44px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-top);">
+      <div style="text-align:center;">
+        <button class="btn-tertiary" style="width:auto;padding:0;font-size:14px;">Terms apply →</button>
+      </div>
+      <button class="btn-primary">Share link</button>
     </div>
   </div>
 </div>
@@ -209,39 +207,35 @@ V3 — Reward split (Foodpanda-inspired)
         <div style="background:var(--card);border-radius:20px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:16px;">
           <div style="font-size:20px;font-weight:700;color:var(--text);text-align:center;line-height:1.2;margin-top:4px;">Invite a friend,<br>you both get 7 days free</div>
           <div style="height:1px;background:var(--bg);"></div>
-          <!-- Friend reward -->
-          <div style="display:flex;align-items:flex-start;gap:12px;">
-            <div style="font-size:24px;line-height:1;flex-shrink:0;margin-top:2px;">🎁</div>
-            <div>
-              <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px;">Your friend gets 7 days free</div>
-              <div style="font-size:13px;font-weight:400;color:var(--muted);line-height:1.4;">A 7-day trial instead of the standard 3 — when they sign up with your invite link</div>
-            </div>
-          </div>
-          <div style="height:1px;background:var(--bg);"></div>
-          <!-- You reward -->
-          <div style="display:flex;align-items:flex-start;gap:12px;">
-            <div style="font-size:24px;line-height:1;flex-shrink:0;margin-top:2px;">✨</div>
-            <div>
-              <div style="font-size:15px;font-weight:600;color:var(--text);margin-bottom:3px;">You get 7 days free</div>
-              <div style="font-size:13px;font-weight:400;color:var(--muted);line-height:1.4;">Unlocked once your friend starts their trial. No expiry date on yours.</div>
-            </div>
-          </div>
-          <div style="height:1px;background:var(--bg);"></div>
           <!-- Steps inside card -->
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <div class="step-row"><div class="step-num">1</div><div class="step-text">Share your invite link with a friend</div></div>
-            <div class="step-row"><div class="step-num">2</div><div class="step-text">They get a 7-day trial instead of 3</div></div>
-            <div class="step-row"><div class="step-num">3</div><div class="step-text">You unlock your 7-day trial once they start theirs</div></div>
-          </div>
-          <div style="border-top:1px solid var(--bg);padding-top:4px;">
-            <button class="btn-tertiary" style="width:auto;padding:0;font-size:14px;">Terms apply →</button>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div class="step-num" style="flex-shrink:0;">1</div>
+              <div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.3;">Share your invite link</div><div style="font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;line-height:1.4;">Your friend must be a new user.</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div class="step-num" style="flex-shrink:0;">2</div>
+              <div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.3;">They get a 7-day trial</div><div style="font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;line-height:1.4;">Your friend needs to start their trial through your invite.</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div class="step-num" style="flex-shrink:0;">3</div>
+              <div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.3;">You unlock your 7-day trial</div><div style="font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;line-height:1.4;">Your trial unlocks once your friend starts theirs.</div></div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:12px;">
+              <div class="step-num" style="flex-shrink:0;">4</div>
+              <div><div style="font-size:14px;font-weight:600;color:var(--text);line-height:1.3;">No expiry date</div><div style="font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;line-height:1.4;">Your trial stays available until you claim it.</div></div>
+            </div>
           </div>
         </div>
       </div>
+      <!-- Terms under card -->
+      <div style="padding:12px 20px 0;text-align:center;">
+        <button class="btn-tertiary" style="width:auto;padding:0;font-size:14px;">Terms apply →</button>
+      </div>
     </div>
 
-    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);padding:16px 20px 44px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-top);">
-      <button class="btn-primary">Send invite</button>
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);padding:16px 20px 44px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-top);">
+      <button class="btn-primary">Share link</button>
       <button class="btn-secondary">Maybe later</button>
     </div>
   </div>
@@ -318,7 +312,7 @@ Terms внизу скролла
     </div>
 
     <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);padding:16px 20px 44px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-top);">
-      <button class="btn-primary">Send invite</button>
+      <button class="btn-primary">Share link</button>
       <button class="btn-secondary">Maybe later</button>
     </div>
   </div>
@@ -388,7 +382,7 @@ V5 — Half & half
 
     <!-- Fixed buttons -->
     <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);padding:12px 20px 44px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-top);">
-      <button class="btn-primary">Send invite</button>
+      <button class="btn-primary">Share link</button>
       <button class="btn-secondary">Maybe later</button>
     </div>
   </div>
