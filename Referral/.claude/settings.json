@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__figma__whoami",
+      "mcp__figma__generate_diagram",
+      "mcp__figma__get_figjam",
+      "mcp__figma__get_design_context",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ],
+    "additionalDirectories": [
+      "/Users/ekateerina/.claude/projects/-Users-ekateerina-Claude-Code-EXAM/memory",
+      "/Users/ekateerina/.claude/projects/-Users-ekateerina-Claude-Code-Exam/memory"
+    ]
+  }
+}

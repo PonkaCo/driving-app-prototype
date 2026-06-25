@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Referral — Giver (Free User)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+:root{
+  --brand:#401971;
+  --brand2:#6B2ABC;
+  --brand-grad:linear-gradient(151.6deg,#411A72 14%,#6D2BC0 90%);
+  --accent:#FA5732;
+  --accent-grad:linear-gradient(90.9deg,#FA5732 1%,#6B2ABC 99%);
+  --bg:#F2F0F5;
+  --bg2:#E9E7EB;
+  --card:#FCFCFC;
+  --text:#150826;
+  --muted:#797282;
+  --on-brand:#FFFCFC;
+  --on-brand2:#CFBBE2;
+  --success:#00A850;
+  --success-bg:#D4FCE7;
+  --error:#FF2346;
+  --error-bg:#FFE0E5;
+  --shadow:0px 6px 30px 0px rgba(55,22,97,0.08);
+  --shadow-top:0px -2px 24px 0px rgba(55,21,97,0.04);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--text);
+}
+
+body{
+  background:#1A1230;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:32px 0 64px;
+  min-height:100vh;
+  gap:16px;
+}
+
+/* ── Phone shell ── */
+.phone{
+  width:390px;
+  height:812px;
+  background:var(--bg);
+  border-radius:48px;
+  overflow:hidden;
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 24px 80px rgba(0,0,0,.5);
+  flex-shrink:0;
+}
+
+/* ── Status bar ── */
+.status-bar{
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  flex-shrink:0;
+}
+.status-bar__time{font-size:15px;font-weight:600;color:var(--text);}
+.status-bar__icons{display:flex;align-items:center;gap:6px;}
+.status-bar__icons svg{width:16px;height:16px;color:var(--text);}
+
+/* ── App bar ── */
+.app-bar{
+  height:48px;
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  gap:8px;
+  flex-shrink:0;
+  background:var(--bg);
+}
+.app-bar__back{
+  width:44px;height:44px;border-radius:24px;
+  background:var(--card);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.app-bar__back svg{width:24px;height:24px;color:var(--text);}
+.app-bar__title{font-size:17px;font-weight:600;color:var(--text);flex:1;text-align:center;}
+.app-bar__spacer{width:44px;flex-shrink:0;}
+
+/* ── Scroll area ── */
+.scroll{
+  flex:1;
+  overflow-y:auto;
+  padding:16px 20px 32px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  scrollbar-width:none;
+}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── Tab bar ── */
+.tab-bar{
+  height:49px;background:var(--card);
+  border-radius:20px 20px 0 0;
+  box-shadow:var(--shadow-top);
+  display:flex;align-items:stretch;
+  flex-shrink:0;
+}
+.tab-bar__item{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:2px;padding:0 4px;cursor:pointer;
+}
+.tab-bar__item svg{width:24px;height:24px;}
+.tab-bar__item span{font-size:10px;font-weight:500;line-height:1;}
+.tab-bar__item.active svg,.tab-bar__item.active span{color:var(--brand);}
+.tab-bar__item:not(.active) svg,.tab-bar__item:not(.active) span{color:var(--muted);}
+
+/* ── Buttons ── */
+.btn-primary{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  height:44px;padding:0 24px;
+  background:var(--accent);border-radius:24px;border:none;cursor:pointer;
+  font-size:16px;font-weight:600;color:var(--on-brand);font-family:inherit;
+  white-space:nowrap;transition:filter .12s;width:100%;
+}
+.btn-primary:active{filter:brightness(.85);}
+.btn-secondary{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  height:44px;padding:0 24px;
+  background:var(--bg);border-radius:24px;border:none;cursor:pointer;
+  font-size:16px;font-weight:600;color:var(--text);font-family:inherit;
+  white-space:nowrap;transition:filter .12s;width:100%;
+}
+.btn-secondary:active{filter:brightness(.95);}
+.btn-tertiary{
+  display:inline-flex;align-items:center;justify-content:center;
+  height:32px;padding:0 24px;background:none;border:none;cursor:pointer;
+  font-size:14px;font-weight:500;color:var(--accent);font-family:inherit;
+}
+
+/* ── Cards ── */
+.card{
+  background:var(--card);border-radius:20px;
+  padding:16px;box-shadow:var(--shadow);
+}
+
+/* ── List row ── */
+.list-row{
+  display:flex;align-items:center;gap:12px;
+  min-height:60px;padding:8px 16px;
+  cursor:pointer;
+}
+.list-row__icon{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--bg);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.list-row__icon svg{width:20px;height:20px;color:var(--brand);}
+.list-row__content{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;}
+.list-row__title{font-size:16px;font-weight:500;color:var(--text);}
+.list-row__sub{font-size:14px;font-weight:400;color:var(--muted);}
+.list-row__chevron{width:20px;height:20px;color:var(--muted);flex-shrink:0;}
+
+/* ── Section label ── */
+.section-label{
+  font-size:12px;font-weight:600;color:var(--muted);
+  letter-spacing:.04em;text-transform:uppercase;
+  padding:0 4px;margin-top:4px;
+}
+
+/* ── Referral Banner (main screen) ── */
+.ref-banner{
+  background:var(--brand-grad);
+  border-radius:20px;
+  padding:16px;
+  display:flex;flex-direction:column;gap:12px;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+}
+.ref-banner__close{
+  position:absolute;top:12px;right:12px;
+  width:28px;height:28px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.ref-banner__close svg{width:14px;height:14px;color:#fff;}
+.ref-banner__tag{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.18);border-radius:100px;
+  padding:4px 10px;width:fit-content;
+}
+.ref-banner__tag-text{font-size:12px;font-weight:600;color:#fff;}
+.ref-banner__title{font-size:20px;font-weight:700;color:#fff;line-height:120%;}
+.ref-banner__sub{font-size:14px;font-weight:400;color:rgba(255,255,255,.75);line-height:140%;}
+.ref-banner__cta{
+  background:rgba(255,255,255,.2);border:none;border-radius:24px;
+  height:40px;padding:0 20px;
+  font-size:15px;font-weight:600;color:#fff;font-family:inherit;
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;
+  width:fit-content;
+}
+.ref-banner__deco{
+  position:absolute;right:-20px;bottom:-20px;
+  width:120px;height:120px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+.ref-banner__deco2{
+  position:absolute;right:40px;bottom:-40px;
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(255,255,255,.04);
+}
+
+/* ── Explanation screen ── */
+.explain-hero{
+  background:var(--brand-grad);
+  border-radius:24px;
+  padding:32px 24px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  text-align:center;
+}
+.explain-hero__icon{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+}
+.explain-hero__icon svg{width:36px;height:36px;color:#fff;}
+.explain-hero__title{font-size:24px;font-weight:700;color:#fff;line-height:120%;}
+.explain-hero__sub{font-size:15px;font-weight:400;color:rgba(255,255,255,.75);line-height:140%;}
+
+.reward-row{
+  display:flex;gap:8px;
+}
+.reward-card{
+  flex:1;background:var(--card);border-radius:16px;
+  padding:14px 12px;display:flex;flex-direction:column;gap:8px;
+  box-shadow:var(--shadow);
+}
+.reward-card__who{font-size:12px;font-weight:500;color:var(--muted);}
+.reward-card__amount{font-size:22px;font-weight:700;color:var(--brand);line-height:1;}
+.reward-card__label{font-size:13px;font-weight:400;color:var(--text);line-height:130%;}
+
+.how-it-works{
+  background:var(--card);border-radius:20px;
+  padding:16px;display:flex;flex-direction:column;gap:12px;
+  box-shadow:var(--shadow);
+}
+.how-it-works__title{font-size:14px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.step-row{display:flex;align-items:flex-start;gap:12px;}
+.step-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--bg);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;color:var(--brand);
+}
+.step-text{font-size:14px;font-weight:400;color:var(--text);line-height:140%;padding-top:4px;}
+
+.btns-stack{display:flex;flex-direction:column;gap:8px;}
+
+/* ── Success screen ── */
+.success-hero{
+  display:flex;flex-direction:column;align-items:center;
+  gap:16px;text-align:center;padding:40px 0 8px;
+}
+.success-hero__icon{
+  width:88px;height:88px;border-radius:50%;
+  background:var(--success-bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.success-hero__icon svg{width:44px;height:44px;color:var(--success);}
+.success-hero__title{font-size:24px;font-weight:700;color:var(--text);line-height:120%;}
+.success-hero__sub{font-size:15px;font-weight:400;color:var(--muted);line-height:140%;}
+
+.status-card{
+  background:var(--card);border-radius:20px;
+  padding:16px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:12px;
+}
+.status-card__icon{
+  width:44px;height:44px;border-radius:50%;
+  background:var(--bg);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.status-card__icon svg{width:22px;height:22px;color:var(--brand);}
+.status-card__content{flex:1;}
+.status-card__title{font-size:15px;font-weight:600;color:var(--text);}
+.status-card__sub{font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;line-height:130%;}
+.status-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--success);flex-shrink:0;
+}
+.status-dot.waiting{background:#FAC32A;}
+
+/* ── Bottom sheet overlay ── */
+.sheet-overlay{
+  position:absolute;inset:0;
+  background:rgba(21,8,38,.6);
+  z-index:20;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.sheet-overlay.hidden{display:none;}
+
+.bottom-sheet{
+  background:var(--card);border-radius:20px 20px 0 0;
+  padding:24px 20px 40px;
+  display:flex;flex-direction:column;gap:0;
+  box-shadow:var(--shadow-top);
+}
+.bottom-sheet__handle{
+  width:36px;height:4px;border-radius:4px;
+  background:#DEDBE1;
+  margin:0 auto 20px;
+}
+.bottom-sheet__icon-wrap{
+  width:72px;height:72px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;
+}
+.bottom-sheet__title{
+  font-size:20px;font-weight:700;color:var(--text);
+  text-align:center;line-height:120%;margin-bottom:8px;
+}
+.bottom-sheet__sub{
+  font-size:15px;font-weight:400;color:var(--muted);
+  text-align:center;line-height:140%;margin-bottom:24px;
+}
+.bottom-sheet__btns{display:flex;flex-direction:column;gap:8px;}
+
+/* ── Toast ── */
+.toast{
+  position:absolute;
+  bottom:80px;left:20px;right:20px;
+  background:var(--text);
+  border-radius:14px;padding:14px 16px;
+  font-size:14px;font-weight:500;color:#fff;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+  z-index:30;
+  animation:slideUp .25s ease;
+}
+.toast.hidden{display:none;}
+.toast svg{width:18px;height:18px;color:var(--accent);flex-shrink:0;}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── Settings referral block ── */
+.ref-settings{
+  background:var(--card);border-radius:20px;
+  padding:16px;box-shadow:var(--shadow);
+  display:flex;flex-direction:column;gap:12px;
+}
+.ref-settings__title{font-size:16px;font-weight:600;color:var(--text);}
+.ref-settings__sub{font-size:14px;font-weight:400;color:var(--muted);line-height:140%;}
+.ref-settings__status{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:500;color:var(--muted);
+}
+.ref-settings__status-dot{
+  width:8px;height:8px;border-radius:50%;
+  flex-shrink:0;
+}
+.ref-settings.unavailable .ref-settings__title{color:var(--muted);}
+
+/* ── Hint ── */
+.hint{
+  display:flex;align-items:center;gap:8px;
+  min-height:48px;padding:12px 16px;
+  background:var(--bg);border-radius:16px;
+}
+.hint svg{width:18px;height:18px;color:var(--brand);flex-shrink:0;}
+.hint__text{font-size:13px;font-weight:400;color:var(--text);line-height:130%;}
+
+/* ── Screen nav ── */
+.screen{display:none;flex-direction:column;height:100%;}
+.screen.active{display:flex;}
+
+/* ── Nav pills ── */
+.nav-bar{
+  display:flex;gap:8px;flex-wrap:wrap;
+  max-width:700px;width:100%;
+  justify-content:center;
+}
+.nav-pill{
+  padding:6px 14px;border-radius:20px;border:none;cursor:pointer;
+  font-size:13px;font-weight:500;font-family:inherit;
+  background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);
+  transition:background .15s,color .15s;
+}
+.nav-pill.active{background:rgba(255,255,255,.9);color:#1A1230;}
+.nav-pill:hover{background:rgba(255,255,255,.2);color:#fff;}
+.nav-pill.active:hover{background:rgba(255,255,255,.9);color:#1A1230;}
+
+.nav-label{
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);text-align:center;
+}
+
+/* ── Hero card (home screen) ── */
+.hero{
+  background:var(--brand-grad);
+  border-radius:24px;padding:24px 24px 28px;
+  position:relative;overflow:hidden;cursor:pointer;
+  min-height:200px;display:flex;flex-direction:column;
+  margin:0;
+}
+.hero-cat{font-size:13px;font-weight:500;color:rgba(255,255,255,.65);margin-bottom:8px;}
+.hero-ttl{font-size:32px;font-weight:800;color:#fff;line-height:1.1;flex:1;}
+.hero-btn{
+  width:48px;height:48px;background:#fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:12px;
+}
+.hero-btn svg{width:20px;height:20px;color:var(--text);}
+.hero-badge{
+  position:absolute;top:16px;right:16px;
+  background:rgba(0,0,0,.25);border-radius:20px;
+  padding:6px 12px 6px 8px;
+  display:flex;align-items:center;gap:5px;
+  font-size:15px;font-weight:700;color:#fff;
+}
+.hero-badge svg{width:18px;height:18px;}
+.hero-art{
+  position:absolute;right:-8px;top:-8px;bottom:0;width:200px;
+  pointer-events:none;display:flex;align-items:center;justify-content:center;
+}
+.hero-art svg{width:190px;height:190px;opacity:.85;}
+
+/* ── Two-col mini cards ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mc{
+  background:var(--card);border-radius:20px;
+  padding:18px 16px 20px;box-shadow:var(--shadow);cursor:pointer;
+}
+.mc-icon{
+  width:40px;height:40px;background:var(--bg);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+}
+.mc-icon svg{width:20px;height:20px;}
+.mc-lbl{font-size:15px;font-weight:700;color:var(--text);line-height:1.25;}
+
+/* ── Explore list ── */
+.expl-list{background:var(--card);border-radius:20px;box-shadow:var(--shadow);overflow:hidden;}
+.expl-row{
+  display:flex;align-items:center;gap:14px;padding:16px 18px;
+  cursor:pointer;
+}
+.expl-row+.expl-row{border-top:1px solid var(--bg);}
+.expl-ico{
+  width:40px;height:40px;background:var(--bg);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.expl-ico svg{width:20px;height:20px;color:var(--brand);}
+.expl-lbl{flex:1;font-size:16px;font-weight:500;color:var(--text);}
+.expl-chev svg{width:16px;height:16px;display:block;color:var(--muted);}
+
+/* ── DVSA single row ── */
+.dvsa-row{
+  background:var(--card);border-radius:20px;box-shadow:var(--shadow);
+  padding:18px;display:flex;align-items:center;gap:14px;cursor:pointer;
+}
+.dvsa-ico{
+  width:40px;height:40px;border-radius:12px;background:#FFE8E3;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+/* ── Home screen decorative cards (fallback) ── */
+.home-card{
+  background:var(--card);border-radius:20px;
+  padding:16px;box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:12px;
+}
+.home-card__icon{
+  width:40px;height:40px;border-radius:12px;
+  background:var(--bg);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.home-card__icon svg{width:20px;height:20px;color:var(--brand);}
+.home-card__title{font-size:16px;font-weight:500;color:var(--text);}
+.home-card__sub{font-size:13px;font-weight:400;color:var(--muted);}
+
+.divider{height:1px;background:var(--bg2);margin:4px 0;}
+
+/* ── Claim ready pill ── */
+.claim-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--success-bg);border-radius:100px;
+  padding:4px 12px;font-size:12px;font-weight:600;color:var(--success);
+}
+.waiting-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--warn-bg, #FFFBD4);border-radius:100px;
+  padding:4px 12px;font-size:12px;font-weight:600;color:#FAC32A;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav-label">Referral — Giver (Free User)</div>
+<div class="nav-bar">
+  <button class="nav-pill active" onclick="show('s1')">1 · Banner</button>
+  <button class="nav-pill" onclick="show('s2')">2 · Explanation</button>
+  <button class="nav-pill" onclick="show('s3')">3 · Link sent</button>
+  <button class="nav-pill" onclick="show('s4')">4 · Waiting</button>
+  <button class="nav-pill" onclick="show('s5')">5 · Claimed</button>
+  <button class="nav-pill" onclick="show('s6')">6 · Settings ×4</button>
+</div>
+
+<!-- ══════════════════════════════════════
+     S1 — Main screen with referral banner
+═══════════════════════════════════════ -->
+<div class="phone" id="s1">
+  <div style="background:var(--bg);flex:1;display:flex;flex-direction:column;">
+    <!-- Status bar (white bg matches screenshot) -->
+    <div style="height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:var(--card);flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="15" width="3" height="6" rx="1"/><rect x="6" y="11" width="3" height="10" rx="1"/><rect x="11" y="7" width="3" height="14" rx="1"/><rect x="16" y="4" width="3" height="17" rx="1" opacity=".3"/></svg>
+        Carrier
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
+      </div>
+      <span style="font-size:15px;font-weight:600;color:var(--text);">9:41 AM</span>
+      <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0" y="1" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity=".08"/><rect x="1" y="2" width="16" height="8" rx="1" fill="currentColor"/><path d="M20 4v4a2 2 0 000-4z" fill="currentColor" opacity=".4"/></svg>
+    </div>
+
+    <div class="scroll" style="padding:12px 16px 32px;gap:10px;">
+
+      <!-- Hero card -->
+      <div class="hero" onclick="show('s2')">
+        <div class="hero-cat">Category B</div>
+        <div class="hero-ttl">Tap to start<br>learning</div>
+        <div class="hero-btn" style="margin-top:16px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>
+        <div class="hero-badge">
+          <svg viewBox="0 0 24 24" fill="#FA5732"><path d="M12 2c0 0-5 5.5-5 10a5 5 0 0010 0C17 7.5 12 2 12 2z"/></svg>
+          13
+        </div>
+        <div class="hero-art">
+          <svg viewBox="0 0 180 200" fill="none">
+            <ellipse cx="100" cy="100" rx="70" ry="70" fill="rgba(180,100,255,.18)"/>
+            <path d="M100 20 C100 20 140 55 140 105 L100 140 L60 105 C60 55 100 20 100 20Z" fill="rgba(220,150,255,.25)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+            <circle cx="100" cy="90" r="16" fill="rgba(255,255,255,.15)" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+            <circle cx="100" cy="90" r="9" fill="rgba(255,255,255,.22)"/>
+            <path d="M62 108 L38 138 L68 124Z" fill="#FA5732" opacity=".8"/>
+            <path d="M138 108 L162 138 L132 124Z" fill="#FA5732" opacity=".8"/>
+            <ellipse cx="100" cy="158" rx="16" ry="24" fill="#FAC32A" opacity=".7"/>
+            <ellipse cx="100" cy="164" rx="9" ry="16" fill="#FA5732" opacity=".9"/>
+            <circle cx="44" cy="38" r="2.5" fill="rgba(255,255,255,.6)"/>
+            <circle cx="158" cy="52" r="1.8" fill="rgba(255,255,255,.5)"/>
+            <circle cx="155" cy="118" r="2" fill="rgba(255,255,255,.4)"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Two-col cards -->
+      <div class="two-col">
+        <div class="mc">
+          <div class="mc-icon" style="background:#EDE8F5;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+          </div>
+          <div class="mc-lbl">Skill<br>Boosters</div>
+        </div>
+        <div class="mc">
+          <div class="mc-icon" style="background:#FFE8E3;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="mc-lbl">Hazard<br>perception</div>
+        </div>
+      </div>
+
+      <!-- DVSA row -->
+      <div class="dvsa-row">
+        <div class="dvsa-ico">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="3" width="18" height="18" rx="3" fill="#FA5732" opacity=".15"/>
+            <text x="12" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="800" fill="#FA5732">L</text>
+          </svg>
+        </div>
+        <span style="font-size:16px;font-weight:600;color:var(--text);flex:1;">DVSA mock test</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <!-- Referral promo card (triggers sheet) -->
+      <div onclick="document.getElementById('ref-sheet-s1').classList.remove('hidden')" style="background:var(--card);border-radius:20px;padding:16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;cursor:pointer;">
+        <div style="width:44px;height:44px;border-radius:14px;background:linear-gradient(151.6deg,#411A72 14%,#6D2BC0 90%);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:15px;font-weight:600;color:var(--text);">Invite a friend</div>
+          <div style="font-size:13px;font-weight:400;color:var(--muted);margin-top:2px;">You both get 7 days free</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+
+      <!-- More to explore -->
+      <div style="font-size:22px;font-weight:800;color:var(--text);padding:6px 4px 0;">More to explore</div>
+      <div class="expl-list">
+        <div class="expl-row">
+          <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg></div>
+          <span class="expl-lbl">Road signs quiz</span>
+          <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="expl-row">
+          <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+          <span class="expl-lbl">Highway code</span>
+          <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="expl-row">
+          <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+          <span class="expl-lbl">Becoming a driver</span>
+          <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="expl-row">
+          <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+          <span class="expl-lbl">Mistakes</span>
+          <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+        <div class="expl-row">
+          <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+          <span class="expl-lbl">Favourites</span>
+          <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Referral bottom sheet -->
+    <div class="sheet-overlay hidden" id="ref-sheet-s1">
+      <div class="bottom-sheet" style="gap:0;padding-bottom:48px;">
+        <div class="bottom-sheet__handle"></div>
+        <!-- Icon -->
+        <div style="width:64px;height:64px;border-radius:20px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;margin:4px auto 20px;">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <!-- Text -->
+        <div style="text-align:center;padding:0 8px;margin-bottom:28px;">
+          <div style="font-size:22px;font-weight:700;color:var(--text);line-height:120%;margin-bottom:10px;">Know someone learning to drive?</div>
+          <div style="font-size:15px;font-weight:400;color:var(--muted);line-height:145%;">You both get a 7-day free trial — just share a link.</div>
+        </div>
+        <!-- Buttons -->
+        <div class="bottom-sheet__btns">
+          <button class="btn-primary" onclick="document.getElementById('ref-sheet-s1').classList.add('hidden');show('s2')">Invite a friend</button>
+          <button class="btn-secondary" onclick="document.getElementById('ref-sheet-s1').classList.add('hidden');showToast()">Maybe later</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast-s1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 17H7A5 5 0 017 7h2M15 7h2a5 5 0 010 10h-2M8 12h8"/></svg>
+      Find it in Settings → Invite a friend
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-bar__item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="tab-bar__item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9h2v11H5V9zm6-5h2v16h-2V4zm6 8h2v8h-2v-8z"/></svg>
+        <span>Stat</span>
+      </div>
+      <div class="tab-bar__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span>Plan</span>
+      </div>
+      <div class="tab-bar__item" onclick="show('s6')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg>
+        <span>Settings</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     S2 — Explanation screen
+═══════════════════════════════════════ -->
+<div class="phone" id="s2" style="display:none">
+  <div style="background:var(--bg);flex:1;display:flex;flex-direction:column;position:relative;">
+    <div style="height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:var(--card);flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:5px;font-size:13px;font-weight:500;color:var(--text);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="15" width="3" height="6" rx="1"/><rect x="6" y="11" width="3" height="10" rx="1"/><rect x="11" y="7" width="3" height="14" rx="1"/><rect x="16" y="4" width="3" height="17" rx="1" opacity=".3"/></svg>
+        Carrier
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
+      </div>
+      <span style="font-size:15px;font-weight:600;color:var(--text);">9:41 AM</span>
+      <svg width="22" height="12" viewBox="0 0 22 12" fill="none"><rect x="0" y="1" width="18" height="10" rx="2" stroke="currentColor" stroke-width="1.2" fill="currentColor" fill-opacity=".08"/><rect x="1" y="2" width="16" height="8" rx="1" fill="currentColor"/><path d="M20 4v4a2 2 0 000-4z" fill="currentColor" opacity=".4"/></svg>
+    </div>
+    <div class="app-bar" style="background:var(--card);">
+      <button class="app-bar__back" onclick="show('s1')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="app-bar__title">Invite a friend</div>
+      <div class="app-bar__spacer"></div>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="scroll" style="padding-bottom:176px;">
+
+      <!-- Purple reward card -->
+      <div style="background:var(--brand-grad);border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:6px;">
+        <div style="font-size:13px;font-weight:500;color:rgba(255,255,255,.65);">You and your friend both get</div>
+        <div style="font-size:40px;font-weight:800;color:#fff;line-height:1.05;">7 days free</div>
+        <div style="font-size:14px;font-weight:400;color:rgba(255,255,255,.65);margin-top:2px;">Your friend gets 7 instead of the usual 3</div>
+      </div>
+
+      <!-- Body card -->
+      <div class="card" style="display:flex;flex-direction:column;gap:14px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">How it works</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:26px;height:26px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--brand);flex-shrink:0;margin-top:1px;">1</div>
+            <div style="font-size:15px;font-weight:400;color:var(--text);line-height:145%;padding-top:3px;">Share your invite link</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:26px;height:26px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--brand);flex-shrink:0;margin-top:1px;">2</div>
+            <div style="font-size:15px;font-weight:400;color:var(--text);line-height:145%;padding-top:3px;">Your friend gets a 7-day trial instead of the usual 3</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:26px;height:26px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--brand);flex-shrink:0;margin-top:1px;">3</div>
+            <div style="font-size:15px;font-weight:400;color:var(--text);line-height:145%;padding-top:3px;">When they start theirs — you unlock a 7-day trial too</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fixed bottom buttons -->
+    <div style="position:absolute;bottom:0;left:0;right:0;background:var(--bg);padding:12px 20px 44px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow-top);">
+      <div style="text-align:center;padding-bottom:4px;">
+        <button onclick="document.getElementById('terms-sheet').classList.remove('hidden')" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;color:var(--muted);display:inline-flex;align-items:center;gap:4px;">
+          Terms apply
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <button class="btn-primary" onclick="show('s3')">Send invite</button>
+      <button class="btn-secondary" onclick="show('s1')">Maybe later</button>
+    </div>
+
+    <!-- Terms & Conditions bottom sheet -->
+    <div class="sheet-overlay hidden" id="terms-sheet">
+      <div class="bottom-sheet" style="gap:16px;">
+        <div class="bottom-sheet__handle"></div>
+        <div style="font-size:18px;font-weight:700;color:var(--text);">Terms & Conditions</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--muted);flex-shrink:0;margin-top:8px;"></div>
+            <div style="font-size:14px;color:var(--text);line-height:145%;">Both you and your friend must never have started a trial before</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--muted);flex-shrink:0;margin-top:8px;"></div>
+            <div style="font-size:14px;color:var(--text);line-height:145%;">The invite link is valid for 7 days from the date it was sent</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--muted);flex-shrink:0;margin-top:8px;"></div>
+            <div style="font-size:14px;color:var(--text);line-height:145%;">Your 7-day trial is unlocked only after your friend starts their 7-day trial</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:10px;">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--muted);flex-shrink:0;margin-top:8px;"></div>
+            <div style="font-size:14px;color:var(--text);line-height:145%;">First friend to activate wins — after that, the link expires. Your trial has no expiry date.</div>
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="document.getElementById('terms-sheet').classList.add('hidden')">Got it</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     S3 — Link sent / Success
+═══════════════════════════════════════ -->
+<div class="phone" id="s3" style="display:none">
+  <div style="background:var(--bg);flex:1;display:flex;flex-direction:column;">
+    <div class="status-bar">
+      <span class="status-bar__time">9:41</span>
+      <div class="status-bar__icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.5a13 13 0 0121 0M5 12a10 10 0 0114 0M8.5 15.5a6 6 0 017 0M12 19h.01"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="20" height="11" rx="2"/><path d="M22 11v3"/></svg>
+      </div>
+    </div>
+    <div class="app-bar">
+      <button class="app-bar__back" onclick="show('s2')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="app-bar__title">Invite a friend</div>
+      <div class="app-bar__spacer"></div>
+    </div>
+
+    <div class="scroll">
+      <div class="success-hero">
+        <div class="success-hero__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        </div>
+        <div class="success-hero__title">Link sent!</div>
+        <div class="success-hero__sub">Your 7-day trial unlocks as soon as your friend starts theirs.</div>
+      </div>
+
+      <!-- Status card -->
+      <div class="status-card">
+        <div class="status-card__icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="status-card__content">
+          <div class="status-card__title">Waiting for friend</div>
+          <div class="status-card__sub">Link active · expires after first activation</div>
+        </div>
+        <div class="status-dot waiting"></div>
+      </div>
+
+      <div class="hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="hint__text">If the link isn't opened within 30 days your friend will see a standard 3-day paywall.</div>
+      </div>
+
+      <div class="btns-stack">
+        <button class="btn-secondary" onclick="show('s3')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+          Share again
+        </button>
+        <button class="btn-tertiary" style="width:100%" onclick="show('s1')">Back to home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     S4 — Next launch: "Friend hasn't activated yet" bottom sheet
+═══════════════════════════════════════ -->
+<div class="phone" id="s4" style="display:none">
+  <div style="background:var(--bg);flex:1;display:flex;flex-direction:column;position:relative;">
+    <div class="status-bar">
+      <span class="status-bar__time">9:41</span>
+      <div class="status-bar__icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.5a13 13 0 0121 0M5 12a10 10 0 0114 0M8.5 15.5a6 6 0 017 0M12 19h.01"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="20" height="11" rx="2"/><path d="M22 11v3"/></svg>
+      </div>
+    </div>
+
+    <!-- Main content (dimmed) -->
+    <div style="flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:12px;opacity:.4;pointer-events:none;">
+      <div style="font-size:20px;font-weight:700;color:var(--text);">Good morning 👋</div>
+      <div class="home-card"><div class="home-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><div><div class="home-card__title">Tests</div><div class="home-card__sub">34 tests · 680 questions</div></div></div>
+    </div>
+
+    <!-- Sheet overlay -->
+    <div class="sheet-overlay" id="sheet-waiting">
+      <div class="bottom-sheet">
+        <div class="bottom-sheet__handle"></div>
+        <div class="bottom-sheet__icon-wrap" style="background:var(--warn-bg,#FFFBD4);">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#FAC32A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div class="bottom-sheet__title">Friend hasn't activated yet</div>
+        <div class="bottom-sheet__sub">Your link is active. As soon as your friend starts a trial, you'll get your 7 days free.</div>
+        <div class="bottom-sheet__btns">
+          <button class="btn-secondary" onclick="show('s3')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+            Share again
+          </button>
+          <button class="btn-tertiary" style="width:100%" onclick="show('s1')">Got it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     S5 — Friend activated: "Claim your trial" bottom sheet
+═══════════════════════════════════════ -->
+<div class="phone" id="s5" style="display:none">
+  <div style="background:var(--bg);flex:1;display:flex;flex-direction:column;position:relative;">
+    <div class="status-bar">
+      <span class="status-bar__time">9:41</span>
+      <div class="status-bar__icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.5a13 13 0 0121 0M5 12a10 10 0 0114 0M8.5 15.5a6 6 0 017 0M12 19h.01"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="20" height="11" rx="2"/><path d="M22 11v3"/></svg>
+      </div>
+    </div>
+
+    <!-- Main content (dimmed) -->
+    <div style="flex:1;padding:16px 20px;display:flex;flex-direction:column;gap:12px;opacity:.4;pointer-events:none;">
+      <div style="font-size:20px;font-weight:700;color:var(--text);">Good morning 👋</div>
+      <div class="home-card"><div class="home-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div><div><div class="home-card__title">Tests</div><div class="home-card__sub">34 tests · 680 questions</div></div></div>
+    </div>
+
+    <!-- Sheet overlay -->
+    <div class="sheet-overlay">
+      <div class="bottom-sheet">
+        <div class="bottom-sheet__handle"></div>
+        <div class="bottom-sheet__icon-wrap" style="background:var(--success-bg);">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00A850" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
+        </div>
+        <div class="bottom-sheet__title">Your 7-day trial is ready</div>
+        <div class="bottom-sheet__sub">Your friend accepted the invite. Claim your free trial now — no time limit to redeem.</div>
+        <div class="bottom-sheet__btns">
+          <button class="btn-primary">Claim free trial</button>
+          <button class="btn-tertiary" style="width:100%" onclick="show('s1')">Later</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     S6 — Settings · All 4 referral statuses
+═══════════════════════════════════════ -->
+<div class="phone" id="s6" style="display:none">
+  <div style="background:var(--bg);flex:1;display:flex;flex-direction:column;">
+    <div class="status-bar">
+      <span class="status-bar__time">9:41</span>
+      <div class="status-bar__icons">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.5a13 13 0 0121 0M5 12a10 10 0 0114 0M8.5 15.5a6 6 0 017 0M12 19h.01"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="7" width="20" height="11" rx="2"/><path d="M22 11v3"/></svg>
+      </div>
+    </div>
+    <div class="app-bar">
+      <button class="app-bar__back" onclick="show('s1')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <div class="app-bar__title">Settings</div>
+      <div class="app-bar__spacer"></div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- ── Status 1: Eligible, not shared ── -->
+      <div class="section-label">Status 1 · Eligible — not shared yet</div>
+      <div class="ref-settings">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="ref-settings__title">Invite a friend</div>
+          <div style="display:inline-flex;align-items:center;gap:4px;background:var(--success-bg);border-radius:100px;padding:3px 10px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--success);"></div>
+            <span style="font-size:12px;font-weight:600;color:var(--success);">Available</span>
+          </div>
+        </div>
+        <div class="ref-settings__sub">You'll get 7 days free. Your friend gets 7 days instead of 3.</div>
+        <button class="btn-primary" onclick="show('s2')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+          Share invite
+        </button>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ── Status 2: Shared, waiting ── -->
+      <div class="section-label">Status 2 · Shared — waiting for friend</div>
+      <div class="ref-settings">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="ref-settings__title">Invite a friend</div>
+          <div style="display:inline-flex;align-items:center;gap:4px;background:var(--warn-bg,#FFFBD4);border-radius:100px;padding:3px 10px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#FAC32A;"></div>
+            <span style="font-size:12px;font-weight:600;color:#FAC32A;">Waiting</span>
+          </div>
+        </div>
+        <div class="ref-settings__sub">Link is active. Your 7 days unlock as soon as your friend starts a trial. Link expires after first activation.</div>
+        <button class="btn-secondary" onclick="show('s3')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
+          Share again
+        </button>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ── Status 3: Friend activated, not claimed ── -->
+      <div class="section-label">Status 3 · Friend activated — claim ready</div>
+      <div class="ref-settings">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="ref-settings__title">Invite a friend</div>
+          <div style="display:inline-flex;align-items:center;gap:4px;background:var(--success-bg);border-radius:100px;padding:3px 10px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--success);"></div>
+            <span style="font-size:12px;font-weight:600;color:var(--success);">Ready!</span>
+          </div>
+        </div>
+        <div class="ref-settings__sub">Your friend accepted the invite! Your 7-day trial is ready — claim it whenever you like.</div>
+        <button class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Claim 7-day trial
+        </button>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ── Status 4: Used / Not eligible ── -->
+      <div class="section-label">Status 4 · Used or not eligible</div>
+      <div class="ref-settings unavailable">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="ref-settings__title">Referral program</div>
+          <div style="display:inline-flex;align-items:center;gap:4px;background:var(--bg2);border-radius:100px;padding:3px 10px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:var(--muted);"></div>
+            <span style="font-size:12px;font-weight:600;color:var(--muted);">Unavailable</span>
+          </div>
+        </div>
+        <div class="ref-settings__sub" style="color:var(--muted);">The referral program is not available for your account.</div>
+      </div>
+
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-bar__item" onclick="show('s1')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="tab-bar__item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9h2v11H5V9zm6-5h2v16h-2V4zm6 8h2v8h-2v-8z"/></svg>
+        <span>Stat</span>
+      </div>
+      <div class="tab-bar__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span>Plan</span>
+      </div>
+      <div class="tab-bar__item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg>
+        <span>Settings</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const screens = ['s1','s2','s3','s4','s5','s6'];
+const pills = document.querySelectorAll('.nav-pill');
+
+function show(id){
+  screens.forEach(s => {
+    document.getElementById(s).style.display = 'none';
+  });
+  document.getElementById(id).style.display = 'flex';
+  const idx = screens.indexOf(id);
+  pills.forEach((p,i) => p.classList.toggle('active', i === idx));
+}
+
+function showToast(){
+  const t = document.getElementById('toast-s1');
+  t.classList.remove('hidden');
+  setTimeout(()=>t.classList.add('hidden'), 3000);
+}
+
+show('s1');
+</script>
+</body>
+</html>
