@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Home — Continue Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+:root{
+  --brand:#401971;
+  --brand2:#6B2ABC;
+  --accent:#FA5732;
+  --bg:#F2F0F5;
+  --bg2:#E9E7EB;
+  --card:#FCFCFC;
+  --text:#150826;
+  --muted:#7C7585;
+  --success:#00A850;
+  --success-bg:#D4FCE7;
+  --shadow:0px 4px 45px 0px rgba(55,22,97,0.06);
+  --shadow-top:0px -2px 24px 0px rgba(55,21,97,0.04);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--text);
+}
+
+html,body{height:100%;}
+body{
+  background:#1A1230;
+  display:flex;flex-direction:column;align-items:center;
+  padding:16px;min-height:100vh;overflow-x:auto;
+}
+
+h1.page-title{color:#fff;font-size:14px;font-weight:600;opacity:.6;margin-bottom:12px;letter-spacing:.02em;text-transform:uppercase;flex-shrink:0;}
+
+.phone-stage{display:flex;align-items:center;justify-content:center;}
+
+.phone{
+  width:375px;height:812px;
+  background:var(--card);border-radius:50px;overflow:hidden;
+  position:relative;display:flex;flex-direction:column;
+  box-shadow:0 24px 80px rgba(0,0,0,.55);flex-shrink:0;
+  border:8px solid #0d0d0d;
+}
+
+.dynamic-island{
+  position:absolute;top:11px;left:50%;transform:translateX(-50%);
+  width:100px;height:30px;background:#000;border-radius:20px;z-index:6;
+}
+
+.sbar{
+  height:47px;display:flex;align-items:center;
+  justify-content:space-between;padding:0 24px 0 28px;
+  flex-shrink:0;position:relative;z-index:5;
+}
+.sbar-time{font-size:15px;font-weight:600;letter-spacing:-.02em;}
+.sbar-right{display:flex;align-items:center;gap:5px;}
+
+.scroll{flex:1;overflow-y:auto;scrollbar-width:none;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── Screens ── */
+.screen{display:none;flex-direction:column;height:100%;position:relative;}
+.screen.active{display:flex;}
+
+/* ── Tab bar ── */
+.tab-bar{
+  height:83px;background:var(--card);
+  box-shadow:var(--shadow-top);display:flex;align-items:flex-start;
+  flex-shrink:0;padding-top:8px;
+}
+.tab-bar__item{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:4px;padding:0 4px;cursor:pointer;
+}
+.tab-bar__item svg{width:24px;height:24px;}
+.tab-bar__item span{font-size:12px;font-weight:500;line-height:14px;}
+.tab-bar__item.active svg,.tab-bar__item.active span{color:var(--brand);}
+.tab-bar__item:not(.active) svg,.tab-bar__item:not(.active) span{color:var(--muted);}
+
+/* ── App bar (sub-screens) ── */
+.app-bar{height:52px;display:flex;align-items:center;padding:0 12px;flex-shrink:0;position:relative;}
+.app-bar-back{width:36px;height:36px;border-radius:50%;background:var(--bg);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.app-bar-back svg{width:18px;height:18px;color:var(--text);}
+.app-bar-title{flex:1;text-align:center;font-size:17px;font-weight:600;color:var(--text);margin-right:36px;}
+
+/* ── Home screen ── */
+.home-wrap{padding:12px 16px 24px;display:flex;flex-direction:column;gap:12px;}
+
+/* Resume top-sheet — full-bleed banner, color fills from the very top */
+.resume-topsheet{
+  background:var(--brand);border-radius:0 0 28px 28px;
+  box-shadow:0px 8px 30px 0px rgba(55,22,97,0.15);
+  flex-shrink:0;display:flex;flex-direction:column;cursor:pointer;
+}
+.resume-topsheet .sbar{padding:0 24px 0 28px;}
+.resume-topsheet .sbar-time,.resume-topsheet .sbar-right svg *{color:#FFFCFC;}
+.topsheet-body{padding:20px 20px 24px;display:flex;}
+.resume-text{flex:1;min-width:0;}
+.resume-cat{font-size:12px;font-weight:400;color:#CFBBE2;margin-bottom:6px;}
+.resume-ttl{font-size:20px;font-weight:600;line-height:1.2;color:#FFFCFC;margin-bottom:12px;}
+.resume-bar-wrap{width:100%;height:4px;background:rgba(255,255,255,.18);border-radius:2px;overflow:hidden;}
+.resume-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90.9deg,#FA5732 1%,#FAC32A 99%);}
+.resume-cta-btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  height:36px;padding:0 14px;background:#FCFCFC;border-radius:18px;border:none;
+  font-size:13px;font-weight:600;color:var(--brand);font-family:inherit;cursor:pointer;
+  width:50%;margin-top:20px;
+}
+.resume-cta-btn svg{width:14px;height:14px;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.mc{background:var(--card);border-radius:20px;padding:16px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;gap:16px;}
+.mc-lbl{font-size:16px;font-weight:500;color:var(--text);line-height:1.3;}
+.mc-icon{width:40px;height:40px;background:var(--bg);border-radius:100px;display:flex;align-items:center;justify-content:center;}
+.mc-icon svg{width:20px;height:20px;color:var(--brand);}
+
+.dvsa-row{background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.dvsa-ico{width:40px;height:40px;border-radius:100px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dvsa-ico svg{width:24px;height:24px;color:var(--accent);}
+
+.section-ttl{font-size:20px;font-weight:600;color:var(--text);padding:8px 4px 0;line-height:36px;}
+.expl-list{display:flex;flex-direction:column;}
+.expl-row{display:flex;align-items:center;gap:12px;padding:8px 0;cursor:pointer;}
+.expl-ico{width:44px;height:44px;background:var(--bg);border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.expl-ico svg{width:20px;height:20px;color:var(--brand);}
+.expl-lbl{flex:1;font-size:16px;font-weight:500;color:var(--text);}
+.expl-chev svg{width:20px;height:20px;display:block;color:var(--muted);}
+
+/* ── Question screen ── */
+.q-progress-wrap{padding:4px 20px 18px;flex-shrink:0;}
+.q-progress-track{height:4px;background:var(--bg);border-radius:2px;overflow:hidden;}
+.q-progress-fill{height:100%;background:var(--brand);border-radius:2px;}
+.q-counter{font-size:13px;color:var(--muted);margin-top:8px;text-align:center;font-weight:500;}
+.q-card{margin:0 20px 24px;background:var(--card);border-radius:20px;box-shadow:var(--shadow);padding:20px;flex-shrink:0;}
+.q-eyebrow{font-size:12px;font-weight:600;color:var(--brand2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em;}
+.q-text{font-size:18px;font-weight:600;color:var(--text);line-height:1.4;}
+.q-options{display:flex;flex-direction:column;gap:10px;padding:0 20px;}
+.q-option{background:var(--card);border:1.5px solid var(--bg2);border-radius:14px;padding:14px 16px;font-size:15px;font-weight:500;color:var(--text);cursor:pointer;transition:all .15s;}
+.q-option.selected{border-color:var(--brand);background:#F5F0FB;color:var(--brand);}
+.q-footer{margin-top:auto;padding:16px 20px 28px;flex-shrink:0;}
+
+.btn-primary{display:flex;align-items:center;justify-content:center;gap:6px;height:44px;width:100%;background:var(--accent);border-radius:24px;border:none;font-size:16px;font-weight:600;color:#FFFCFC;font-family:inherit;cursor:pointer;}
+.btn-secondary{display:flex;align-items:center;justify-content:center;gap:6px;height:44px;width:100%;background:var(--bg);border-radius:24px;border:none;font-size:16px;font-weight:600;color:var(--text);font-family:inherit;cursor:pointer;}
+
+/* ── Success screen ── */
+.success-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:0 32px;}
+.success-emoji{font-size:56px;margin-bottom:8px;}
+.success-title{font-size:22px;font-weight:700;color:var(--text);}
+.success-sub{font-size:14px;color:var(--muted);margin-bottom:8px;}
+.success-stats{display:flex;gap:32px;margin-top:12px;}
+.stat-box{text-align:center;}
+.stat-num{font-size:20px;font-weight:700;color:var(--brand);}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+.success-footer{display:flex;flex-direction:column;gap:8px;padding:20px 20px 28px;flex-shrink:0;}
+
+/* ── Tests & Topics list screen ── */
+.pill-tabs{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin:0 20px 16px;flex-shrink:0;}
+.pill-tab{flex:1;text-align:center;padding:8px 12px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;}
+.pill-tab.active{background:var(--card);color:var(--text);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.09);}
+.overview-row{background:var(--bg);border-radius:12px;margin:0 20px 14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;}
+.overview-row span{font-size:14px;color:var(--text);font-weight:500;}
+.overview-row strong{font-size:14px;color:var(--brand);font-weight:700;}
+.topic-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);margin:0 20px 10px;padding:16px;position:relative;}
+.topic-card.just-finished{border:1.5px solid var(--accent);}
+.topic-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.topic-name{font-size:15px;font-weight:600;color:var(--text);}
+.topic-status{font-size:12px;font-weight:500;}
+.topic-status.passed{color:var(--success);}
+.topic-status.progress{color:var(--accent);}
+.topic-status.locked{color:var(--muted);}
+.topic-bar{height:4px;background:var(--bg);border-radius:2px;overflow:hidden;margin-bottom:8px;}
+.topic-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90.9deg,#FA5732 1%,#6B2ABC 99%);}
+.topic-meta{font-size:12px;color:var(--muted);}
+.just-tag{position:absolute;top:-9px;right:14px;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;letter-spacing:.02em;}
+
+.app-bar-action{width:36px;height:36px;border:none;background:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.app-bar-action svg{width:24px;height:24px;color:var(--accent);}
+
+/* Test grid — 3-up cards with number, check badge, score, progress bar */
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px 24px;}
+.test-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:14px;position:relative;min-height:104px;display:flex;flex-direction:column;justify-content:space-between;}
+.test-card.just-finished{border:1.5px solid var(--accent);}
+.test-num{font-size:13px;font-weight:500;color:var(--muted);}
+.test-check{position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;background:var(--success);display:flex;align-items:center;justify-content:center;}
+.test-check svg{width:11px;height:11px;color:#fff;}
+.test-score{font-size:19px;font-weight:700;color:var(--text);margin:10px 0 8px;}
+.test-bar-track{height:3px;background:var(--bg2);border-radius:2px;overflow:hidden;}
+.test-bar-fill{height:100%;border-radius:2px;}
+.test-bar-fill.purple{background:var(--brand2);}
+.test-bar-fill.green{background:var(--success);}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Continue Flow — Tests only — Home → Question → Success → List</h1>
+
+<div class="phone-stage">
+<div class="phone active">
+  <div class="dynamic-island"></div>
+
+  <!-- ══════ SCREEN 1 — HOME ══════ -->
+  <div class="screen active" id="screen-home">
+    <div class="resume-topsheet" onclick="goTo('question')">
+      <div class="sbar">
+        <span class="sbar-time">9:41</span>
+        <div class="sbar-right">
+          <svg viewBox="0 0 19 12" width="18" height="12" fill="none"><rect x="1" y="4" width="2.4" height="7" rx="1" fill="#FFFCFC"/><rect x="5.4" y="2.5" width="2.4" height="8.5" rx="1" fill="#FFFCFC"/><rect x="9.8" y="1" width="2.4" height="10" rx="1" fill="#FFFCFC"/><rect x="14.2" y="0" width="2.4" height="11" rx="1" fill="#FFFCFC" opacity=".4"/></svg>
+          <svg viewBox="0 0 16 12" width="16" height="12" fill="none"><path d="M8 10.5a1 1 0 100-2 1 1 0 000 2z" fill="#FFFCFC"/><path d="M2.5 5.7a7 7 0 0111 0" stroke="#FFFCFC" stroke-width="1.3" stroke-linecap="round" opacity=".5"/><path d="M4.7 8.1a4.7 4.7 0 016.6 0" stroke="#FFFCFC" stroke-width="1.3" stroke-linecap="round"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="#FFFCFC" stroke-opacity=".5" stroke-width="1"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.5" fill="#FFFCFC"/><rect x="22" y="4" width="1.6" height="4" rx="0.8" fill="#FFFCFC" opacity=".4"/></svg>
+        </div>
+      </div>
+      <div class="topsheet-body">
+        <div class="resume-text">
+          <div class="resume-cat" id="resume-cat">Continue where you left off</div>
+          <div class="resume-ttl" id="resume-ttl">Test 4 · 8 questions left</div>
+          <div class="resume-bar-wrap"><div class="resume-bar-fill" id="resume-bar" style="width:60%"></div></div>
+          <button class="resume-cta-btn" id="resume-cta-btn" onclick="goTo('question')">
+            <span id="resume-cta-label">Start test</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll">
+      <div class="home-wrap">
+
+        <div class="dvsa-row" onclick="goTo('list')">
+          <div class="dvsa-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </div>
+          <span style="font-size:16px;font-weight:500;color:var(--text);">Tests &amp; topics</span>
+        </div>
+
+        <div class="two-col">
+          <div class="mc">
+            <div class="mc-lbl">Skill<br>Boosters</div>
+            <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+          </div>
+          <div class="mc">
+            <div class="mc-lbl">Hazard perception</div>
+            <div class="mc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          </div>
+        </div>
+
+        <div class="dvsa-row">
+          <div class="dvsa-ico">
+            <svg viewBox="0 0 24 24" fill="none"><text x="12" y="17" text-anchor="middle" font-family="Inter,sans-serif" font-size="14" font-weight="800" fill="#FA5732">L</text></svg>
+          </div>
+          <span style="font-size:16px;font-weight:500;color:var(--text);">DVSA mock test</span>
+        </div>
+
+        <div class="section-ttl">More to explore</div>
+        <div class="expl-list">
+          <div class="expl-row">
+            <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg></div>
+            <span class="expl-lbl">Road signs quiz</span>
+            <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="expl-row">
+            <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+            <span class="expl-lbl">Highway code</span>
+            <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="expl-row">
+            <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+            <span class="expl-lbl">Becoming a driver</span>
+            <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="expl-row">
+            <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+            <span class="expl-lbl">Mistakes</span>
+            <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+          <div class="expl-row">
+            <div class="expl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+            <span class="expl-lbl">Favorites</span>
+            <div class="expl-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-bar">
+      <div class="tab-bar__item active">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </div>
+      <div class="tab-bar__item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9h2v11H5V9zm6-5h2v16h-2V4zm6 8h2v8h-2v-8z"/></svg>
+        <span>Stat</span>
+      </div>
+      <div class="tab-bar__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+        <span>Plan</span>
+      </div>
+      <div class="tab-bar__item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Settings</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 2 — QUESTION ══════ -->
+  <div class="screen" id="screen-question">
+    <div class="sbar">
+      <span class="sbar-time">9:41</span>
+      <div class="sbar-right">
+        <svg viewBox="0 0 19 12" width="18" height="12" fill="none"><rect x="1" y="4" width="2.4" height="7" rx="1" fill="#150826"/><rect x="5.4" y="2.5" width="2.4" height="8.5" rx="1" fill="#150826"/><rect x="9.8" y="1" width="2.4" height="10" rx="1" fill="#150826"/><rect x="14.2" y="0" width="2.4" height="11" rx="1" fill="#150826" opacity=".4"/></svg>
+        <svg viewBox="0 0 16 12" width="16" height="12" fill="none"><path d="M8 10.5a1 1 0 100-2 1 1 0 000 2z" fill="#150826"/><path d="M2.5 5.7a7 7 0 0111 0" stroke="#150826" stroke-width="1.3" stroke-linecap="round" opacity=".5"/><path d="M4.7 8.1a4.7 4.7 0 016.6 0" stroke="#150826" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="#150826" stroke-opacity=".4" stroke-width="1"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.5" fill="#150826"/><rect x="22" y="4" width="1.6" height="4" rx="0.8" fill="#150826" opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="app-bar">
+      <button class="app-bar-back" onclick="goTo('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="app-bar-title">Test 4</div>
+    </div>
+
+    <div class="q-progress-wrap">
+      <div class="q-progress-track"><div class="q-progress-fill" style="width:65%"></div></div>
+      <div class="q-counter">Question 13 of 20</div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-eyebrow">Safety &amp; your vehicle</div>
+      <div class="q-text">When should you check the tread depth of your tyres?</div>
+    </div>
+
+    <div class="q-options" id="q-options">
+      <div class="q-option" onclick="selectOption(this)">Only before a long motorway trip</div>
+      <div class="q-option" onclick="selectOption(this)">Regularly, at least once a month</div>
+      <div class="q-option" onclick="selectOption(this)">Only when the MOT is due</div>
+      <div class="q-option" onclick="selectOption(this)">Never — a garage checks it for you</div>
+    </div>
+
+    <div class="q-footer">
+      <button class="btn-primary" onclick="goTo('success')">Next question</button>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 3 — SUCCESS ══════ -->
+  <div class="screen" id="screen-success">
+    <div class="sbar">
+      <span class="sbar-time">9:41</span>
+      <div class="sbar-right">
+        <svg viewBox="0 0 19 12" width="18" height="12" fill="none"><rect x="1" y="4" width="2.4" height="7" rx="1" fill="#150826"/><rect x="5.4" y="2.5" width="2.4" height="8.5" rx="1" fill="#150826"/><rect x="9.8" y="1" width="2.4" height="10" rx="1" fill="#150826"/><rect x="14.2" y="0" width="2.4" height="11" rx="1" fill="#150826" opacity=".4"/></svg>
+        <svg viewBox="0 0 16 12" width="16" height="12" fill="none"><path d="M8 10.5a1 1 0 100-2 1 1 0 000 2z" fill="#150826"/><path d="M2.5 5.7a7 7 0 0111 0" stroke="#150826" stroke-width="1.3" stroke-linecap="round" opacity=".5"/><path d="M4.7 8.1a4.7 4.7 0 016.6 0" stroke="#150826" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="#150826" stroke-opacity=".4" stroke-width="1"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.5" fill="#150826"/><rect x="22" y="4" width="1.6" height="4" rx="0.8" fill="#150826" opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="app-bar">
+      <button class="app-bar-back" onclick="goTo('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+    </div>
+
+    <div class="success-center">
+      <div class="success-emoji">🎉</div>
+      <div class="success-title" id="success-title">Great job!</div>
+      <div class="success-sub">Test 4 completed</div>
+      <div class="success-stats">
+        <div class="stat-box"><div class="stat-num">18/20</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat-box"><div class="stat-num">6:42</div><div class="stat-lbl">Time</div></div>
+        <div class="stat-box"><div class="stat-num">4/15</div><div class="stat-lbl">Tests passed</div></div>
+      </div>
+    </div>
+
+    <div class="success-footer">
+      <button class="btn-primary" onclick="goTo('question')">Next test</button>
+      <button class="btn-secondary" onclick="goTo('question')">Review answers</button>
+    </div>
+  </div>
+
+  <!-- ══════ SCREEN 4 — TESTS & TOPICS LIST ══════ -->
+  <div class="screen" id="screen-list">
+    <div class="sbar">
+      <span class="sbar-time">9:41</span>
+      <div class="sbar-right">
+        <svg viewBox="0 0 19 12" width="18" height="12" fill="none"><rect x="1" y="4" width="2.4" height="7" rx="1" fill="#150826"/><rect x="5.4" y="2.5" width="2.4" height="8.5" rx="1" fill="#150826"/><rect x="9.8" y="1" width="2.4" height="10" rx="1" fill="#150826"/><rect x="14.2" y="0" width="2.4" height="11" rx="1" fill="#150826" opacity=".4"/></svg>
+        <svg viewBox="0 0 16 12" width="16" height="12" fill="none"><path d="M8 10.5a1 1 0 100-2 1 1 0 000 2z" fill="#150826"/><path d="M2.5 5.7a7 7 0 0111 0" stroke="#150826" stroke-width="1.3" stroke-linecap="round" opacity=".5"/><path d="M4.7 8.1a4.7 4.7 0 016.6 0" stroke="#150826" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="1" y="1" width="20" height="10" rx="2.5" stroke="#150826" stroke-opacity=".4" stroke-width="1"/><rect x="2.5" y="2.5" width="17" height="7" rx="1.5" fill="#150826"/><rect x="22" y="4" width="1.6" height="4" rx="0.8" fill="#150826" opacity=".4"/></svg>
+      </div>
+    </div>
+    <div class="app-bar">
+      <button class="app-bar-back" onclick="goTo('home')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="app-bar-title" style="margin-right:0;">Learning</div>
+      <button class="app-bar-action">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </button>
+    </div>
+
+    <div class="pill-tabs">
+      <div class="pill-tab" id="pill-tests" onclick="switchPill('tests')">Test</div>
+      <div class="pill-tab" id="pill-topics" onclick="switchPill('topics')">Topics</div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Topics pane -->
+      <div id="pane-topics">
+        <div class="overview-row"><span>Topics passed</span><strong id="topics-passed-count">4 / 15</strong></div>
+
+        <div class="topic-card"><div class="topic-header"><div class="topic-name">1. Alertness</div><div class="topic-status passed">✓ Passed</div></div><div class="topic-bar"><div class="topic-bar-fill" style="width:100%"></div></div><div class="topic-meta">4 parts · 80 questions</div></div>
+        <div class="topic-card"><div class="topic-header"><div class="topic-name">2. Attitude</div><div class="topic-status passed">✓ Passed</div></div><div class="topic-bar"><div class="topic-bar-fill" style="width:100%"></div></div><div class="topic-meta">3 parts · 60 questions</div></div>
+
+        <div class="topic-card just-finished" id="topic-3-card">
+          <div class="just-tag">Just finished</div>
+          <div class="topic-header"><div class="topic-name">3. Safety &amp; your vehicle</div><div class="topic-status passed">✓ Passed</div></div>
+          <div class="topic-bar"><div class="topic-bar-fill" style="width:100%"></div></div>
+          <div class="topic-meta">4 parts · 88 questions</div>
+        </div>
+
+        <div class="topic-card"><div class="topic-header"><div class="topic-name">4. Safety margins</div><div class="topic-status progress">In progress</div></div><div class="topic-bar"><div class="topic-bar-fill" style="width:12%"></div></div><div class="topic-meta">Part 1 of 4 · 2/20 done</div></div>
+        <div class="topic-card"><div class="topic-header"><div class="topic-name">🔒 5. Hazard awareness</div><div class="topic-status locked">Locked</div></div><div class="topic-bar"><div class="topic-bar-fill" style="width:0%"></div></div><div class="topic-meta">3 parts · 72 questions</div></div>
+        <div style="height:24px"></div>
+      </div>
+
+      <!-- Tests pane — 3-up grid: number, check badge when complete, score, progress bar -->
+      <div id="pane-tests" style="display:none;">
+        <div class="test-grid">
+          <div class="test-card"><div class="test-num">01</div><div class="test-score">18/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:90%"></div></div></div>
+          <div class="test-card"><div class="test-num">02</div><div class="test-score">3/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:15%"></div></div></div>
+          <div class="test-card"><div class="test-num">03</div><div class="test-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="test-score">19/20</div><div class="test-bar-track"><div class="test-bar-fill green" style="width:100%"></div></div></div>
+
+          <div class="test-card just-finished" id="test-4-card"><div class="test-num">04</div><div class="test-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="test-score">18/20</div><div class="test-bar-track"><div class="test-bar-fill green" style="width:100%"></div></div></div>
+          <div class="test-card"><div class="test-num">05</div><div class="test-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="test-score">19/20</div><div class="test-bar-track"><div class="test-bar-fill green" style="width:100%"></div></div></div>
+          <div class="test-card"><div class="test-num">06</div><div class="test-score">0/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:0%"></div></div></div>
+
+          <div class="test-card"><div class="test-num">07</div><div class="test-score">3/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:15%"></div></div></div>
+          <div class="test-card"><div class="test-num">08</div><div class="test-score">3/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:15%"></div></div></div>
+          <div class="test-card"><div class="test-num">09</div><div class="test-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="test-score">19/20</div><div class="test-bar-track"><div class="test-bar-fill green" style="width:100%"></div></div></div>
+
+          <div class="test-card"><div class="test-num">10</div><div class="test-score">0/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:0%"></div></div></div>
+          <div class="test-card"><div class="test-num">11</div><div class="test-score">0/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:0%"></div></div></div>
+          <div class="test-card"><div class="test-num">12</div><div class="test-score">0/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:0%"></div></div></div>
+
+          <div class="test-card"><div class="test-num">13</div><div class="test-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="test-score">20/20</div><div class="test-bar-track"><div class="test-bar-fill green" style="width:100%"></div></div></div>
+          <div class="test-card"><div class="test-num">14</div><div class="test-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="test-score">19/20</div><div class="test-bar-track"><div class="test-bar-fill green" style="width:100%"></div></div></div>
+          <div class="test-card"><div class="test-num">15</div><div class="test-score">3/20</div><div class="test-bar-track"><div class="test-bar-fill purple" style="width:15%"></div></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// Tests-only flow. A test can straddle two Topics, so the resume card only ever
+// shows the test number — never a topic name.
+
+// ── Screen navigation ──
+const screens = ['home', 'question', 'success', 'list'];
+let testCompleted = false;
+
+function goTo(name) {
+  screens.forEach(s => document.getElementById('screen-' + s).classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  if (name === 'success') testCompleted = true;
+  if (name === 'home') renderHomeCard();
+}
+
+// Once the test is finished, the resume card on Home swaps from "in progress"
+// to a "completed / next test" nudge — it never reverts to the resume state.
+function renderHomeCard() {
+  if (testCompleted) {
+    document.getElementById('resume-cat').textContent = 'Test 4 completed 🎉';
+    document.getElementById('resume-ttl').textContent = 'Test 5 · 20 questions';
+    document.getElementById('resume-bar').style.width = '27%';
+    document.getElementById('resume-cta-label').textContent = 'Start test';
+  } else {
+    document.getElementById('resume-cat').textContent = 'Continue where you left off';
+    document.getElementById('resume-ttl').textContent = 'Test 4 · 8 questions left';
+    document.getElementById('resume-bar').style.width = '60%';
+    document.getElementById('resume-cta-label').textContent = 'Start test';
+  }
+}
+
+function switchPill(pill) {
+  ['topics', 'tests'].forEach(p => {
+    document.getElementById('pill-' + p).classList.remove('active');
+    document.getElementById('pane-' + p).style.display = 'none';
+  });
+  document.getElementById('pill-' + pill).classList.add('active');
+  document.getElementById('pane-' + pill).style.display = 'block';
+}
+
+function selectOption(el) {
+  el.parentElement.querySelectorAll('.q-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+switchPill('tests');
+</script>
+</body>
+</html>
