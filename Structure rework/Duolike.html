@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Duolike — Structure rework</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --brand:#401971;--brand2:#6B2ABC;--accent:#FA5732;
+  --brand-grad:linear-gradient(151.6deg,#411A72 14%,#6D2BC0 90%);
+  --bg:#F2F0F5;--bg2:#E9E7EB;--card:#FCFCFC;
+  --text:#150826;--muted:#797282;
+  --on-brand2:#CFBBE2;
+  --success:#00A850;--success-muted:#D4FCE7;
+  --error:#FF2346;--error-muted:#FFE0E5;
+  --warning:#FAC32A;--warning-muted:#FFFBD4;
+  --shadow:0px 6px 30px 0px rgba(55,22,97,0.08);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+body{background:#2A1F4A;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.phone{
+  width:390px;height:844px;border-radius:50px;overflow:hidden;flex-shrink:0;position:relative;
+  box-shadow:0 0 0 10px #1A1A2E,0 0 0 12px #2E2E50,0 48px 100px rgba(0,0,0,.6);
+  display:flex;flex-direction:column;background:var(--card);
+}
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── sticky top: statusbar + header + hero ── */
+.sticky-top{position:sticky;top:0;z-index:6;background:var(--card);}
+.sbar{height:46px;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between;}
+.sbar .time{font-size:15px;font-weight:700;color:var(--text);}
+.sbar .icons{display:flex;align-items:center;gap:5px;color:var(--text);}
+.sbar .icons svg{width:16px;height:16px;}
+
+.home-head{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 12px;}
+.coin-pill{
+  display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--bg2);
+  border-radius:999px;padding:7px 14px;font-size:14px;font-weight:700;color:var(--text);box-shadow:var(--shadow);
+}
+.coin-pill svg{width:15px;height:15px;color:var(--warning);}
+.head-icons{display:flex;gap:10px;}
+.circ-btn{
+  width:38px;height:38px;border-radius:999px;border:1px solid var(--bg2);background:var(--card);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);
+}
+.circ-btn svg{width:17px;height:17px;color:var(--muted);}
+.circ-btn.fav svg{color:var(--warning);}
+
+/* ── hero slider ── */
+.hero-wrap{padding:0 20px;position:relative;touch-action:pan-y;}
+.hero-card{
+  background:#F0EAF8;
+  border-radius:28px;padding:22px 20px 20px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  cursor:grab;user-select:none;
+}
+.hero-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:999px;
+  border:none;background:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;z-index:2;box-shadow:var(--shadow);
+}
+.hero-arrow svg{width:16px;height:16px;color:var(--muted);}
+.hero-arrow.left{left:10px;}
+.hero-arrow.right{right:10px;}
+.hero-arrow[disabled]{opacity:.25;pointer-events:none;}
+.hero-icon{
+  width:68px;height:68px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;
+  margin-bottom:12px;box-shadow:0 6px 16px rgba(55,22,97,.06);
+}
+.hero-icon svg{width:30px;height:30px;}
+.hero-ttl{font-size:21px;font-weight:800;color:var(--text);}
+.hero-sub{font-size:13px;color:var(--muted);margin-top:4px;}
+.hero-dots{display:flex;justify-content:center;gap:6px;margin-top:18px;}
+.hd{width:6px;height:6px;border-radius:999px;background:var(--bg2);transition:all .2s;}
+.hd.on{width:18px;background:var(--brand2);}
+
+/* ── content panel ── */
+.content-panel{padding:18px 20px 32px;}
+
+/* Theory: topic banner — sticky, steps scroll underneath it */
+.banner-sticky{
+  position:sticky;z-index:5;background:var(--card);padding:24px 20px 10px;display:none;
+}
+.tabs-sticky{
+  position:sticky;z-index:5;background:var(--card);padding:24px 20px 12px;display:none;
+}
+.topic-banner{
+  border:2px solid var(--brand);border-radius:20px;padding:14px 16px;text-align:center;background:var(--card);
+}
+.tb-lvl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--brand);text-transform:uppercase;margin-bottom:4px;}
+.tb-ttl{font-size:17px;font-weight:800;color:var(--text);}
+
+/* path */
+.path-box{position:relative;margin:0 auto;}
+.pnode-wrap{position:absolute;display:flex;align-items:center;gap:14px;transform:translate(-50%,-50%);}
+.pnode{
+  width:56px;height:56px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:800;cursor:pointer;border:none;position:relative;
+}
+.pnode.diamond{border-radius:14px;transform:rotate(45deg);width:48px;height:48px;}
+.pnode.diamond .pnode-inner{transform:rotate(-45deg);display:flex;}
+.pnode.done{background:var(--success);color:#fff;}
+.pnode.done svg{width:22px;height:22px;}
+.pnode.current{background:var(--brand);color:#fff;}
+.pnode.todo{background:var(--bg2);color:#A79FB0;}
+.pnode.mistake{background:var(--error-muted);color:var(--error);}
+.pnode.mistake svg{width:20px;height:20px;}
+.pcap{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;}
+.pcap.dim{color:#B7B0C2;}
+.path-collapse{
+  width:38px;height:38px;border-radius:999px;background:var(--card);box-shadow:var(--shadow);border:none;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;margin:8px 0 0;
+}
+.path-collapse svg{width:18px;height:18px;color:var(--muted);}
+
+.plain-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-height:1.6;}
+
+/* ── hazard ── */
+.pill-tabs{display:flex;background:var(--bg);border-radius:999px;padding:4px;margin-bottom:16px;}
+.pill-tab{flex:1;border:none;background:transparent;border-radius:999px;padding:9px 0;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;}
+.pill-tab.active{background:#fff;color:var(--brand);box-shadow:0 1px 6px rgba(55,22,97,.10);}
+.hz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.hz-card{border-radius:16px;overflow:hidden;border:1px solid var(--bg2);}
+.hz-card.current{border:2px solid var(--brand);}
+.hz-thumb{height:78px;position:relative;background:var(--bg);overflow:hidden;}
+.hz-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.hz-badge{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:999px;box-shadow:0 0 0 2px #fff;}
+.hz-foot{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;}
+.hz-num{font-size:13px;font-weight:700;color:var(--muted);}
+.hz-status{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;}
+.hz-status.start{color:var(--brand2);}
+.hz-dot{width:8px;height:8px;border-radius:999px;flex-shrink:0;}
+
+/* ── exam ── */
+.stat-row{display:flex;gap:10px;margin-bottom:18px;}
+.stat-box{flex:1;background:var(--card);border-radius:14px;padding:12px 8px;text-align:center;box-shadow:var(--shadow);}
+.stat-box .v{font-size:16px;font-weight:800;color:var(--text);}
+.stat-box .l{font-size:11px;color:var(--muted);margin-top:2px;}
+.pass-lbl{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.pass-bar{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;margin-bottom:22px;}
+.pass-bar-fill{height:100%;background:var(--success);border-radius:999px;}
+
+/* ── learning modes list ── */
+.lm-row{
+  display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;border:1px solid var(--bg2);
+  background:var(--card);margin-bottom:10px;cursor:pointer;
+}
+.lm-ico{width:42px;height:42px;border-radius:12px;background:#E1D4F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.lm-ico svg{width:20px;height:20px;color:var(--brand2);}
+.lm-txt{flex:1;min-width:0;}
+.lm-ttl{font-size:15px;font-weight:700;color:var(--text);}
+.lm-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.lm-start{font-size:13px;font-weight:700;color:var(--brand2);white-space:nowrap;display:flex;align-items:center;}
+.lm-start svg{width:18px;height:18px;color:var(--muted);}
+.lm-back{display:flex;align-items:center;gap:8px;margin-bottom:16px;cursor:pointer;}
+.lm-back svg{width:18px;height:18px;color:var(--muted);}
+.lm-back span{font-size:14px;font-weight:600;color:var(--muted);}
+
+/* buttons */
+.btn-full{width:100%;height:48px;border:none;border-radius:24px;background:var(--accent);color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-full svg{width:16px;height:16px;}
+
+/* bottom sheet */
+.bs-overlay{display:none;position:absolute;inset:0;z-index:10;background:rgba(21,8,38,.45);opacity:0;transition:opacity .3s;}
+.bs-overlay.vis{opacity:1;}
+.bs{display:none;position:absolute;bottom:0;left:0;right:0;z-index:11;background:#fff;border-radius:24px 24px 0 0;padding:12px 20px 32px;transform:translateY(100%);transition:transform .38s cubic-bezier(.4,0,.2,1);}
+.bs.open{transform:translateY(0);}
+.bs-handle{width:40px;height:4px;background:var(--bg2);border-radius:2px;margin:0 auto 18px;}
+.bs-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:8px;text-align:center;}
+.bs-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:20px;}
+.bs-btns{display:flex;flex-direction:column;gap:8px;}
+.bs-cancel{height:44px;border:none;border-radius:24px;background:var(--bg);color:var(--text);font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;}
+
+/* tab bar */
+.tabbar{background:var(--card);border-top:1px solid var(--bg2);padding:8px 0 20px;display:flex;align-items:center;flex-shrink:0;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0;}
+.tab svg{width:22px;height:22px;}
+.tab span{font-size:11px;font-weight:500;}
+.tab.on svg,.tab.on span{color:var(--brand);}
+.tab:not(.on) svg,.tab:not(.on) span{color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="phone" id="phoneEl">
+  <div class="scroll" id="homeScroll">
+    <div class="sticky-top" id="stickyTop">
+      <div class="sbar">
+        <div class="time">15:28</div>
+        <div class="icons">
+          <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        </div>
+      </div>
+
+      <div class="home-head">
+        <div class="coin-pill">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.3H22l-6.2 4.5 2.4 7.2L12 16.5 5.8 21l2.4-7.2L2 9.3h7.6z"/></svg>
+          2
+        </div>
+        <div class="head-icons">
+          <button class="circ-btn fav" onclick="openBS('sheetFav')" title="Favorites">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+          </button>
+          <button class="circ-btn" title="Streak">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-wrap">
+        <div class="hero-card" id="heroCard" onclick="heroTap(event)">
+          <button class="hero-arrow left" id="heroPrev" onclick="event.stopPropagation();heroGo(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <button class="hero-arrow right" id="heroNext" onclick="event.stopPropagation();heroGo(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+          <div class="hero-icon" id="heroIcon"></div>
+          <div class="hero-ttl" id="heroTtl"></div>
+          <div class="hero-sub" id="heroSub"></div>
+          <div class="hero-dots" id="heroDots"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="banner-sticky" id="bannerSticky"></div>
+    <div class="tabs-sticky" id="tabsSticky"></div>
+    <div class="content-panel" id="contentPanel"></div>
+  </div>
+
+  <div class="bs-overlay" id="ovMain" onclick="closeAllBS()"></div>
+
+  <div class="bs" id="sheetNode">
+    <div class="bs-handle"></div>
+    <div class="bs-title" id="nsTitle">Part 02</div>
+    <div class="bs-sub" id="nsSub">8 questions</div>
+    <div class="bs-btns">
+      <button class="btn-full" id="nsStart" onclick="completeCurrentNode()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Start</button>
+      <button class="bs-cancel" onclick="closeAllBS()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="bs" id="sheetExam">
+    <div class="bs-handle"></div>
+    <div class="bs-title">Start the test</div>
+    <div class="bs-sub">50 questions · 57 minutes · 43 correct to pass</div>
+    <div class="bs-btns">
+      <button class="btn-full"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Start the test</button>
+      <button class="bs-cancel" onclick="closeAllBS()">Cancel</button>
+    </div>
+  </div>
+
+  <div class="bs" id="sheetFav">
+    <div class="bs-handle"></div>
+    <div class="bs-title">Favorites</div>
+    <div class="bs-sub">Signs, articles and questions you've starred</div>
+    <div class="bs-btns">
+      <button class="bs-cancel" onclick="closeAllBS()">Close</button>
+    </div>
+  </div>
+
+  <div class="tabbar">
+    <div class="tab on"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Home</span></div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 9h2v11H5V9zm6-5h2v16h-2V4zm6 8h2v8h-2v-8z"/></svg><span>Stat</span></div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>Plan</span></div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg><span>Settings</span></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════ ICONS ═══════════ */
+const ICONS = {
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>',
+  hazard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  trophy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg>',
+  dumbbell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M4 8l4-4 2 2-4 4-2-2zM14 18l4-4 2 2-4 4-2-2zM2 10l2-2M20 16l2-2M9 6l3-3M15 18l3-3"/></svg>',
+  play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+  warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+  chev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
+  sign: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16h.01"/></svg>',
+  battle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M2 22l4-4M22 2l-4 4M4.5 4.5l2 2M17.5 17.5l2 2"/></svg>',
+  video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="14" height="14" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg>',
+  marathon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2"/><path d="M15 22l1-7-3-2 1-5 4 3 2 4M9 22l2-8-3-4 3-3"/></svg>',
+  adaptive: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>',
+  placeholder: '<svg class="ph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
+  chevRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
+};
+
+/* ═══════════ SLIDES (hero) ═══════════ */
+const SLIDES = [
+  {id:'theory', ttl:'Theory', sub:'Topic 4 of 15', ic:ICONS.book, ic_c:'var(--brand)'},
+  {id:'hazard', ttl:'Hazard perception', sub:'6 of 14 videos watched', ic:ICONS.hazard, ic_c:'var(--accent)'},
+  {id:'exam', ttl:'DVSA mock test', sub:'Simulate the real exam', ic:ICONS.trophy, ic_c:'var(--success)'},
+  {id:'modes', ttl:'Learning modes', sub:'Extra practice, your way', ic:ICONS.dumbbell, ic_c:'var(--brand2)'},
+];
+let slideIdx=0;
+
+function renderHero(){
+  const s=SLIDES[slideIdx];
+  document.getElementById('heroIcon').innerHTML=s.ic;
+  document.getElementById('heroIcon').style.color=s.ic_c;
+  document.getElementById('heroTtl').textContent=s.ttl;
+  document.getElementById('heroSub').textContent=s.sub;
+  document.getElementById('heroDots').innerHTML=SLIDES.map((_,i)=>`<div class="hd ${i===slideIdx?'on':''}"></div>`).join('');
+  document.getElementById('heroPrev').disabled=slideIdx===0;
+  document.getElementById('heroNext').disabled=slideIdx===SLIDES.length-1;
+  renderPanel(s.id);
+}
+function heroGo(dir){ slideIdx=Math.max(0,Math.min(SLIDES.length-1,slideIdx+dir)); renderHero(); }
+let dragX=null, dragging=false;
+function initHeroSwipe(){
+  const hc=document.getElementById('heroCard');
+  hc.addEventListener('pointerdown',e=>{
+    if(e.target.closest('.hero-arrow')) return; // let the arrow buttons handle their own click
+    dragX=e.clientX; dragging=true;
+    try{ hc.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  hc.addEventListener('pointerup',e=>{
+    if(!dragging||dragX===null)return;
+    const dx=e.clientX-dragX;
+    if(dx>50)heroGo(-1); else if(dx<-50)heroGo(1);
+    dragging=false; dragX=null;
+  });
+  hc.addEventListener('pointercancel',()=>{ dragging=false; dragX=null; });
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initHeroSwipe);
+else initHeroSwipe();
+
+/* ═══════════ TOPICS DATA (Theory) ═══════════ */
+const TOPICS=[
+  'Alertness','Attitude','Safety and your vehicle','Safety margins','Hazard awareness',
+  'Vulnerable road users','Other types of vehicle','Vehicle handling','Motorway rules',
+  'Rules of the road','Road and traffic signs','Documents','Incidents & emergencies',
+  'Vehicle loading','Becoming a driver'
+];
+let curTopic=3; // 0-based -> "Level 4"
+function topicSteps(){
+  return [
+    {label:'Part 01', state:'done'},
+    {label:'Part 02', state:'done'},
+    {label:'Mistakes', state:'mistake', diamond:true},
+    {label:'Part 03', state:'current'},
+    {label:'Part 04', state:'todo'},
+    {label:'Part 05', state:'todo'},
+    {label:'Practice', state:'todo'},
+    {label:'Topic test', state:'todo'},
+  ];
+}
+let theorySteps=topicSteps();
+
+/* ═══════════ HAZARD DATA ═══════════ */
+const HAZARD_CLIPS=[
+  {n:'01',status:'done',pts:5},{n:'02',status:'current'},{n:'03',status:'failed',pts:2},
+  {n:'04',status:'done',pts:5},{n:'05',status:'done',pts:4},{n:'06',status:'done',pts:5},
+  {n:'07',status:'todo'},{n:'08',status:'failed',pts:1},{n:'09',status:'todo'},
+  {n:'10',status:'todo'},{n:'11',status:'todo'},{n:'12',status:'todo'},
+  {n:'13',status:'todo'},{n:'14',status:'todo'},
+];
+let hazardTab='all';
+
+/* ═══════════ LEARNING MODES ═══════════ */
+const MODES=[
+  {id:'adaptive', ttl:'Adaptive mode', sub:'Adapts to what you know', ic:ICONS.adaptive, path:true},
+  {id:'signs', ttl:'Road signs quiz', sub:'142 signs to learn', ic:ICONS.sign, path:true},
+  {id:'video', ttl:'Video questions', sub:'Learn from real footage', ic:ICONS.video, path:false},
+  {id:'battle', ttl:'Quiz battle', sub:'Compete in real time', ic:ICONS.battle, path:false},
+  {id:'marathon', ttl:'Marathon', sub:'Stops after too many mistakes', ic:ICONS.marathon, path:false},
+];
+let modesSub=null; // null = list, or mode id showing its own path
+
+const SIGN_STEPS=[
+  {label:'Warning signs', state:'done'},
+  {label:'Mistakes', state:'mistake', diamond:true},
+  {label:'Regulatory signs', state:'current'},
+  {label:'Information signs', state:'todo'},
+  {label:'Direction signs', state:'todo'},
+];
+const ADAPTIVE_STEPS=[
+  {label:'Question 1', state:'done'},
+  {label:'Question 2', state:'current'},
+  {label:'Question 3', state:'todo'},
+  {label:'Question 4', state:'todo'},
+];
+
+/* ═══════════ PATH RENDERER ═══════════ */
+function renderPath(steps, opts){
+  opts=opts||{};
+  const width=310, gapY=88, centerX=width/2;
+  const offs=[0,54,0,-54];
+  const pos=steps.map((s,i)=>({x:centerX+offs[i%offs.length], y:i*gapY+40}));
+  const height=(steps.length-1)*gapY+80;
+  let lines='';
+  for(let i=1;i<pos.length;i++){
+    lines+=`<line x1="${pos[i-1].x}" y1="${pos[i-1].y}" x2="${pos[i].x}" y2="${pos[i].y}" stroke="#E4E1EC" stroke-width="3" stroke-dasharray="1 12" stroke-linecap="round"/>`;
+  }
+  let nodes='';
+  steps.forEach((s,i)=>{
+    let cls='pnode '+s.state, inner='';
+    if(s.diamond) cls+=' diamond';
+    if(s.state==='done') inner=s.diamond?ICONS.check:`<span>${ICONS.check}</span>`;
+    else if(s.state==='mistake') inner=ICONS.warn;
+    else inner=`<span>${i+1}</span>`;
+    const capCls = s.state==='todo' ? 'pcap dim' : 'pcap';
+    const btn = s.state==='locked' ? '' : `onclick="nodeTap(${i},'${opts.key||''}')"`;
+    nodes+=`<div class="pnode-wrap" style="left:${pos[i].x}px;top:${pos[i].y}px;">
+      <button class="${cls}" ${btn}><span class="pnode-inner">${inner}</span></button>
+      <div class="${capCls}">${s.label}</div>
+    </div>`;
+  });
+  return `<div class="path-box" style="width:${width}px;height:${height}px;">
+    <svg width="${width}" height="${height}" style="position:absolute;top:0;left:0;">${lines}</svg>
+    ${nodes}
+  </div>`;
+}
+
+let activeNodeCtx=null;
+function nodeTap(i,key){
+  const src = key==='signs'?SIGN_STEPS : key==='adaptive'?ADAPTIVE_STEPS : theorySteps;
+  const step=src[i];
+  if(step.state==='todo'||step.state==='locked') return;
+  activeNodeCtx={i,key};
+  document.getElementById('nsTitle').textContent=step.label;
+  document.getElementById('nsSub').textContent = step.state==='done' ? 'Completed — review anytime' : step.state==='mistake' ? 'Questions you got wrong' : 'Ready to start';
+  document.getElementById('nsStart').innerHTML = (step.state==='done' ? '' : ICONS.play) + (step.state==='done'?'Review':'Start');
+  openBS('sheetNode');
+}
+function completeCurrentNode(){
+  if(!activeNodeCtx) return closeAllBS();
+  const src = activeNodeCtx.key==='signs'?SIGN_STEPS : activeNodeCtx.key==='adaptive'?ADAPTIVE_STEPS : theorySteps;
+  const i=activeNodeCtx.i;
+  if(src[i].state==='current'){
+    src[i].state='done';
+    const next=src.find(s=>s.state==='todo');
+    if(next) next.state='current';
+    else if(!activeNodeCtx.key){ nextTopic(); }
+  }
+  closeAllBS();
+  renderHero();
+}
+function nextTopic(){
+  if(curTopic<TOPICS.length-1){ curTopic++; theorySteps=topicSteps(); }
+}
+
+/* ═══════════ CONTENT PANEL ═══════════ */
+function renderPanel(id){
+  const el=document.getElementById('contentPanel');
+  const bs=document.getElementById('bannerSticky');
+  const ts=document.getElementById('tabsSticky');
+  const stickyH=document.getElementById('stickyTop').offsetHeight+'px';
+  bs.style.display='none'; ts.style.display='none';
+
+  if(id==='theory'){
+    bs.style.display='block'; bs.style.top=stickyH;
+    bs.innerHTML=`<div class="topic-banner">
+      <div class="tb-lvl">Level ${curTopic+1} of ${TOPICS.length}</div>
+      <div class="tb-ttl">${TOPICS[curTopic]}</div>
+    </div>`;
+    el.innerHTML=panelTheory();
+  } else if(id==='modes' && modesSub){
+    const m=MODES.find(x=>x.id===modesSub);
+    bs.style.display='block'; bs.style.top=stickyH;
+    bs.innerHTML=`<div class="lm-back" onclick="modesSub=null;renderPanel('modes')">${backChevSvg()}<span>Learning modes</span></div>
+      <div class="topic-banner" style="border-color:var(--brand2);">
+        <div class="tb-lvl" style="color:var(--brand2);">${m.ttl}</div>
+        <div class="tb-ttl">${m.sub}</div>
+      </div>`;
+    el.innerHTML=panelModes();
+  } else if(id==='hazard'){
+    ts.style.display='block'; ts.style.top=stickyH;
+    ts.innerHTML=hazardTabsHTML();
+    el.innerHTML=panelHazard();
+  } else if(id==='exam'){
+    el.innerHTML=panelExam();
+  } else if(id==='modes'){
+    el.innerHTML=panelModes();
+  }
+}
+
+function panelTheory(){
+  return `
+    ${renderPath(theorySteps,{})}
+    <div style="display:flex;justify-content:center;"><button class="path-collapse">${ICONS.chev}</button></div>
+  `;
+}
+
+function hazardTabsHTML(){
+  return `<div class="pill-tabs">${['all','todo','failed','done'].map(t=>{
+    const lbl=t==='all'?'All':t==='todo'?'To do':t==='failed'?'Failed':'Mastered';
+    return `<button class="pill-tab ${hazardTab===t?'active':''}" onclick="hazardTab='${t}';renderPanel('hazard')">${lbl}</button>`;
+  }).join('')}</div>`;
+}
+function panelHazard(){
+  const filtered=HAZARD_CLIPS.filter(c=>{
+    if(hazardTab==='all') return true;
+    if(hazardTab==='todo') return c.status==='todo'||c.status==='current';
+    if(hazardTab==='failed') return c.status==='failed';
+    return c.status==='done';
+  });
+  const cards=filtered.map(c=>{
+    const cur = c.status==='current'?'current':'';
+    const badge = c.status==='done'?'var(--success)':c.status==='failed'?'var(--error)':'transparent';
+    let statusHtml;
+    if(c.status==='done') statusHtml=`<span class="hz-dot" style="background:var(--success);"></span>${c.pts} points`;
+    else if(c.status==='failed') statusHtml=`<span class="hz-dot" style="background:var(--error);"></span>${c.pts} points`;
+    else statusHtml=`Start`;
+    const statusCls = (c.status==='done'||c.status==='failed') ? '' : 'start';
+    return `<div class="hz-card ${cur}">
+      <div class="hz-thumb"><img src="https://picsum.photos/seed/hazard${c.n}/200/150" alt=""><span class="hz-badge" style="background:${badge};"></span></div>
+      <div class="hz-foot"><span class="hz-num">${c.n}</span><span class="hz-status ${statusCls}">${statusHtml}</span></div>
+    </div>`;
+  }).join('');
+  return `<div class="hz-grid">${cards||'<div class="plain-hint">Nothing here yet</div>'}</div>`;
+}
+
+function panelExam(){
+  const last=46,total=75,pass=44;
+  const pct=Math.round(last/total*100);
+  return `
+    <div class="stat-row">
+      <div class="stat-box"><div class="v">${last}/${total}</div><div class="l">Last score</div></div>
+      <div class="stat-box"><div class="v">51/75</div><div class="l">Average</div></div>
+      <div class="stat-box"><div class="v">4</div><div class="l">Attempts</div></div>
+    </div>
+    <div class="pass-lbl">Pass mark: ${pass}/${total}</div>
+    <div class="pass-bar"><div class="pass-bar-fill" style="width:${pct}%"></div></div>
+    <button class="btn-full" onclick="openBS('sheetExam')">${ICONS.play}Start mock test</button>
+    <div class="plain-hint">No instant feedback — just like the real exam.</div>
+  `;
+}
+
+function panelModes(){
+  if(modesSub){
+    const steps = modesSub==='signs'?SIGN_STEPS:ADAPTIVE_STEPS;
+    return renderPath(steps,{key:modesSub});
+  }
+  return MODES.map(m=>`
+    <div class="lm-row" onclick="${m.path?`modesSub='${m.id}';renderPanel('modes')`:''}">
+      <div class="lm-ico">${m.ic}</div>
+      <div class="lm-txt"><div class="lm-ttl">${m.ttl}</div><div class="lm-sub">${m.sub}</div></div>
+      <div class="lm-start">${ICONS.chevRight}</div>
+    </div>
+  `).join('');
+}
+
+/* fix chevron rotation manually since replace() above is fragile */
+function backChevSvg(){
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+}
+
+/* ═══════════ BOTTOM SHEETS ═══════════ */
+function openBS(id){
+  document.querySelectorAll('.bs').forEach(b=>{b.style.display='none';b.classList.remove('open');});
+  const sheet=document.getElementById(id);
+  const ov=document.getElementById('ovMain');
+  sheet.style.display='block'; ov.style.display='block';
+  requestAnimationFrame(()=>{ sheet.classList.add('open'); ov.classList.add('vis'); });
+}
+function closeAllBS(){
+  document.querySelectorAll('.bs').forEach(b=>b.classList.remove('open'));
+  document.getElementById('ovMain').classList.remove('vis');
+  setTimeout(()=>{ document.querySelectorAll('.bs').forEach(b=>b.style.display='none'); document.getElementById('ovMain').style.display='none'; },380);
+}
+
+renderHero();
+</script>
+</body>
+</html>
