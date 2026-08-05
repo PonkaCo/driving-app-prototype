@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ready — 5 variants</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --brand:#401971;--brand2:#6B2ABC;--accent:#FA5732;
+  --bg:#F2F0F5;--bg2:#E9E7EB;--card:#FCFCFC;--tint:#F0EAF8;
+  --text:#150826;--muted:#797282;--on-brand:#FFFCFC;
+  --success:#00A850;--success-bg:#D4FCE7;
+  --warn-star:#FAC32A;
+  --shadow:0px 6px 30px 0px rgba(55,22,97,0.08);
+  --shadow-top:0px -2px 24px 0px rgba(55,21,97,0.04);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+body{
+  background:#1E1535;min-height:100vh;
+  display:flex;align-items:flex-start;justify-content:center;
+  gap:40px;padding:40px 24px;flex-wrap:wrap;
+}
+
+.variant-wrap{display:flex;flex-direction:column;align-items:center;gap:16px;}
+.variant-lbl{font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:rgba(255,255,255,.45);text-align:center;}
+
+.phone{
+  width:390px;height:844px;border-radius:50px;overflow:hidden;flex-shrink:0;position:relative;
+  box-shadow:0 0 0 10px #1A1A2E,0 0 0 12px #2E2E50,0 48px 100px rgba(0,0,0,.6);
+  display:flex;flex-direction:column;background:var(--card);
+}
+.scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{display:none;}
+
+.sbar{height:46px;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between;}
+.sbar .time{font-size:15px;font-weight:600;color:var(--text);}
+.sbar .icons{display:flex;align-items:center;gap:5px;color:var(--text);}
+.sbar .icons svg{width:16px;height:16px;}
+
+/* header — just a centered title now, gear/star removed */
+.ex-head{display:flex;align-items:center;justify-content:center;padding:16px 20px 8px;}
+.ex-head-title{font-size:20px;font-weight:600;color:var(--text);}
+
+.content-panel{padding:8px 20px 32px;}
+
+/* exam date — plain, low-color, small Edit button instead of a days-left counter */
+.ex-date-card{background:var(--card);border:1px solid var(--bg2);border-radius:18px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.ex-date-ico{width:40px;height:40px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ex-date-ico svg{width:19px;height:19px;color:var(--muted);}
+.ex-date-txt{flex:1;min-width:0;}
+.ex-date-lbl{font-size:12px;font-weight:500;color:var(--muted);}
+.ex-date-val{font-size:15px;font-weight:600;color:var(--text);margin-top:1px;}
+.ex-date-edit{flex-shrink:0;height:32px;padding:0 14px;border-radius:999px;border:none;background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+
+/* Theory / Hazards — boxed cards, icon only, pass mark as text (Current variant) */
+.ex-split{display:flex;gap:10px;margin-top:16px;}
+.ex-split-card{flex:1;background:var(--card);border-radius:16px;padding:14px;box-shadow:var(--shadow);}
+.ex-split-head{margin-bottom:10px;}
+.ex-split-head svg{width:16px;height:16px;color:var(--brand2);}
+.ex-split-score{font-size:20px;font-weight:600;color:var(--text);}
+.ex-split-score .of{font-size:13px;font-weight:500;color:var(--muted);}
+.ex-split-bar{height:5px;border-radius:4px;background:var(--bg2);margin-top:8px;overflow:hidden;}
+.ex-split-fill{height:100%;border-radius:4px;}
+.ex-split-fill.theory{background:var(--brand2);}
+.ex-split-fill.hazard{background:var(--accent);}
+.ex-split-sub{font-size:11px;color:var(--muted);margin-top:6px;}
+
+/* Test simulator card shell (Current / donut / gauge concepts) */
+.ex-summary-card,.ts-card{background:var(--card);border:1px solid var(--bg2);border-radius:22px;padding:22px 20px;text-align:center;}
+.ex-summary-card{background:var(--tint);border:none;}
+.ex-summary-ico,.ts-card .ts-eyebrow{ }
+.ex-summary-ico{width:52px;height:52px;border-radius:16px;background:var(--card);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;}
+.ex-summary-ico svg{width:23px;height:23px;color:var(--brand2);}
+.ex-summary-eyebrow,.ts-eyebrow{font-size:12px;font-weight:600;color:var(--brand2);}
+.ex-summary-ttl,.ts-title{font-size:19px;font-weight:600;color:var(--text);margin-top:2px;}
+.ex-summary-info{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px;}
+.ex-summary-info-chip{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--muted);}
+.ex-summary-info-chip svg{width:14px;height:14px;}
+.ex-summary-row{display:flex;align-items:center;gap:10px;margin-top:16px;}
+.ex-summary-bar{flex:1;height:6px;border-radius:4px;background:var(--bg2);overflow:hidden;}
+.ex-summary-fill{height:100%;border-radius:4px;}
+.ex-summary-val{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;}
+
+/* Practice by topic — stays in the scroll content, low-emphasis row */
+.ex-bottom-link{width:100%;margin-top:22px;display:flex;align-items:center;justify-content:center;gap:6px;background:none;border:none;font-family:inherit;font-size:14px;font-weight:600;color:var(--brand2);cursor:pointer;padding:10px 0;}
+.ex-bottom-link svg{width:16px;height:16px;}
+
+/* combined-progress diagrams (donut / gauge concepts) */
+.ts-ring-wrap{position:relative;width:150px;height:150px;margin:18px auto 4px;}
+.ts-ring{width:150px;height:150px;}
+.ts-ring-pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.ts-ring-pct b{font-size:28px;font-weight:600;color:var(--text);line-height:1;}
+.ts-ring-pct span{font-size:12px;color:var(--muted);margin-top:2px;}
+
+.ts-gauge-wrap{position:relative;width:220px;height:130px;margin:18px auto 4px;}
+.ts-gauge{width:220px;height:130px;}
+.ts-gauge-needle{position:absolute;left:50%;bottom:14px;width:3px;height:56px;background:var(--brand);border-radius:2px;transform-origin:bottom center;}
+.ts-gauge-pct{position:absolute;left:0;right:0;bottom:0;text-align:center;}
+.ts-gauge-pct b{font-size:26px;font-weight:600;color:var(--text);line-height:1;}
+.ts-gauge-pct span{display:block;font-size:12px;color:var(--muted);margin-top:2px;}
+.ts-info-line{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.ts-rows.divided{border-top:1px solid var(--bg2);margin-top:16px;}
+.sticky-cta.noline{border-top:none;}
+
+.ts-rows{text-align:left;margin-top:8px;}
+.ts-row{display:flex;align-items:flex-start;gap:12px;padding:16px 0;}
+.ts-row+.ts-row{border-top:1px solid var(--bg2);}
+.ts-row-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ts-row-ico svg{width:18px;height:18px;}
+.ts-row-ico.theory{background:#EDE7F6;color:var(--brand2);}
+.ts-row-ico.hazard{background:#FFE9E0;color:var(--accent);}
+.ts-row-txt{flex:1;min-width:0;}
+.ts-row-ttl{font-size:15px;font-weight:600;color:var(--text);}
+.ts-row-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.ts-row-val{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;}
+.ts-dot{width:7px;height:7px;border-radius:999px;flex-shrink:0;}
+.ts-dot.pass{background:var(--success);}
+.ts-dot.fail{background:var(--accent);}
+
+/* Variant 1 & 2: chrome-less icon+score+bar row with a pass-mark tick */
+.tk-rows{margin-top:18px;}
+.tk-row{display:flex;align-items:center;gap:12px;padding:10px 0;}
+.tk-ico{width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tk-ico svg{width:16px;height:16px;}
+.tk-ico.theory{background:#EDE7F6;color:var(--brand2);}
+.tk-ico.hazard{background:#FFE9E0;color:var(--accent);}
+.tk-score{font-size:15px;font-weight:600;color:var(--text);flex-shrink:0;width:50px;}
+.tk-score .of{font-weight:500;color:var(--muted);}
+.tk-bar{flex:1;position:relative;height:6px;border-radius:4px;background:var(--bg2);overflow:visible;}
+.tk-fill{height:100%;border-radius:4px;}
+.tk-fill.pass{background:var(--success);}
+.tk-fill.fail{background:var(--accent);}
+.tk-tick{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:var(--text);opacity:.45;}
+
+/* Variant 2: mini rings for Theory/Hazards, matching the reference screenshot */
+.mini-rings{display:flex;gap:10px;margin-top:18px;}
+.mini-ring-card{flex:1;background:var(--card);border:1px solid var(--bg2);border-radius:18px;padding:16px 10px;text-align:center;}
+.mini-ring-wrap{position:relative;width:88px;height:88px;margin:0 auto 10px;}
+.mini-ring{width:88px;height:88px;}
+.mini-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;color:var(--text);}
+.mini-ring-lbl{font-size:13px;font-weight:600;color:var(--text);}
+
+/* sticky bottom CTA — same on every variant, replaces the in-card button */
+.sticky-cta{padding:14px 20px 16px;background:var(--card);border-top:1px solid var(--bg2);flex-shrink:0;}
+.sticky-cta-btn{width:100%;height:46px;border:none;border-radius:24px;background:var(--accent);color:var(--on-brand);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;}
+
+.tabbar{background:var(--card);border-top:1px solid var(--bg2);padding:8px 0 20px;display:flex;align-items:center;flex-shrink:0;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0;}
+.tab svg{width:22px;height:22px;}
+.tab span{font-size:11px;font-weight:500;}
+.tab.on svg,.tab.on span{color:var(--brand);}
+.tab:not(.on) svg,.tab:not(.on) span{color:var(--muted);}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ 1. CURRENT — split cards ═══════════ -->
+<div class="variant-wrap">
+  <div class="variant-lbl">Current — split cards</div>
+  <div class="phone">
+    <div class="scroll">
+      <div class="sbar">
+        <div class="time">15:28</div>
+        <div class="icons">
+          <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="ex-head"><div class="ex-head-title">Test simulator</div></div>
+      <div class="content-panel">
+        <div class="ex-date-card">
+          <div class="ex-date-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+          <button class="ex-date-edit">Edit</button>
+        </div>
+
+        <div class="ex-summary-card">
+          <div class="ex-summary-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg></div>
+          <div class="ex-summary-eyebrow">Theory and hazards</div>
+          <div class="ex-summary-ttl">Test simulator</div>
+          <div class="ex-summary-info">
+            <span class="ex-summary-info-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>50 Q + 14 clips</span>
+            <span class="ex-summary-info-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>77 min</span>
+          </div>
+          <div class="ex-summary-row">
+            <div class="ex-summary-bar"><div class="ex-summary-fill" style="width:61%;background:var(--accent);"></div></div>
+            <span class="ex-summary-val">46/75</span>
+          </div>
+        </div>
+
+        <div class="ex-split">
+          <div class="ex-split-card">
+            <div class="ex-split-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+            <div class="ex-split-score">42<span class="of">/50</span></div>
+            <div class="ex-split-bar"><div class="ex-split-fill theory" style="width:84%"></div></div>
+            <div class="ex-split-sub">Pass mark: 43/50</div>
+          </div>
+          <div class="ex-split-card">
+            <div class="ex-split-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div class="ex-split-score">37<span class="of">/75</span></div>
+            <div class="ex-split-bar"><div class="ex-split-fill hazard" style="width:49%"></div></div>
+            <div class="ex-split-sub">Pass mark: 44/75</div>
+          </div>
+        </div>
+
+        <button class="ex-bottom-link">Practice by topic instead<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="sticky-cta"><button class="sticky-cta-btn">Start mock test</button></div>
+    <div class="tabbar">
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Learn</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M4 8l4-4 2 2-4 4-2-2zM14 18l4-4 2 2-4 4-2-2zM2 10l2-2M20 16l2-2M9 6l3-3M15 18l3-3"/></svg><span>Practice</span></div>
+      <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg><span>Test</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>ProDrive</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg><span>Settings</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 2. Donut ring concept ═══════════ -->
+<div class="variant-wrap">
+  <div class="variant-lbl">Donut ring</div>
+  <div class="phone">
+    <div class="scroll">
+      <div class="sbar">
+        <div class="time">15:28</div>
+        <div class="icons">
+          <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="ex-head"><div class="ex-head-title">Test simulator</div></div>
+      <div class="content-panel">
+        <div class="ex-date-card">
+          <div class="ex-date-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+          <button class="ex-date-edit">Edit</button>
+        </div>
+
+        <div class="ts-card">
+          <div class="ts-eyebrow">THEORY AND HAZARDS</div>
+          <div class="ts-title">Test simulator</div>
+          <div class="ts-ring-wrap">
+            <svg class="ts-ring" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="54" stroke="var(--bg2)" stroke-width="10" fill="none"/>
+              <circle cx="60" cy="60" r="54" stroke="var(--accent)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="132.3" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div class="ts-ring-pct"><b>61%</b><span>ready</span></div>
+          </div>
+          <div class="ts-rows">
+            <div class="ts-row">
+              <div class="ts-row-ico theory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+              <div class="ts-row-txt"><div class="ts-row-ttl">Questions</div><div class="ts-row-sub">Pass mark 43/50</div></div>
+              <div class="ts-row-val">42/50<span class="ts-dot fail"></span></div>
+            </div>
+            <div class="ts-row">
+              <div class="ts-row-ico hazard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="ts-row-txt"><div class="ts-row-ttl">Hazard clips</div><div class="ts-row-sub">Pass mark 44/75</div></div>
+              <div class="ts-row-val">37/75<span class="ts-dot fail"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <button class="ex-bottom-link">Practice by topic instead<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="sticky-cta"><button class="sticky-cta-btn">Start mock test</button></div>
+    <div class="tabbar">
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Learn</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M4 8l4-4 2 2-4 4-2-2zM14 18l4-4 2 2-4 4-2-2zM2 10l2-2M20 16l2-2M9 6l3-3M15 18l3-3"/></svg><span>Practice</span></div>
+      <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg><span>Test</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>ProDrive</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg><span>Settings</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 3. Gauge concept ═══════════ -->
+<div class="variant-wrap">
+  <div class="variant-lbl">Gauge</div>
+  <div class="phone">
+    <div class="scroll">
+      <div class="sbar">
+        <div class="time">15:28</div>
+        <div class="icons">
+          <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="ex-head"><div class="ex-head-title">Test simulator</div></div>
+      <div class="content-panel">
+        <div class="ex-date-card">
+          <div class="ex-date-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+          <button class="ex-date-edit">Edit</button>
+        </div>
+
+        <div class="ts-card">
+          <div class="ts-eyebrow">THEORY AND HAZARDS</div>
+          <div class="ts-title">Test simulator</div>
+          <div class="ts-gauge-wrap">
+            <svg class="ts-gauge" viewBox="0 0 220 130">
+              <defs>
+                <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" style="stop-color:var(--accent)"/>
+                  <stop offset="100%" style="stop-color:var(--brand2)"/>
+                </linearGradient>
+              </defs>
+              <path d="M20,110 A90,90 0 0 1 200,110" stroke="var(--bg2)" stroke-width="14" fill="none" stroke-linecap="round"/>
+              <path d="M20,110 A90,90 0 0 1 200,110" stroke="url(#gaugeGrad)" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="110.3"/>
+            </svg>
+            <div class="ts-gauge-needle" style="transform:translateX(-50%) rotate(19.8deg)"></div>
+            <div class="ts-gauge-pct"><b>61%</b><span>ready</span></div>
+          </div>
+          <div class="ts-rows">
+            <div class="ts-row">
+              <div class="ts-row-ico theory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+              <div class="ts-row-txt"><div class="ts-row-ttl">Questions</div><div class="ts-row-sub">Pass mark 43/50</div></div>
+              <div class="ts-row-val">42/50<span class="ts-dot fail"></span></div>
+            </div>
+            <div class="ts-row">
+              <div class="ts-row-ico hazard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="ts-row-txt"><div class="ts-row-ttl">Hazard clips</div><div class="ts-row-sub">Pass mark 44/75</div></div>
+              <div class="ts-row-val">37/75<span class="ts-dot fail"></span></div>
+            </div>
+          </div>
+        </div>
+
+        <button class="ex-bottom-link">Practice by topic instead<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="sticky-cta"><button class="sticky-cta-btn">Start mock test</button></div>
+    <div class="tabbar">
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Learn</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M4 8l4-4 2 2-4 4-2-2zM14 18l4-4 2 2-4 4-2-2zM2 10l2-2M20 16l2-2M9 6l3-3M15 18l3-3"/></svg><span>Practice</span></div>
+      <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg><span>Test</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>ProDrive</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg><span>Settings</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 4. NEW — overall ring + Theory/Hazards bars ═══════════ -->
+<div class="variant-wrap">
+  <div class="variant-lbl">New — ring overall, bars for parts</div>
+  <div class="phone">
+    <div class="scroll">
+      <div class="sbar">
+        <div class="time">15:28</div>
+        <div class="icons">
+          <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="ex-head"><div class="ex-head-title">Test simulator</div></div>
+      <div class="content-panel">
+        <div class="ex-date-card">
+          <div class="ex-date-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+          <button class="ex-date-edit">Edit</button>
+        </div>
+
+        <div class="ts-card">
+          <div class="ts-eyebrow">THEORY AND HAZARDS</div>
+          <div class="ts-title">Test simulator</div>
+
+          <!-- overall ring: 61% vs a derived combined pass mark (~70%, weighted avg of both pass marks) -->
+          <div class="ts-ring-wrap">
+            <svg class="ts-ring" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="54" stroke="var(--bg2)" stroke-width="10" fill="none"/>
+              <circle cx="60" cy="60" r="54" stroke="var(--accent)" stroke-width="10" fill="none" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="132.3" transform="rotate(-90 60 60)"/>
+              <line x1="60" y1="1" x2="60" y2="11" stroke="var(--text)" stroke-width="2" stroke-linecap="round" opacity=".45" transform="rotate(252 60 60)"/>
+            </svg>
+            <div class="ts-ring-pct"><b>61%</b><span>ready</span></div>
+          </div>
+
+          <!-- Theory / Hazards as bars with a pass-mark tick, same idea as the ring tick -->
+          <div class="tk-rows">
+            <div class="tk-row">
+              <div class="tk-ico theory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+              <div class="tk-score">42<span class="of">/50</span></div>
+              <div class="tk-bar"><div class="tk-fill fail" style="width:84%"></div><div class="tk-tick" style="left:86%"></div></div>
+            </div>
+            <div class="tk-row">
+              <div class="tk-ico hazard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="tk-score">37<span class="of">/75</span></div>
+              <div class="tk-bar"><div class="tk-fill fail" style="width:49%"></div><div class="tk-tick" style="left:59%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <button class="ex-bottom-link">Practice by topic instead<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="sticky-cta"><button class="sticky-cta-btn">Start mock test</button></div>
+    <div class="tabbar">
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Learn</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M4 8l4-4 2 2-4 4-2-2zM14 18l4-4 2 2-4 4-2-2zM2 10l2-2M20 16l2-2M9 6l3-3M15 18l3-3"/></svg><span>Practice</span></div>
+      <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg><span>Test</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>ProDrive</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg><span>Settings</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 5. NEW — overall bar + Theory/Hazards rings ═══════════ -->
+<div class="variant-wrap">
+  <div class="variant-lbl">New — bar overall, rings for parts</div>
+  <div class="phone">
+    <div class="scroll">
+      <div class="sbar">
+        <div class="time">15:28</div>
+        <div class="icons">
+          <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="ex-head"><div class="ex-head-title">Test simulator</div></div>
+      <div class="content-panel">
+        <div class="ex-date-card">
+          <div class="ex-date-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+          <button class="ex-date-edit">Edit</button>
+        </div>
+
+        <div class="ts-card">
+          <div class="ts-eyebrow">THEORY AND HAZARDS</div>
+          <div class="ts-title">Test simulator</div>
+
+          <!-- overall bar with a tick at the derived combined pass mark (~70%) -->
+          <div class="ex-summary-row" style="margin-top:18px;">
+            <div class="ex-summary-bar" style="position:relative;"><div class="ex-summary-fill" style="width:61%;background:var(--accent);"></div><div class="tk-tick" style="left:70%;"></div></div>
+            <span class="ex-summary-val">61%</span>
+          </div>
+
+          <!-- Theory / Hazards as mini rings, matching the reference screenshot -->
+          <div class="mini-rings">
+            <div class="mini-ring-card">
+              <div class="mini-ring-wrap">
+                <svg class="mini-ring" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="44" stroke="var(--bg2)" stroke-width="9" fill="none"/>
+                  <circle cx="50" cy="50" r="44" stroke="var(--accent)" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="44.2" transform="rotate(-90 50 50)"/>
+                  <line x1="50" y1="1" x2="50" y2="11" stroke="var(--text)" stroke-width="2" stroke-linecap="round" opacity=".5" transform="rotate(309.6 50 50)"/>
+                </svg>
+                <div class="mini-ring-pct">84%</div>
+              </div>
+              <div class="mini-ring-lbl">Questions</div>
+            </div>
+            <div class="mini-ring-card">
+              <div class="mini-ring-wrap">
+                <svg class="mini-ring" viewBox="0 0 100 100">
+                  <circle cx="50" cy="50" r="44" stroke="var(--bg2)" stroke-width="9" fill="none"/>
+                  <circle cx="50" cy="50" r="44" stroke="var(--accent)" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="276.5" stroke-dashoffset="141.0" transform="rotate(-90 50 50)"/>
+                  <line x1="50" y1="1" x2="50" y2="11" stroke="var(--text)" stroke-width="2" stroke-linecap="round" opacity=".5" transform="rotate(212.4 50 50)"/>
+                </svg>
+                <div class="mini-ring-pct">49%</div>
+              </div>
+              <div class="mini-ring-lbl">Hazard clips</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="ex-bottom-link">Practice by topic instead<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="sticky-cta"><button class="sticky-cta-btn">Start mock test</button></div>
+    <div class="tabbar">
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Learn</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M4 8l4-4 2 2-4 4-2-2zM14 18l4-4 2 2-4 4-2-2zM2 10l2-2M20 16l2-2M9 6l3-3M15 18l3-3"/></svg><span>Practice</span></div>
+      <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg><span>Test</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>ProDrive</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg><span>Settings</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ 6. Gauge — refined ═══════════ -->
+<div class="variant-wrap">
+  <div class="variant-lbl">Gauge — refined</div>
+  <div class="phone">
+    <div class="scroll">
+      <div class="sbar">
+        <div class="time">15:28</div>
+        <div class="icons">
+          <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+        </div>
+      </div>
+      <div class="ex-head"><div class="ex-head-title">Test simulator</div></div>
+      <div class="content-panel">
+        <div class="ex-date-card">
+          <div class="ex-date-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+          <button class="ex-date-edit">Edit</button>
+        </div>
+
+        <div class="ts-card">
+          <div class="ts-info-line">50 questions · 14 hazard clips</div>
+          <div class="ts-title">Test simulator</div>
+
+          <div class="ts-gauge-wrap">
+            <svg class="ts-gauge" viewBox="0 0 220 130">
+              <defs>
+                <linearGradient id="gaugeGrad2" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" style="stop-color:var(--accent)"/>
+                  <stop offset="100%" style="stop-color:var(--brand2)"/>
+                </linearGradient>
+              </defs>
+              <path d="M20,110 A90,90 0 0 1 200,110" stroke="var(--bg2)" stroke-width="14" fill="none" stroke-linecap="round"/>
+              <path d="M20,110 A90,90 0 0 1 200,110" stroke="url(#gaugeGrad2)" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="110.3"/>
+              <!-- pass mark tick at 87% -->
+              <line x1="110" y1="14" x2="110" y2="26" stroke="var(--text)" stroke-width="2.2" stroke-linecap="round" opacity=".55" transform="rotate(66.6 110 110)"/>
+            </svg>
+            <div class="ts-gauge-pct"><b>61%</b></div>
+          </div>
+
+          <div class="ts-rows divided">
+            <div class="ts-row">
+              <div class="ts-row-ico theory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+              <div class="ts-row-txt"><div class="ts-row-ttl">Questions</div><div class="ts-row-sub">Pass mark 43/50</div></div>
+              <div class="ts-row-val">42/50<span class="ts-dot fail"></span></div>
+            </div>
+            <div class="ts-row">
+              <div class="ts-row-ico hazard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="ts-row-txt"><div class="ts-row-ttl">Hazard clips</div><div class="ts-row-sub">Pass mark 44/75</div></div>
+              <div class="ts-row-val">37/75<span class="ts-dot fail"></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-cta noline"><button class="sticky-cta-btn">Start mock test</button></div>
+    <div class="tabbar">
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Learn</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5l11 11M4 8l4-4 2 2-4 4-2-2zM14 18l4-4 2 2-4 4-2-2zM2 10l2-2M20 16l2-2M9 6l3-3M15 18l3-3"/></svg><span>Practice</span></div>
+      <div class="tab on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg><span>Test</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg><span>ProDrive</span></div>
+      <div class="tab"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg><span>Settings</span></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

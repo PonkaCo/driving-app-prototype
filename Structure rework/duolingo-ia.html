@@ -32,14 +32,14 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 /* ── sticky top: statusbar + header + hero ── */
 .sticky-top{position:sticky;top:0;z-index:6;background:var(--card);}
 .sbar{height:46px;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between;}
-.sbar .time{font-size:15px;font-weight:700;color:var(--text);}
+.sbar .time{font-size:15px;font-weight:600;color:var(--text);}
 .sbar .icons{display:flex;align-items:center;gap:5px;color:var(--text);}
 .sbar .icons svg{width:16px;height:16px;}
 
 .home-head{display:flex;align-items:center;justify-content:space-between;padding:16px;}
 .coin-pill{
   display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--bg2);
-  border-radius:999px;padding:7px 14px;font-size:14px;font-weight:700;color:var(--text);box-shadow:var(--shadow);
+  border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600;color:var(--text);box-shadow:var(--shadow);
 }
 .coin-pill svg{width:15px;height:15px;color:var(--warn-star);}
 .head-icons{display:flex;gap:8px;}
@@ -74,7 +74,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .hero-card.big .tb-ttl{font-size:21px;}
 .hero-card.big .hero-progress{display:none;}
 /* plain variant — Exam / Settings: just a centered H2 title (ui-kit H2: 20px/120%), no card, no icon, no subtitle */
-.hero-card.plain{border:none;background:transparent;padding:8px 0 4px;}
+.hero-card.plain{border:none;background:transparent;padding:18px 0 4px;}
 .hero-card.plain .tb-lvl{display:none;}
 .hero-card.plain .tb-ttl{font-size:20px;font-weight:600;line-height:1.2;}
 .hero-card.plain .hero-progress{display:none;}
@@ -82,7 +82,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .hero-progress{width:100%;margin-top:20px;display:flex;align-items:center;gap:10px;}
 .hero-progress-bar{flex:1;height:6px;border-radius:999px;background:var(--bg2);overflow:hidden;}
 .hero-progress-fill{height:100%;background:var(--brand);border-radius:999px;}
-.hero-progress-lbl{font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;}
+.hero-progress-lbl{font-size:12px;font-weight:600;color:var(--text);white-space:nowrap;}
 
 /* ── content panel ── */
 .content-panel{padding:18px 20px 32px;}
@@ -90,31 +90,31 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .banner-sticky{position:sticky;z-index:5;background:var(--card);padding:24px 20px 10px;display:none;}
 .tabs-sticky{position:sticky;z-index:5;background:var(--card);padding:24px 20px 12px;display:none;}
 .topic-banner{border:2px solid var(--brand);border-radius:20px;padding:14px 16px;text-align:center;background:var(--card);}
-.tb-lvl{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--brand);text-transform:uppercase;margin-bottom:4px;}
-.tb-ttl{font-size:17px;font-weight:800;color:var(--text);}
+.tb-lvl{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--brand);text-transform:uppercase;margin-bottom:4px;}
+.tb-ttl{font-size:17px;font-weight:600;color:var(--text);}
 
 /* ── path ── */
 .path-box{position:relative;margin:0 auto;}
 .pnode-wrap{position:absolute;display:flex;align-items:center;gap:14px;transform:translate(-50%,-50%);}
-.pnode{width:56px;height:56px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;cursor:pointer;border:none;position:relative;}
+.pnode{width:56px;height:56px;border-radius:999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;cursor:pointer;border:none;position:relative;}
 .pnode-inner svg{width:22px;height:22px;}
 .pnode.done{background:var(--success);color:#fff;}
 .pnode.current{background:var(--brand);color:#fff;}
 .pnode.todo{background:var(--bg2);color:#A79FB0;}
 .pnode.mistake{background:var(--error-bg);color:var(--error);}
 .pnode.failed{background:var(--error-bg);color:var(--error);}
-.pcap{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;}
+.pcap{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;}
 .pcap.dim{color:#B7B0C2;}
 .topic-divider{position:absolute;left:0;width:100%;display:flex;align-items:center;gap:10px;}
 .topic-divider .ln{flex:1;height:2px;border-radius:2px;background:#C7C1D4;}
-.topic-divider .lbl{font-size:11px;font-weight:800;letter-spacing:.06em;color:var(--text);text-transform:uppercase;white-space:nowrap;}
+.topic-divider .lbl{font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--text);text-transform:uppercase;white-space:nowrap;}
 .path-collapse{width:38px;height:38px;border-radius:999px;background:var(--card);box-shadow:var(--shadow);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;margin:8px 0 0;}
 .path-collapse svg{width:18px;height:18px;color:var(--muted);}
 .plain-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-height:1.6;}
 
 /* ── hazard grid (used inside Learning modes > Hazard perception) ── */
 .pill-tabs{display:flex;background:var(--bg);border-radius:999px;padding:4px;}
-.pill-tab{flex:1;border:none;background:transparent;border-radius:999px;padding:9px 0;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;}
+.pill-tab{flex:1;border:none;background:transparent;border-radius:999px;padding:9px 0;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;}
 .pill-tab.active{background:#fff;color:var(--brand);box-shadow:0 1px 6px rgba(55,22,97,.10);}
 .hz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .hz-card{border-radius:16px;overflow:hidden;border:1px solid var(--bg2);}
@@ -123,8 +123,8 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .hz-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
 .hz-badge{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:999px;box-shadow:0 0 0 2px #fff;}
 .hz-foot{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;}
-.hz-num{font-size:13px;font-weight:700;color:var(--muted);}
-.hz-status{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:6px;}
+.hz-num{font-size:13px;font-weight:600;color:var(--muted);}
+.hz-status{font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px;}
 .hz-status.start{color:var(--brand2);}
 .hz-dot{width:8px;height:8px;border-radius:999px;flex-shrink:0;}
 
@@ -132,13 +132,13 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .empty-state{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;}
 .empty-state-icon{width:52px;height:52px;border-radius:999px;background:var(--bg);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
 .empty-state-icon svg{width:22px;height:22px;color:var(--muted);}
-.empty-state-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.empty-state-title{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;}
 .empty-state-sub{font-size:13px;color:var(--muted);line-height:1.5;max-width:220px;}
 
 /* ── ProDrive overview — ported 1:1 from SuperProdrive/ProDrive v3.html (#scr-prodrive), visual-only preview ── */
 .pd-sec-head{display:flex;align-items:baseline;margin:0 0 10px;}
 .pd-sec-head.mt{margin-top:22px;}
-.pd-sec-head-title{font-size:18px;font-weight:800;color:var(--text);}
+.pd-sec-head-title{font-size:18px;font-weight:600;color:var(--text);}
 .pd-sec-head-count{font-size:13px;font-weight:500;color:var(--muted);margin-left:4px;}
 .pd-hscroll{overflow-x:auto;scrollbar-width:none;margin:0 -20px 4px;padding:0 20px;}
 .pd-hscroll::-webkit-scrollbar{display:none;}
@@ -162,20 +162,66 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 /* ── exam ── */
 .stat-row{display:flex;gap:10px;margin-bottom:18px;}
 .stat-box{flex:1;background:var(--card);border-radius:14px;padding:12px 8px;text-align:center;box-shadow:var(--shadow);}
-.stat-box .v{font-size:16px;font-weight:800;color:var(--text);}
+.stat-box .v{font-size:16px;font-weight:600;color:var(--text);}
 .stat-box .l{font-size:11px;color:var(--muted);margin-top:2px;}
 .pass-lbl{font-size:12px;color:var(--muted);margin-bottom:6px;}
 .pass-bar{height:8px;border-radius:999px;background:var(--bg2);overflow:hidden;margin-bottom:22px;}
 .pass-bar-fill{height:100%;background:var(--success);border-radius:999px;}
+
+/* ── exam tab: exam-date card + Test simulator card (gauge, pass-mark rows) ── */
+.ex-date-card{background:var(--card);border:1px solid var(--bg2);border-radius:18px;padding:14px 16px;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+.ex-date-ico{width:40px;height:40px;border-radius:12px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ex-date-ico svg{width:19px;height:19px;color:var(--muted);}
+.ex-date-txt{flex:1;min-width:0;}
+.ex-date-lbl{font-size:12px;font-weight:500;color:var(--muted);}
+.ex-date-val{font-size:15px;font-weight:600;color:var(--text);margin-top:1px;}
+.ex-date-edit{flex-shrink:0;height:32px;padding:0 14px;border-radius:999px;border:none;background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;}
+
+.ts-card{background:var(--card);border:1px solid var(--bg2);border-radius:22px;padding:22px 20px 0;text-align:center;}
+.ts-info-line{font-size:12px;color:var(--muted);margin-bottom:6px;}
+.ts-title{font-size:19px;font-weight:600;color:var(--text);}
+.ts-gauge-wrap{position:relative;width:220px;height:130px;margin:18px auto 4px;}
+.ts-gauge{width:220px;height:130px;}
+.ts-gauge-pct{position:absolute;left:0;right:0;bottom:0;text-align:center;}
+.ts-gauge-pct b{font-size:26px;font-weight:600;color:var(--text);line-height:1;}
+.ts-rows{text-align:left;margin-top:16px;border-top:1px solid var(--bg2);}
+.ts-row{display:flex;align-items:flex-start;gap:12px;padding:16px 0;}
+.ts-row+.ts-row{border-top:1px solid var(--bg2);}
+.ts-row-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ts-row-ico svg{width:18px;height:18px;}
+.ts-row-ico.theory{background:#EDE7F6;color:var(--brand2);}
+.ts-row-ico.hazard{background:#FFE9E0;color:var(--accent);}
+.ts-row-txt{flex:1;min-width:0;}
+.ts-row-ttl{font-size:15px;font-weight:600;color:var(--text);}
+.ts-row-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.ts-row-val{display:flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:var(--text);white-space:nowrap;}
+.ts-dot{width:7px;height:7px;border-radius:999px;flex-shrink:0;}
+.ts-dot.pass{background:var(--success);}
+.ts-dot.fail{background:var(--accent);}
+.exam-cta{display:none;padding:14px 20px 16px;background:var(--card);flex-shrink:0;}
+.exam-cta-btn{width:100%;height:46px;border:none;border-radius:24px;background:var(--accent);color:var(--on-brand);font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;}
+
+/* mock-test start choice — Theory / Hazards / Full, inside sheetExam */
+.bs-choice-list{display:flex;flex-direction:column;margin:4px 0 0;}
+.bs-choice-row{display:flex;align-items:center;gap:12px;padding:12px 0;cursor:pointer;}
+#sheetExam{padding-bottom:16px;} /* + the last row's own 12px padding = 28px to the sheet's bottom edge */
+.bs-choice-row+.bs-choice-row{border-top:1px solid var(--bg2);}
+.bs-choice-ico{width:38px;height:38px;border-radius:11px;background:var(--bg);color:var(--brand2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.bs-choice-ico svg{width:18px;height:18px;}
+.bs-choice-txt{flex:1;min-width:0;}
+.bs-choice-ttl{font-size:15px;font-weight:600;color:var(--text);}
+.bs-choice-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.bs-choice-chev{color:var(--bg2);flex-shrink:0;}
+.bs-choice-chev svg{width:18px;height:18px;}
 
 /* ── learning modes list ── */
 .lm-row{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;border:1px solid var(--bg2);background:var(--card);margin-bottom:10px;cursor:pointer;}
 .lm-ico{width:42px;height:42px;border-radius:12px;background:#E1D4F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .lm-ico svg{width:20px;height:20px;color:var(--brand2);}
 .lm-txt{flex:1;min-width:0;}
-.lm-ttl{font-size:15px;font-weight:700;color:var(--text);}
+.lm-ttl{font-size:15px;font-weight:600;color:var(--text);}
 .lm-sub{font-size:12px;color:var(--muted);margin-top:1px;}
-.lm-start{font-size:13px;font-weight:700;color:var(--brand2);white-space:nowrap;display:flex;align-items:center;}
+.lm-start{font-size:13px;font-weight:600;color:var(--brand2);white-space:nowrap;display:flex;align-items:center;}
 .lm-start svg{width:18px;height:18px;color:var(--muted);}
 .lm-title{font-size:20px;font-weight:600;color:var(--text);margin-bottom:16px;text-align:center;}
 .plain-back{display:flex;align-items:center;justify-content:center;width:28px;height:28px;background:none;border:none;padding:0;cursor:pointer;color:var(--muted);flex-shrink:0;}
@@ -191,7 +237,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .bs{display:none;position:absolute;bottom:0;left:0;right:0;z-index:11;background:#fff;border-radius:24px 24px 0 0;padding:12px 20px 32px;transform:translateY(100%);transition:transform .38s cubic-bezier(.4,0,.2,1);}
 .bs.open{transform:translateY(0);}
 .bs-handle{width:36px;height:4px;background:#DEDBE1;border-radius:2px;margin:0 auto 18px;}
-.bs-title{font-size:19px;font-weight:800;color:var(--text);margin-bottom:8px;text-align:center;}
+.bs-title{font-size:19px;font-weight:600;color:var(--text);margin-bottom:8px;text-align:center;}
 .bs-sub{font-size:14px;color:var(--muted);text-align:center;margin-bottom:20px;}
 .bs-btns{display:flex;flex-direction:column;gap:8px;}
 .bs-dots{display:none;justify-content:center;gap:6px;margin-bottom:16px;}
@@ -204,7 +250,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .hw-overlay.open{display:flex;}
 .hw-head{display:flex;align-items:center;padding:12px 20px 4px;flex-shrink:0;}
 .hw-head-spacer{width:32px;flex-shrink:0;}
-.hw-head-title{flex:1;text-align:center;font-size:17px;font-weight:800;color:var(--text);}
+.hw-head-title{flex:1;text-align:center;font-size:17px;font-weight:600;color:var(--text);}
 .hw-search-wrap{position:relative;padding:14px 20px 6px;flex-shrink:0;}
 .hw-search{width:100%;height:44px;border-radius:14px;background:var(--bg);border:none;padding:0 14px 0 42px;font-family:inherit;font-size:15px;color:var(--text);}
 .hw-search::placeholder{color:var(--muted);}
@@ -215,7 +261,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .hw-ico{width:44px;height:44px;border-radius:999px;background:#E1D4F2;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .hw-ico svg{width:20px;height:20px;color:var(--brand2);}
 .hw-row-txt{flex:1;min-width:0;}
-.hw-row-ttl{font-size:16px;font-weight:700;color:var(--text);line-height:1.3;}
+.hw-row-ttl{font-size:16px;font-weight:600;color:var(--text);line-height:1.3;}
 .hw-row-sub{font-size:13px;color:var(--muted);margin-top:2px;}
 .hw-row-chev{color:var(--bg2);flex-shrink:0;}
 .hw-row-chev svg{width:20px;height:20px;}
@@ -232,7 +278,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .test-qnum.correct{background:var(--success);}
 .test-qnum.wrong{background:var(--error);}
 .test-body{flex:1;min-height:0;overflow-y:auto;padding:24px;}
-.test-question{font-size:18px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:20px;}
+.test-question{font-size:18px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:20px;}
 .test-answers{display:flex;flex-direction:column;gap:10px;}
 .test-answer{
   min-height:56px;padding:14px 16px;border-radius:16px;border:1.5px solid var(--bg2);background:var(--card);
@@ -253,14 +299,14 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .tr-top{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;position:relative;overflow:hidden;text-align:center;}
 .tr-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
 .tr-confetti .cdot{position:absolute;border-radius:50%;opacity:.55;}
-.tr-headline{font-size:26px;font-weight:800;color:#fff;text-align:center;line-height:1.2;}
+.tr-headline{font-size:26px;font-weight:600;color:#fff;text-align:center;line-height:1.2;}
 .tr-sheet{background:var(--card);border-radius:28px 28px 0 0;flex-shrink:0;padding:24px 20px 28px;}
-.tr-sheet-title{font-size:20px;font-weight:800;color:var(--text);margin-bottom:16px;}
+.tr-sheet-title{font-size:20px;font-weight:600;color:var(--text);margin-bottom:16px;}
 .tr-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;}
 .tr-row+.tr-row{border-top:1px solid var(--bg);}
 .tr-row-lbl{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:500;color:var(--text);}
 .tr-row-lbl svg{width:20px;height:20px;flex-shrink:0;}
-.tr-row-val{font-size:16px;font-weight:700;color:var(--text);}
+.tr-row-val{font-size:16px;font-weight:600;color:var(--text);}
 .tr-divider{height:1px;background:var(--bg);margin:4px 0 20px;}
 .tr-btns{display:flex;flex-direction:column;gap:10px;}
 .tr-btns-row{display:flex;gap:10px;}
@@ -380,11 +426,24 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 
   <div class="bs" id="sheetExam">
     <div class="bs-handle"></div>
-    <div class="bs-title">Theory test</div>
-    <div class="bs-sub">50 questions · pass mark: 43 correct answers, or 86%</div>
-    <div class="bs-btns">
-      <button class="btn-full"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Start the test</button>
-      <button class="bs-cancel" onclick="closeAllBS()">Cancel</button>
+    <div class="bs-title">Test simulator</div>
+    <div class="bs-sub">You can take the whole test in one go, or practice theory and hazards separately.</div>
+    <div class="bs-choice-list">
+      <div class="bs-choice-row" onclick="closeAllBS()">
+        <div class="bs-choice-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></div>
+        <div class="bs-choice-txt"><div class="bs-choice-ttl">Theory only</div><div class="bs-choice-sub">50 questions</div></div>
+        <div class="bs-choice-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>
+      <div class="bs-choice-row" onclick="closeAllBS()">
+        <div class="bs-choice-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div class="bs-choice-txt"><div class="bs-choice-ttl">Hazards only</div><div class="bs-choice-sub">14 clips</div></div>
+        <div class="bs-choice-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>
+      <div class="bs-choice-row" onclick="closeAllBS()">
+        <div class="bs-choice-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 01-10 0V4zM7 4H3v2a4 4 0 004 4M17 4h4v2a4 4 0 01-4 4"/></svg></div>
+        <div class="bs-choice-txt"><div class="bs-choice-ttl">Full mock test</div><div class="bs-choice-sub">Theory + hazards</div></div>
+        <div class="bs-choice-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>
     </div>
   </div>
 
@@ -405,6 +464,8 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
       <button class="bs-cancel" onclick="closeAllBS()">Close</button>
     </div>
   </div>
+
+  <div class="exam-cta" id="examCta"><button class="exam-cta-btn" onclick="openBS('sheetExam')">Start test</button></div>
 
   <div class="tabbar">
     <div class="tab on" id="tabHome" onclick="switchTab('home')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Learn</span></div>
@@ -446,6 +507,7 @@ const ICONS = {
   shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>',
   bolt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>',
   gear: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg>',
+  calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
 };
 function backChevSvg(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>'; }
 
@@ -549,7 +611,7 @@ function getTopicSteps(idx){
    inside the Theory path, not its own tab. On Home the card tracks whichever topic is scrolled
    into view (see updateTopicLabel()) and shows course progress; Exam/Modes show a static header. */
 const TAB_META = {
-  exam:{ttl:'DVSA mock test', sub:'Simulate the real exam', ic:ICONS.trophy, ic_c:'var(--success)'},
+  exam:{ttl:'Test simulator', sub:'Simulate the real exam', ic:ICONS.trophy, ic_c:'var(--success)'},
   modes:{ttl:'Practice modes', sub:'Extra practice, your way', ic:ICONS.dumbbell, ic_c:'var(--brand2)'},
   prodrive:{ttl:'ProDrive', sub:'Real driving videos and hazard clips', ic:ICONS.bolt, ic_c:'var(--brand2)'},
   settings:{ttl:'Settings', sub:'Preferences, notifications and account', ic:ICONS.gear, ic_c:'var(--muted)'},
@@ -573,6 +635,7 @@ function renderHeader(){
   document.getElementById('heroCard').classList.toggle('plain',plain);
   document.getElementById('heroWrap').style.display=(activeTab==='modes'||activeTab==='prodrive')?'none':'block';
   document.getElementById('homeHead').style.display=activeTab==='home'?'flex':'none';
+  document.getElementById('examCta').style.display=activeTab==='exam'?'block':'none';
   if(activeTab==='home'){
     document.getElementById('topLabel').textContent=`Topic ${curTopic+1} of ${TOPICS.length}`;
     document.getElementById('topTitle').textContent=TOPICS[curTopic];
@@ -986,12 +1049,14 @@ function renderPanel(id){
       </div>`;
     el.innerHTML=panelModes();
   } else if(id==='exam'){
+    el.style.paddingTop='2px'; // matches Practice modes' 16px title-to-content gap (heroWrap already contributes 14px below the title)
     el.innerHTML=panelExam();
   } else if(id==='modes'){
     el.innerHTML=panelModes();
   } else if(id==='prodrive'){
     el.innerHTML=panelProdrive();
   } else if(id==='settings'){
+    el.style.paddingTop='2px';
     el.innerHTML=panelSettings();
   }
 }
@@ -1073,18 +1138,42 @@ function panelHazard(){
 }
 
 function panelExam(){
-  const last=46,total=50,pass=43;
-  const pct=Math.round(last/total*100);
   return `
-    <div class="stat-row">
-      <div class="stat-box"><div class="v">${last}/${total}</div><div class="l">Last result</div></div>
-      <div class="stat-box"><div class="v">41/50</div><div class="l">Best result</div></div>
-      <div class="stat-box"><div class="v">4</div><div class="l">Test taken</div></div>
+    <div class="ex-date-card">
+      <div class="ex-date-ico">${ICONS.calendar}</div>
+      <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+      <button class="ex-date-edit">Edit</button>
     </div>
-    <div class="pass-lbl">Pass mark: ${pass} correct answers, or 86%</div>
-    <div class="pass-bar"><div class="pass-bar-fill" style="width:${pct}%"></div></div>
-    <button class="btn-full" onclick="openBS('sheetExam')">${ICONS.play}Start mock test</button>
-    <div class="plain-hint">No instant feedback — just like the real exam.</div>
+    <div class="ts-card">
+      <div class="ts-info-line">50 questions · 14 hazard clips</div>
+      <div class="ts-title">Test simulator</div>
+      <div class="ts-gauge-wrap">
+        <svg class="ts-gauge" viewBox="0 0 220 130">
+          <defs>
+            <linearGradient id="gaugeGradMain" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" style="stop-color:var(--accent)"/>
+              <stop offset="100%" style="stop-color:var(--brand2)"/>
+            </linearGradient>
+          </defs>
+          <path d="M20,110 A90,90 0 0 1 200,110" stroke="var(--bg2)" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M20,110 A90,90 0 0 1 200,110" stroke="url(#gaugeGradMain)" stroke-width="14" fill="none" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="110.3"/>
+          <line x1="110" y1="14" x2="110" y2="26" stroke="var(--text)" stroke-width="2.2" stroke-linecap="round" opacity=".55" transform="rotate(66.6 110 110)"/>
+        </svg>
+        <div class="ts-gauge-pct"><b>61%</b></div>
+      </div>
+      <div class="ts-rows">
+        <div class="ts-row">
+          <div class="ts-row-ico theory">${ICONS.book}</div>
+          <div class="ts-row-txt"><div class="ts-row-ttl">Questions</div><div class="ts-row-sub">Pass mark 43/50</div></div>
+          <div class="ts-row-val">42/50<span class="ts-dot fail"></span></div>
+        </div>
+        <div class="ts-row">
+          <div class="ts-row-ico hazard">${ICONS.hazard}</div>
+          <div class="ts-row-txt"><div class="ts-row-ttl">Hazard clips</div><div class="ts-row-sub">Pass mark 44/75</div></div>
+          <div class="ts-row-val">37/75<span class="ts-dot fail"></span></div>
+        </div>
+      </div>
+    </div>
   `;
 }
 
