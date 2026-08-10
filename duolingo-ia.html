@@ -57,7 +57,9 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 
 /* ── top card: sticky, swipeable (Theory topic / Exam / Learning modes) ──
    Theory = small bordered pill, centered text. Exam/Modes = big tinted card, icon on top. */
-.hero-wrap{padding:0 20px 14px;}
+.hero-wrap{padding:0 20px 14px;position:relative;}
+.hero-toggle-btn{display:none;position:absolute;top:18px;right:20px;z-index:1;width:32px;height:32px;border-radius:999px;border:1px solid var(--bg2);background:var(--card);align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow);}
+.hero-toggle-btn svg{width:15px;height:15px;color:var(--muted);}
 .hero-card{
   border:2px solid var(--brand);border-radius:20px;padding:14px 16px;position:relative;
   display:flex;flex-direction:column;align-items:center;text-align:center;
@@ -180,11 +182,17 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .ts-card{background:var(--card);border:1px solid var(--bg2);border-radius:22px;padding:22px 20px 0;text-align:center;}
 .ts-info-line{font-size:12px;color:var(--muted);margin-bottom:6px;}
 .ts-title{font-size:19px;font-weight:600;color:var(--text);}
-.ts-gauge-wrap{position:relative;width:220px;height:130px;margin:18px auto 4px;}
-.ts-gauge{width:220px;height:130px;}
-.ts-gauge-pct{position:absolute;left:0;right:0;bottom:0;text-align:center;}
+.ts-empty-gauge-wrap{position:relative;width:220px;height:124px;margin:14px auto 0;}
+.ts-empty-gauge-wrap .ts-gauge{position:absolute;top:0;left:0;width:220px;height:130px;display:block;}
+.ts-empty-status{position:absolute;left:0;right:0;top:110px;transform:translateY(-50%);display:flex;justify-content:center;}
+.ts-empty-status svg{width:22px;height:20px;}
+.ts-empty-divider{height:1px;background:var(--bg2);margin:20px -20px 0;}
+.ts-empty-txt{font-size:14px;line-height:1.5;color:var(--text);text-align:center;padding:20px 4px 24px;}
+.ts-gauge-wrap{position:relative;width:220px;height:124px;margin:18px auto 0;}
+.ts-gauge{position:absolute;top:0;left:0;width:220px;height:130px;}
+.ts-gauge-pct{position:absolute;left:0;right:0;top:110px;transform:translateY(-50%);text-align:center;}
 .ts-gauge-pct b{font-size:26px;font-weight:600;color:var(--text);line-height:1;}
-.ts-rows{text-align:left;margin-top:16px;border-top:1px solid var(--bg2);}
+.ts-rows{text-align:left;margin-top:20px;border-top:1px solid var(--bg2);}
 .ts-row{display:flex;align-items:flex-start;gap:12px;padding:16px 0;}
 .ts-row+.ts-row{border-top:1px solid var(--bg2);}
 .ts-row-ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -315,6 +323,41 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .tr-review{flex:1;height:54px;background:var(--bg);border:none;border-radius:18px;font-family:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
 .tr-review svg{width:18px;height:18px;color:var(--muted);}
 
+/* ── hazard clip player overlay (launched by tapping a hazard node) ── */
+.hz-overlay{display:none;position:absolute;inset:0;z-index:25;background:#EDEAF2;flex-direction:column;}
+.hz-overlay.open{display:flex;}
+.hz-close{position:absolute;top:22px;left:20px;z-index:1;width:32px;height:32px;border-radius:999px;border:none;background:rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.hz-close svg{width:16px;height:16px;color:var(--text);}
+.hz-video{width:100%;aspect-ratio:1/1.05;background:var(--bg);overflow:hidden;flex-shrink:0;}
+.hz-video img{width:100%;height:100%;object-fit:cover;display:block;}
+.hz-scrub{position:relative;padding:26px 20px 0;flex-shrink:0;}
+.hz-scrub-line{height:5px;border-radius:4px;background:var(--brand2);}
+.hz-flag{position:absolute;top:-2px;transform:translateX(-2px);}
+.hz-flag svg{width:16px;height:24px;}
+.hz-foot{margin-top:auto;padding:20px;flex-shrink:0;}
+
+/* ── hazard results overlay (matches tr-* result pattern, adapted top bar/rows) ── */
+.hzr-overlay{display:none;position:absolute;inset:0;z-index:26;background:linear-gradient(160deg,#3A1068 0%,#5B22A0 100%);flex-direction:column;}
+.hzr-overlay.open{display:flex;}
+.hzr-top{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 0;flex-shrink:0;}
+.hzr-back,.hzr-share{width:34px;height:34px;background:rgba(255,255,255,.15);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.hzr-back svg,.hzr-share svg{width:16px;height:16px;color:#fff;}
+.hzr-title{font-size:16px;font-weight:600;color:#fff;}
+.hzr-headline{font-size:22px;font-weight:700;color:#fff;text-align:center;line-height:1.3;margin:40px 24px 0;}
+.hzr-sheet{margin-top:auto;background:var(--card);border-radius:28px 28px 0 0;flex-shrink:0;padding:24px 20px 28px;}
+.hzr-row{display:flex;align-items:center;gap:10px;padding:13px 0;}
+.hzr-row+.hzr-row{border-top:1px solid var(--bg);}
+.hzr-row-ico{display:flex;flex-shrink:0;}
+.hzr-row-ico svg{width:20px;height:20px;}
+.hzr-row-ico.star svg{color:var(--warn-star);}
+.hzr-row-ico.warn svg{color:var(--brand2);}
+.hzr-row-lbl{flex:1;font-size:16px;font-weight:500;color:var(--text);}
+.hzr-row-val{font-size:16px;font-weight:600;color:var(--text);}
+.hzr-btns-row{display:flex;gap:10px;margin:8px 0 10px;}
+.hzr-reset{width:54px;height:54px;flex-shrink:0;background:var(--bg);border:none;border-radius:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.hzr-reset svg{width:20px;height:20px;color:var(--muted);}
+.hzr-review{flex:1;height:54px;background:var(--bg);border:none;border-radius:18px;font-family:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;}
+
 /* tab bar — Home / Stat / ProDrive / Settings (per app-flow.md) */
 .tabbar{background:var(--card);border-top:1px solid var(--bg2);padding:8px 0 20px;display:flex;align-items:center;flex-shrink:0;box-shadow:var(--shadow-top);}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;padding:4px 0;}
@@ -350,6 +393,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
       </div>
 
       <div class="hero-wrap" id="heroWrap">
+        <button class="hero-toggle-btn" id="heroToggleBtn" onclick="toggleExamDemoState()" title="Toggle demo state (prototype testing only)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.6 6.4"/><path d="M3 20v-5h5"/></svg></button>
         <div class="hero-card" id="heroCard">
           <div class="hero-icon" id="topIcon"></div>
           <div class="tb-lvl" id="topLabel"></div>
@@ -402,6 +446,44 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
       <input class="hw-search" placeholder="Search">
     </div>
     <div class="hw-list" id="hwList"></div>
+  </div>
+
+  <div class="hz-overlay" id="hazardOverlay">
+    <button class="hz-close" onclick="closeHazardOverlay()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="hz-video"><img id="hzVideoImg" src="" alt=""></div>
+    <div class="hz-scrub">
+      <div class="hz-scrub-line"></div>
+      <div class="hz-flag" style="left:15%"><svg viewBox="0 0 16 24"><line x1="2" y1="3" x2="2" y2="21" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/><path d="M2 3 L14 7 L2 11 Z" fill="#EA4335"/></svg></div>
+      <div class="hz-flag" style="left:42%"><svg viewBox="0 0 16 24"><line x1="2" y1="3" x2="2" y2="21" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/><path d="M2 3 L14 7 L2 11 Z" fill="#EA4335"/></svg></div>
+      <div class="hz-flag" style="left:83%"><svg viewBox="0 0 16 24"><line x1="2" y1="3" x2="2" y2="21" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/><path d="M2 3 L14 7 L2 11 Z" fill="#EA4335"/></svg></div>
+    </div>
+    <div class="hz-foot"><button class="btn-full" onclick="finishHazardClip()">Continue</button></div>
+  </div>
+
+  <div class="hzr-overlay" id="hazardResultOverlay">
+    <div class="hzr-top">
+      <button class="hzr-back" onclick="closeHazardResult()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="hzr-title">Results</div>
+      <button class="hzr-share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg></button>
+    </div>
+    <div class="hzr-headline" id="hzrHeadline"></div>
+    <div class="hzr-sheet">
+      <div class="hzr-row">
+        <span class="hzr-row-ico star"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg></span>
+        <span class="hzr-row-lbl">Points</span>
+        <span class="hzr-row-val" id="hzrPoints"></span>
+      </div>
+      <div class="hzr-row">
+        <span class="hzr-row-ico warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
+        <span class="hzr-row-lbl">Misclicks</span>
+        <span class="hzr-row-val" id="hzrMisclicks"></span>
+      </div>
+      <div class="hzr-btns-row">
+        <button class="hzr-reset" onclick="closeHazardResult()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.6 6.4"/><path d="M3 20v-5h5"/></svg></button>
+        <button class="hzr-review" onclick="closeHazardResult()">Review</button>
+      </div>
+      <button class="btn-full" onclick="nextHazardVideo()">Next video</button>
+    </div>
   </div>
 
   <div class="bs-overlay" id="ovMain" onclick="closeAllBS()"></div>
@@ -565,16 +647,16 @@ function getTopicSteps(idx){
   if(TOPIC_STEPS[idx]) return TOPIC_STEPS[idx];
   let steps;
   if(idx===0){
-    // Alertness — 26q -> 9/9/8, split=2 (trailing=1). Carries the one-time Intro node; hazards moved to the end, after Mistakes.
+    // Alertness — simplified flow, this topic only: Intro -> 3 theory circles (only Part 01 launches a real quiz;
+    // Part 02/03 are demo-only stand-ins that just auto-complete on tap) -> hazardintro -> 1 hazard clip -> Mistakes -> Topic test.
     steps=[
       {type:'intro', label:'Introduction', state:'current'},
-      {type:'question', label:'Part 01', qCount:9, state:'todo'},
-      {type:'question', label:'Part 02', qCount:9, state:'todo'},
-      {type:'question', label:'Part 03', qCount:8, state:'todo'},
-      {type:'mistake', label:'Mistakes', state:'todo'},
+      {type:'question', label:'Part 01', qCount:3, state:'todo'},
+      {type:'question', label:'Part 02', qCount:3, state:'todo', demoAutoComplete:true},
+      {type:'question', label:'Part 03', qCount:3, state:'todo', demoAutoComplete:true},
       {type:'hazardintro', label:'How hazards work', state:'todo'},
       {type:'hazard', label:'Hazard clip 1', state:'todo'},
-      {type:'hazard', label:'Hazard clip 2', state:'todo'},
+      {type:'mistake', label:'Mistakes', state:'todo'},
       {type:'summary', label:'Topic test', state:'todo'},
     ];
   } else if(idx===1 || idx===2){
@@ -636,6 +718,7 @@ function renderHeader(){
   document.getElementById('heroWrap').style.display=(activeTab==='modes'||activeTab==='prodrive')?'none':'block';
   document.getElementById('homeHead').style.display=activeTab==='home'?'flex':'none';
   document.getElementById('examCta').style.display=activeTab==='exam'?'block':'none';
+  document.getElementById('heroToggleBtn').style.display=activeTab==='exam'?'flex':'none';
   if(activeTab==='home'){
     document.getElementById('topLabel').textContent=`Topic ${curTopic+1} of ${TOPICS.length}`;
     document.getElementById('topTitle').textContent=TOPICS[curTopic];
@@ -853,7 +936,7 @@ function finishTestNext(){
   const i=src.indexOf(testState.stepRef);
   completeTestedNode();
   const next=src[i+1];
-  if(next && next.type==='question'){
+  if(next && next.type==='question' && !next.demoAutoComplete){
     startQuestionTest(next,topicIdx); // chain straight into the next question circle
   } else {
     document.getElementById('testOverlay').classList.remove('open');
@@ -957,8 +1040,12 @@ function nodeTap(i,key,topicIdx){
   const src=getStepsForKey(key,topicIdx);
   const step=src[i];
   activeNodeCtx={i,key,topicIdx};
-  if(step.type==='question'){ startQuestionTest(step,topicIdx); return; }
+  if(step.type==='question'){
+    if(step.demoAutoComplete){ completeCurrentNode(); return; }
+    startQuestionTest(step,topicIdx); return;
+  }
   if(step.type==='summary'){ openSummarySheet(src); return; }
+  if(step.type==='hazard'){ startHazardClip(step,topicIdx); return; }
   document.getElementById('nsDots').style.display='none';
   document.getElementById('nsCancel').style.display='block';
   document.getElementById('nsStart').onclick=completeCurrentNode;
@@ -972,12 +1059,23 @@ function nodeTap(i,key,topicIdx){
   }
   document.getElementById('nsTitle').textContent=step.label;
   let sub;
-  if(step.type==='hazardintro') sub='A hazard clip is a short video — tap as soon as you spot a developing hazard. Early, well-timed taps score higher.';
-  else if(step.type==='hazard') sub = step.state==='done' ? `Completed — ${step.pts||5} points` : step.state==='failed' ? `Scored low — ${step.pts||1} points, try again` : '1 hazard perception clip';
+  if(step.type==='hazardintro') sub='A hazard clip is a short video — spot hazards as they develop, e.g. a parked car becomes a hazard when it pulls out. Tap as soon as you notice one — the earlier you tap, the higher you score.';
   else sub = step.state==='done' ? 'Reviewed' : 'Questions you got wrong';
   document.getElementById('nsSub').textContent=sub;
-  document.getElementById('nsStart').innerHTML = (step.state==='done' ? '' : ICONS.play) + (step.state==='done'?'Review': step.type==='hazardintro'?'Got it':'Start');
+  document.getElementById('nsStart').innerHTML = (step.state==='done' ? '' : ICONS.play) + (step.state==='done'?'Review': step.type==='hazardintro'?'Open hazard clip':'Start');
+  if(step.type==='hazardintro') document.getElementById('nsStart').onclick=finishHazardIntro;
   openBS('sheetNode');
+}
+function finishHazardIntro(){
+  const src=getStepsForKey(activeNodeCtx.key,activeNodeCtx.topicIdx);
+  const i=activeNodeCtx.i;
+  src[i].state='done';
+  const next=src[i+1];
+  if(next && next.state==='todo') next.state='current';
+  closeAllBS();
+  renderPanel(activeTab);
+  if(activeTab==='home') renderHeroProgress();
+  if(next && next.type==='hazard') startHazardClip(next,activeNodeCtx.topicIdx);
 }
 function completeCurrentNode(){
   if(!activeNodeCtx) return closeAllBS();
@@ -987,6 +1085,42 @@ function completeCurrentNode(){
   const next=src[i+1];
   if(next && next.state==='todo') next.state='current';
   closeAllBS();
+  renderPanel(activeTab);
+  if(activeTab==='home') renderHeroProgress();
+}
+
+/* ═══════════ HAZARD CLIP PLAYER + RESULTS (launched by tapping any hazard node) ═══════════ */
+let hazardLastPass=true;
+function startHazardClip(step,topicIdx){
+  document.getElementById('hzVideoImg').src='assets/hazard-clip.png';
+  document.getElementById('hazardOverlay').classList.add('open');
+}
+function closeHazardOverlay(){
+  document.getElementById('hazardOverlay').classList.remove('open');
+}
+function finishHazardClip(){
+  document.getElementById('hazardOverlay').classList.remove('open');
+  hazardLastPass=Math.random()>0.35;
+  const points=hazardLastPass?(Math.random()>0.5?5:4):(Math.random()>0.5?2:1);
+  const misclicks=hazardLastPass?0:(Math.random()>0.5?1:2);
+  document.getElementById('hzrHeadline').innerHTML=hazardLastPass?'Great spot!':'Try Again!<br>Not Enough Points';
+  document.getElementById('hzrPoints').textContent=`${points}/5`;
+  document.getElementById('hzrMisclicks').textContent=misclicks;
+  document.getElementById('hazardResultOverlay').classList.add('open');
+}
+function closeHazardResult(){
+  document.getElementById('hazardResultOverlay').classList.remove('open');
+  document.getElementById('hazardOverlay').classList.add('open');
+}
+function nextHazardVideo(){
+  document.getElementById('hazardResultOverlay').classList.remove('open');
+  if(!activeNodeCtx) return;
+  const src=getStepsForKey(activeNodeCtx.key,activeNodeCtx.topicIdx);
+  const i=activeNodeCtx.i;
+  src[i].state=hazardLastPass?'done':'failed';
+  src[i].pts=hazardLastPass?5:1;
+  const next=src[i+1];
+  if(next && next.state==='todo') next.state='current';
   renderPanel(activeTab);
   if(activeTab==='home') renderHeroProgress();
 }
@@ -1140,16 +1274,15 @@ function panelHazard(){
   return `<div class="hz-grid">${cards||emptyHtml}</div>`;
 }
 
+let examDemoTaken=false;
+function toggleExamDemoState(){
+  examDemoTaken=!examDemoTaken;
+  renderPanel('exam');
+}
 function panelExam(){
-  return `
-    <div class="ex-date-card">
-      <div class="ex-date-ico">${ICONS.calendar}</div>
-      <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
-      <button class="ex-date-edit">Edit</button>
-    </div>
+  const statsCard = examDemoTaken ? `
     <div class="ts-card">
-      <div class="ts-info-line">50 questions · 14 hazard clips</div>
-      <div class="ts-title">Test simulator</div>
+      <div class="ts-title">Mock test</div>
       <div class="ts-gauge-wrap">
         <svg class="ts-gauge" viewBox="0 0 220 130">
           <defs>
@@ -1176,7 +1309,25 @@ function panelExam(){
           <div class="ts-row-val">37/75<span class="ts-dot fail"></span></div>
         </div>
       </div>
+    </div>` : `
+    <div class="ts-card">
+      <div class="ts-title">Mock test</div>
+      <div class="ts-empty-gauge-wrap">
+        <svg class="ts-gauge" viewBox="0 0 220 130">
+          <path d="M20,110 A90,90 0 0 1 200,110" stroke="var(--bg2)" stroke-width="14" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="ts-empty-status"><svg viewBox="0 0 20 18" fill="var(--brand2)"><path d="M0,9 L18,0 L10,9 L18,18 Z"/></svg></div>
+      </div>
+      <div class="ts-empty-divider"></div>
+      <div class="ts-empty-txt"><b>The theory test has two parts:</b><br>50 questions in 57 minutes, then 14 hazard clips back-to-back.</div>
+    </div>`;
+  return `
+    <div class="ex-date-card">
+      <div class="ex-date-ico">${ICONS.calendar}</div>
+      <div class="ex-date-txt"><div class="ex-date-lbl">Your exam</div><div class="ex-date-val">14 September 2026</div></div>
+      <button class="ex-date-edit">Edit</button>
     </div>
+    ${statsCard}
   `;
 }
 
