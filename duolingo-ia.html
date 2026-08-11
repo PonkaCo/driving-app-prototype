@@ -29,6 +29,21 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 .scroll::-webkit-scrollbar{display:none;}
 
+/* ── splash / start screen — shown on load, dismissed by the Start button ── */
+.splash{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:absolute;inset:0;z-index:30;padding:64px 32px 40px;text-align:center;
+  background:linear-gradient(151.6deg,#411A72 14%,#6D2BC0 90%);
+}
+.splash.closed{display:none;}
+.splash-logo{width:132px;height:132px;border-radius:50%;margin-bottom:24px;box-shadow:0 12px 28px rgba(0,0,0,.35);object-fit:cover;}
+.splash-ttl{font-size:24px;font-weight:700;color:#fff;line-height:1.25;}
+.splash-sub{font-size:14px;color:rgba(255,255,255,.75);line-height:1.5;margin-top:10px;max-width:280px;}
+.splash-start{
+  margin-top:auto;width:100%;height:48px;border-radius:999px;border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.12);color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;
+}
+
 /* ── sticky top: statusbar + header + hero ── */
 .sticky-top{position:sticky;top:0;z-index:6;background:var(--card);}
 .sbar{height:46px;padding:14px 22px 0;display:flex;align-items:center;justify-content:space-between;}
@@ -370,6 +385,12 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 <body>
 
 <div class="phone" id="phoneEl">
+  <div class="splash" id="splashOverlay">
+    <img class="splash-logo" src="assets/logo.png" alt="">
+    <div class="splash-ttl">Get ready for your driving test</div>
+    <div class="splash-sub">Theory questions, hazard clips and the Highway Code — all in one place.</div>
+    <button class="splash-start" onclick="closeSplash()">Start</button>
+  </div>
   <div class="scroll" id="homeScroll">
     <div class="sticky-top" id="stickyTop">
       <div class="sbar">
@@ -1452,6 +1473,10 @@ function closeHighwayCode(){
 }
 
 /* ═══════════ BOTTOM SHEETS ═══════════ */
+function closeSplash(){
+  document.getElementById('splashOverlay').classList.add('closed');
+}
+
 function openBS(id){
   document.querySelectorAll('.bs').forEach(b=>{b.style.display='none';b.classList.remove('open');});
   const sheet=document.getElementById(id);
