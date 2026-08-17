@@ -129,6 +129,20 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .path-collapse svg{width:18px;height:18px;color:var(--muted);}
 .plain-hint{font-size:12px;color:var(--muted);text-align:center;margin-top:18px;line-height:1.6;}
 
+/* ── sign grid (Road signs practice mode) — real production Test card: number, X/20, thin bar, no title (Continue test/home.html Tests pane) ── */
+.sign-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;}
+.test-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:16px 12px 12px;height:110px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;position:relative;transition:filter .12s;border:none;font-family:inherit;text-align:left;}
+.test-card:active{filter:brightness(.97);}
+.test-num{font-size:12px;font-weight:400;color:var(--muted);}
+.test-score{font-size:14px;font-weight:500;color:var(--text);}
+.test-bar-track{height:4px;background:var(--bg2);border-radius:4px;overflow:hidden;margin-top:4px;}
+.test-bar-fill{height:100%;border-radius:4px;background:var(--brand2);}
+.test-bar-fill.passed{background:var(--success);}
+.test-card__check{position:absolute;top:10px;right:10px;width:16px;height:16px;color:var(--success);}
+.test-card.action{justify-content:center;align-items:center;gap:6px;}
+.test-card.action .test-card__ico{width:22px;height:22px;color:var(--brand2);}
+.test-card.action .test-card__label{text-align:center;font-size:13px;font-weight:500;color:var(--text);}
+
 /* ── hazard grid (used inside Learning modes > Hazard perception) ── */
 .pill-tabs{display:flex;background:var(--bg);border-radius:999px;padding:4px;}
 .pill-tab{flex:1;border:none;background:transparent;border-radius:999px;padding:9px 0;font-family:inherit;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;}
@@ -263,6 +277,25 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .hw-row-ttl{font-size:16px;font-weight:600;color:var(--text);line-height:1.3;}
 .hw-row-sub{font-size:13px;color:var(--muted);margin-top:2px;}
 .hw-row-chev{color:var(--bg2);flex-shrink:0;}
+
+/* ── Test settings overlay (full-screen, opened from head-icons sliders button) ── */
+.ts-set-overlay{display:none;position:absolute;inset:0;z-index:20;background:var(--bg);flex-direction:column;}
+.ts-set-overlay.open{display:flex;}
+.ts-set-list{flex:1;min-height:0;overflow-y:auto;padding:16px 20px 28px;display:flex;flex-direction:column;gap:12px;}
+
+/* ── Toggle — node 2337:568/569, 51×30px pill ── */
+.toggle{width:51px;height:30px;border-radius:15px;border:none;cursor:pointer;padding:2px;position:relative;flex-shrink:0;transition:background .2s;}
+.toggle.on{background:var(--accent);}
+.toggle.off{background:#F0EAF8;}
+.toggle__knob{width:26px;height:26px;border-radius:50%;background:var(--card);position:absolute;top:2px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.15);}
+.toggle.on .toggle__knob{left:23px;}
+.toggle.off .toggle__knob{left:2px;}
+
+/* ── List Switch row — node 2339:516 ── */
+.list-switch{display:flex;align-items:center;justify-content:space-between;min-height:75px;padding:16px;gap:8px;background:var(--card);border-radius:20px;box-shadow:var(--shadow);}
+.list-switch__text{display:flex;flex-direction:column;gap:4px;flex:1;}
+.list-switch__title{font-size:16px;font-weight:500;color:var(--text);}
+.list-switch__sub{font-size:14px;font-weight:400;color:#91899C;}
 .hw-row-chev svg{width:20px;height:20px;}
 
 /* ── question test overlay (full-screen mini test, launched by tapping any question node) ── */
@@ -330,9 +363,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 /* ── hazard results overlay (matches tr-* result pattern, adapted top bar/rows) ── */
 .hzr-overlay{display:none;position:absolute;inset:0;z-index:26;background:linear-gradient(160deg,#3A1068 0%,#5B22A0 100%);flex-direction:column;}
 .hzr-overlay.open{display:flex;}
-.hzr-top{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 0;flex-shrink:0;}
-.hzr-back,.hzr-share{width:34px;height:34px;background:rgba(255,255,255,.15);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
-.hzr-back svg,.hzr-share svg{width:16px;height:16px;color:#fff;}
+.hzr-top{display:flex;align-items:center;justify-content:center;padding:18px 16px 0;flex-shrink:0;}
 .hzr-title{font-size:16px;font-weight:600;color:#fff;}
 .hzr-headline{font-size:22px;font-weight:700;color:#fff;text-align:center;line-height:1.3;margin:40px 24px 0;}
 .hzr-sheet{margin-top:auto;background:var(--card);border-radius:28px 28px 0 0;flex-shrink:0;padding:24px 20px 28px;}
@@ -347,7 +378,8 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 .hzr-btns-row{display:flex;gap:10px;margin:8px 0 10px;}
 .hzr-reset{width:54px;height:54px;flex-shrink:0;background:var(--bg);border:none;border-radius:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .hzr-reset svg{width:20px;height:20px;color:var(--muted);}
-.hzr-review{flex:1;height:54px;background:var(--bg);border:none;border-radius:18px;font-family:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;}
+.hzr-review{flex:1;height:54px;background:var(--bg);border:none;border-radius:18px;font-family:inherit;font-size:16px;font-weight:600;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+.hzr-review svg{width:18px;height:18px;color:var(--muted);}
 
 /* tab bar — Home / Practice / Mock test / Share / Settings */
 .tabbar{background:var(--card);border-top:1px solid var(--bg2);padding:8px 0 20px;display:flex;align-items:center;flex-shrink:0;box-shadow:var(--shadow-top);}
@@ -380,11 +412,11 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
       <div class="home-head" id="homeHead">
         <button class="pill-btn hwcode" onclick="openHighwayCode()" title="Highway code">Highway code</button>
         <div class="head-icons">
-          <button class="circ-btn" onclick="openBS('sheetSettings')" title="Settings">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg>
-          </button>
           <button class="circ-btn fav" onclick="openBS('sheetFav')" title="Favorites">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+          </button>
+          <button class="circ-btn" onclick="openTestSettings()" title="Test settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="15" cy="6" r="2.2" fill="currentColor" stroke="none"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="9" cy="12" r="2.2" fill="currentColor" stroke="none"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="13" cy="18" r="2.2" fill="currentColor" stroke="none"/></svg>
           </button>
         </div>
       </div>
@@ -445,6 +477,22 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
     <div class="hw-list" id="hwList"></div>
   </div>
 
+  <div class="ts-set-overlay" id="testSettingsOverlay">
+    <div class="sbar">
+      <div class="time">15:28</div>
+      <div class="icons">
+        <svg viewBox="0 0 20 12" fill="currentColor"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4" width="3" height="8" rx="1"/><rect x="10" y="1" width="3" height="11" rx="1" opacity=".4"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a16 16 0 0120 0M5.5 12a11 11 0 0113 0M9 15.5a6 6 0 016 0"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+      </div>
+    </div>
+    <div class="hw-head">
+      <button class="test-close" onclick="closeTestSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="hw-head-title">Test settings</div>
+      <div class="hw-head-spacer"></div>
+    </div>
+    <div class="ts-set-list" id="testSettingsList"></div>
+  </div>
+
   <div class="hz-overlay" id="hazardOverlay">
     <button class="hz-close" onclick="closeHazardOverlay()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     <div class="hz-video"><img id="hzVideoImg" src="" alt=""></div>
@@ -459,9 +507,7 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
 
   <div class="hzr-overlay" id="hazardResultOverlay">
     <div class="hzr-top">
-      <button class="hzr-back" onclick="closeHazardResult()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
       <div class="hzr-title">Results</div>
-      <button class="hzr-share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg></button>
     </div>
     <div class="hzr-headline" id="hzrHeadline"></div>
     <div class="hzr-sheet">
@@ -476,8 +522,8 @@ body{background:#1A1230;min-height:100vh;display:flex;align-items:center;justify
         <span class="hzr-row-val" id="hzrMisclicks"></span>
       </div>
       <div class="hzr-btns-row">
-        <button class="hzr-reset" onclick="closeHazardResult()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 1 2.6 6.4"/><path d="M3 20v-5h5"/></svg></button>
-        <button class="hzr-review" onclick="closeHazardResult()">Review</button>
+        <button class="hzr-reset" onclick="closeHazardResult()" title="Back to topics"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="hzr-review" onclick="closeHazardResult()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>Review answers</button>
       </div>
       <button class="btn-full" onclick="nextHazardVideo()">Next video</button>
     </div>
@@ -613,6 +659,7 @@ const ICONS = {
   bolt: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>',
   gear: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.6-.22l-2.39.96a6.96 6.96 0 00-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 00-.6.22L2.74 8.87a.48.48 0 00.12.6l2.03 1.58c-.05.3-.07.63-.07.95s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.6.22l2.39-.96c.5.37 1.04.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.23.07.48 0 .6-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.02-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/></svg>',
   calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  sliders: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="15" cy="6" r="2.2" fill="currentColor" stroke="none"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="9" cy="12" r="2.2" fill="currentColor" stroke="none"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="13" cy="18" r="2.2" fill="currentColor" stroke="none"/></svg>',
 };
 function backChevSvg(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>'; }
 
@@ -835,9 +882,9 @@ function getQuestionsForNode(topicIdx,count){
 }
 
 let testState=null;
-function startQuestionTest(step,topicIdx){
+function startQuestionTest(step,topicIdx,key){
   testState={
-    topicIdx, stepRef:step, idx:0, score:0, answered:false, startedAt:Date.now(),
+    topicIdx, key, stepRef:step, idx:0, score:0, answered:false, startedAt:Date.now(),
     questions:getQuestionsForNode(topicIdx, Math.min(5,step.qCount||5)),
   };
   document.getElementById('testHead').style.display='flex';
@@ -943,8 +990,8 @@ function retakeTest(){
   renderTestQuestion();
 }
 function completeTestedNode(){
-  activeNodeCtx={i:null,key:null,topicIdx:testState.topicIdx};
-  const src=getStepsForKey(null,testState.topicIdx);
+  activeNodeCtx={i:null,key:testState.key,topicIdx:testState.topicIdx};
+  const src=getStepsForKey(testState.key,testState.topicIdx);
   activeNodeCtx.i=src.indexOf(testState.stepRef);
   completeCurrentNode();
 }
@@ -954,12 +1001,13 @@ function finishTestBack(){
 }
 function finishTestNext(){
   const topicIdx=testState.topicIdx;
-  const src=getStepsForKey(null,topicIdx);
+  const key=testState.key;
+  const src=getStepsForKey(key,topicIdx);
   const i=src.indexOf(testState.stepRef);
   completeTestedNode();
   const next=src[i+1];
   if(next && next.type==='question' && !next.demoAutoComplete){
-    startQuestionTest(next,topicIdx); // chain straight into the next question circle
+    startQuestionTest(next,topicIdx,key); // chain straight into the next question circle
   } else {
     document.getElementById('testOverlay').classList.remove('open');
   }
@@ -980,13 +1028,14 @@ const MODES=[
 ];
 let modesSub=null;
 
-const SIGN_STEPS=[
-  {type:'question', label:'Warning signs', state:'todo'},
-  {type:'mistake', label:'Mistakes', state:'todo'},
-  {type:'question', label:'Regulatory signs', state:'todo'},
-  {type:'question', label:'Information signs', state:'todo'},
-  {type:'question', label:'Direction signs', state:'todo'},
-];
+// Real "Road and traffic signs" total (134q, question-bank-structure.md) split into ~20-question
+// numbered parts — matches the production Test card grid (see Continue test/home.html Tests pane).
+const SIGN_STEPS=(()=>{
+  const sizes=computeParts(134,20);
+  const steps=sizes.map((sz,i)=>({type:'question', label:'Part '+pad(i+1), num:pad(i+1), state:'todo', total:sz}));
+  steps.push({type:'mistake', label:'Mistakes', state:'todo'});
+  return steps;
+})();
 const ADAPTIVE_STEPS=[
   {type:'question', label:'Question 1', state:'done'},
   {type:'question', label:'Question 2', state:'current'},
@@ -1032,6 +1081,28 @@ function renderPath(steps, opts){
   return {html:`<svg width="${width}" height="${height+yOffset}" style="position:absolute;top:0;left:0;pointer-events:none;">${lines}</svg>${nodes}`, height:height+yOffset};
 }
 
+/* ═══════════ SIGN GRID — Road signs practice mode, real production Test Card squares instead of the path ═══════════ */
+function renderSignGrid(steps, opts){
+  opts=opts||{};
+  const cards=steps.map((s,i)=>{
+    if(s.type==='mistake'){
+      return `<button class="test-card action" onclick="nodeTap(${i},'${opts.key||''}',null)">
+        <span class="test-card__ico">${ICONS.edit}</span>
+        <div class="test-card__label">${s.label}</div>
+      </button>`;
+    }
+    const done=s.state==='done';
+    const num=done?s.total:0;
+    const pct=done?100:0;
+    return `<button class="test-card" onclick="nodeTap(${i},'${opts.key||''}',null)">
+      ${done?`<svg class="test-card__check" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5l-4-4 1.41-1.41L10 13.67l6.59-6.59L18 8.5l-8 8z"/></svg>`:''}
+      <div class="test-num">${s.num}</div>
+      <div><div class="test-score">${num}/${s.total}</div><div class="test-bar-track"><div class="test-bar-fill ${done?'passed':''}" style="width:${pct}%"></div></div></div>
+    </button>`;
+  }).join('');
+  return `<div class="sign-grid">${cards}</div>`;
+}
+
 const INTRO_STEPS=[
   {title:'What’s in the theory test', sub:'The theory test has two parts: road rules questions and hazard perception clips.', btn:'Next'},
   {title:'How learning works', sub:'Go through the theory step by step, fix what didn’t stick, then practise hazard clips.', btn:'Start first test'},
@@ -1064,7 +1135,7 @@ function nodeTap(i,key,topicIdx){
   activeNodeCtx={i,key,topicIdx};
   if(step.type==='question'){
     if(step.demoAutoComplete){ completeCurrentNode(); return; }
-    startQuestionTest(step,topicIdx); return;
+    startQuestionTest(step,topicIdx,key); return;
   }
   if(step.type==='summary'){ openSummarySheet(src); return; }
   if(step.type==='hazard'){ startHazardClip(step,topicIdx); return; }
@@ -1114,7 +1185,7 @@ function completeCurrentNode(){
 /* ═══════════ HAZARD CLIP PLAYER + RESULTS (launched by tapping any hazard node) ═══════════ */
 let hazardLastPass=true;
 function startHazardClip(step,topicIdx){
-  document.getElementById('hzVideoImg').src='assets/hazard-clip.png';
+  document.getElementById('hzVideoImg').src='assets/hazard-clip.jpg';
   document.getElementById('hazardOverlay').classList.add('open');
 }
 function closeHazardOverlay(){
@@ -1131,8 +1202,8 @@ function finishHazardClip(){
   document.getElementById('hazardResultOverlay').classList.add('open');
 }
 function closeHazardResult(){
-  document.getElementById('hazardResultOverlay').classList.remove('open');
-  document.getElementById('hazardOverlay').classList.add('open');
+  document.getElementById('hazardOverlay').classList.remove('open');
+  nextHazardVideo();
 }
 function nextHazardVideo(){
   document.getElementById('hazardResultOverlay').classList.remove('open');
@@ -1356,15 +1427,17 @@ function wrapPath(result){
 }
 function openMode(id){ modesSub=id; renderPanel('modes'); }
 function panelModes(){
-  if(modesSub){
-    const steps = modesSub==='signs'?SIGN_STEPS:ADAPTIVE_STEPS;
-    const bookLink = modesSub!=='signs' ? '' : `
+  if(modesSub==='signs'){
+    const bookLink = `
       <div class="lm-row" onclick="openHighwayCode()">
         <div class="lm-ico">${ICONS.book}</div>
         <div class="lm-txt"><div class="lm-ttl">Road signs book</div><div class="lm-sub">All signs, with descriptions</div></div>
         <div class="lm-start">${ICONS.chevRight}</div>
       </div>`;
-    return bookLink + wrapPath(renderPath(steps,{key:modesSub}));
+    return bookLink + renderSignGrid(SIGN_STEPS,{key:'signs'});
+  }
+  if(modesSub){
+    return wrapPath(renderPath(ADAPTIVE_STEPS,{key:modesSub}));
   }
   return `<div class="lm-title">Practice modes</div>` + MODES.map(m=>`
     <div class="lm-row" ${(m.path||m.id==='hazardfull')?`onclick="openMode('${m.id}')"`:''}>
@@ -1381,7 +1454,7 @@ const SETTINGS_ITEMS=[
   {ttl:'Rate the app', sub:'Enjoying it? Leave a review', ic:ICONS.star},
   {ttl:'Write to us', sub:'Feedback or a bug to report', ic:ICONS.edit},
   {ttl:'Share', sub:'Tell a friend about the app', ic:ICONS.share},
-  {ttl:'Tests settings', sub:'Question order, timers and more', ic:ICONS.book},
+  {ttl:'Tests settings', sub:'Question order, timers and more', ic:ICONS.sliders, action:'openTestSettings()'},
   {ttl:'Notifications', sub:'Reminders and daily streaks', ic:ICONS.bell},
   {ttl:'Reset statistics', sub:'Clear your progress and start over', ic:ICONS.redo},
   {ttl:'Theme', sub:'Light, dark or system', ic:ICONS.theme},
@@ -1391,11 +1464,42 @@ const SETTINGS_ITEMS=[
 ];
 function panelSettings(){
   return SETTINGS_ITEMS.map(s=>`
-    <div class="lm-row">
+    <div class="lm-row" ${s.action?`onclick="${s.action}"`:''}>
       <div class="lm-ico">${s.ic}</div>
       <div class="lm-txt"><div class="lm-ttl">${s.ttl}</div><div class="lm-sub">${s.sub}</div></div>
       <div class="lm-start">${ICONS.chevRight}</div>
     </div>`).join('');
+}
+
+/* ═══════════ TEST SETTINGS — full-screen overlay, opened from head-icons sliders button or Settings row ═══════════ */
+const TEST_SETTINGS_ITEMS=[
+  {id:'shuffle', ttl:'Shuffle answers', sub:'Answer order changes each time to test recall', on:true},
+  {id:'confirm', ttl:'Confirm answer', sub:'App will ask before moving to the next question', on:true},
+  {id:'explain', ttl:'Explain mistakes', sub:'See an explanation when your answer is wrong', on:true},
+  {id:'hints', ttl:'Show hints', sub:'See a hint before you answer', on:false},
+  {id:'confirmQuit', ttl:'Confirm quitting the test', sub:'App will ask before exiting to prevent accidental exits', on:true},
+];
+function renderTestSettings(){
+  document.getElementById('testSettingsList').innerHTML = TEST_SETTINGS_ITEMS.map(s=>`
+    <div class="list-switch">
+      <div class="list-switch__text">
+        <div class="list-switch__title">${s.ttl}</div>
+        <div class="list-switch__sub">${s.sub}</div>
+      </div>
+      <button class="toggle ${s.on?'on':'off'}" onclick="toggleTestSetting('${s.id}')"><div class="toggle__knob"></div></button>
+    </div>`).join('');
+}
+function toggleTestSetting(id){
+  const s=TEST_SETTINGS_ITEMS.find(x=>x.id===id);
+  s.on=!s.on;
+  renderTestSettings();
+}
+function openTestSettings(){
+  renderTestSettings();
+  document.getElementById('testSettingsOverlay').classList.add('open');
+}
+function closeTestSettings(){
+  document.getElementById('testSettingsOverlay').classList.remove('open');
 }
 
 /* ═══════════ HIGHWAY CODE — full-screen chapter list, real UK Highway Code structure ═══════════ */
